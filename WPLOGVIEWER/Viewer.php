@@ -8,13 +8,5 @@ if (!defined('WPLV_BASE')) {
 
 
 /**
- * Get current plugin version
- *
- * @return string
+ * Dependencies
  */
-function getVersion() {
-	return '';
-}
-
-
-

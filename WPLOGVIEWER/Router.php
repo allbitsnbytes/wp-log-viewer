@@ -10,3 +10,4 @@ if (!defined('WPLV_BASE')) {
 /**
  * Dependencies
  */
+use WPLOGVIEWER\Helper;
