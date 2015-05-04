@@ -1,0 +1,10 @@
+# Node and NPM
+node_modules
+
+
+# VIM
+*.swp
+
+
+# Misc
+.DS_Store
