@@ -22,13 +22,6 @@ var paths = {
 gulp.task('default', ['css', 'js']);
 
 
-// Watch 
-gulp.task('watch', function() {
-	gulp.watch(paths.src.css, 'css');
-	gulp.watch(paths.src.js, 'js');
-});
-
-
 // Process all stylus files
 gulp.task('css', function() {
 	return gulp.src(paths.src.css)
