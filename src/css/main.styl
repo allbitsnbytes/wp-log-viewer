@@ -1,9 +1,28 @@
-#wp-log-viewer	
+body
+	min-height 1200px
+	height 100%
+	
+.debugger-status.enabled
+	background #006600
+	
+.debugger-status.disabled
+	background #ff0000
+	
+#viewer-pane
 	
 	h2
 		margin 0 0 15px
 		
-	.viewer
+		.debugger-status
+			display inline-block
+			font-size 11px
+			line-height 11px
+			color #fff
+			border-radius 6px
+			padding: 5px
+			margin-left 8px
+		
+	.log-entries
 		display inline-block
 		width 80%
 		min-height 530px
@@ -15,6 +34,9 @@
 		box-sizing border-box
 		padding 15px
 		
+		.log-entry
+			margin-bottom 5px
+
 	.sidebar
 		display inline-block
 		float left
@@ -37,5 +59,13 @@
 				
 		small
 			font-size 0.85em
-				
+	
+	.highlight
+		color #ff0000
+		background transparent
+
+	.code-snippet
+		border 1px solid #f0f0f0
+		background #fafafa
+		padding 15px
 				
