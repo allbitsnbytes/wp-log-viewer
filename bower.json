@@ -1,0 +1,21 @@
+{
+  "name": "wp-log-viewer",
+  "version": "0.1.0",
+  "authors": [
+    "Maxwell Berkel <maxwell@allbitsnbytes.com>"
+  ],
+  "description": "Wordpress Log Viewer",
+  "main": "gulpfile.js",
+  "moduleType": [
+    "node"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/allbitsnbytes/wp-log-viewer",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "test",
+    "tests"
+  ]
+}
