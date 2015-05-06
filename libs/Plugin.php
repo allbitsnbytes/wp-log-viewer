@@ -15,13 +15,17 @@ use Allbitsnbytes\WPLogViewer\Helper;
 use Allbitsnbytes\WPLogViewer\Characteristic\IsSingleton;
 
 
-// Plugin class
+/**
+ * Plugin class
+ * @since 0.1.0
+ */
 class Plugin {
 	
 	use IsSingleton;
 	
 	/**
 	 * Initialize plugin
+	 * @since 0.1.0
 	 */
 	public function init() {
 		add_action('admin_enqueue_scripts', [$this, 'load_css_and_js']);
@@ -31,6 +35,7 @@ class Plugin {
 	
 	/**
 	 * Enqueue css and js files
+	 * @since 0.1.0
 	 */
 	public function load_css_and_js() {
 		// Stylesheet files
@@ -38,11 +43,15 @@ class Plugin {
 
 		// Javascript files
 		wp_enqueue_script('wplogviewer-js', WPLOGVIEWER_URL . 'assets/js/main.min.js', false, false, true);
+		
+		// Localize some variables
+		wp_localize_script('wplogviewer-js', 'WPLOGVIEWER', ['api' => WPLOGVIEWER_API]);
 	}
 	
 	
 	/**
 	 * Add navigation entry
+	 * @since 0.1.0
 	 */
 	public function add_navigation() {
 		add_management_page('Wordpress Log Viewer', 'Log Viewer', 'manage_options', 'wp-log-viewer', [$this, 'get_view']);
@@ -51,13 +60,11 @@ class Plugin {
 
 	/**
 	 * Get main view
+	 * @since 0.1.0
 	 */
 	public function get_view() {
 		echo '
 			<div id="wp-log-viewer" class="wrap">
-				<h2>Log Viewer</h2>
-				
-				<div id="viewer-pane"></div>
 			</div>
 		';
 	}
