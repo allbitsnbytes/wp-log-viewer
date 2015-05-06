@@ -12,6 +12,7 @@ if (!defined('WPLOGVIEWER_BASE')) {
  * Get current plugin version
  *
  * @return string
+ * @since 0.1.0
  */
 function getVersion() {
 	return '';
