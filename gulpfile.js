@@ -1,49 +1,71 @@
 // Dependencies
 var $			= require('gulp-load-plugins')();
-var gulp		= require('gulp');
-var jeet		= require('jeet');
+var Gulp		= require('gulp');
+var Jeet		= require('Jeet');
 
 
 // Paths
 var paths = {
 	src: {
 		css: 'src/css/**/*.styl',
-		js: 'src/js/**/*.js'
+		js: [
+			'src/bower/react/react.min.js',
+			'src/bower/reqwest/reqwest.min.js',
+			'src/react/**/*.jsx',
+			'src/js/main.jsx'
+		]
 	},
 	
 	build: {
 		css: 'assets/css',
-		js: 'assets/js'
+		js: 'assets/js',
 	}
 };
 
 
+/**
+ * Check if is jsx file
+ * @param {object} Vinyl file object
+ * @return {boolean}
+ */
+function isJSX(file) {
+	var ext = '.jsx';
+	var startIndex = file.path.length - ext.length;
+	
+	return file.path.indexOf(ext, startIndex) !== -1 ? true : false;
+}
+
+
 // Default Task
-gulp.task('default', ['css', 'js']);
+Gulp.task('default', ['css', 'js']);
 
 
 // Watch 
-gulp.task('watch', function() {
-	gulp.watch(paths.src.css, ['css']);
-	gulp.watch(paths.src.js, ['js']);
+Gulp.task('watch', function() {
+	Gulp.watch(paths.src.css, ['css']);
+	Gulp.watch(paths.src.js, ['js']);
 });
 
 
 // Process all stylus files
-gulp.task('css', function() {
-	return gulp.src(paths.src.css)
+Gulp.task('css', function() {
+	return Gulp.src(paths.src.css)
+		.pipe($.plumber())
 		.pipe($.stylus({
-			use: [jeet]
+			use: [Jeet]
 		}))
 		.pipe($.minifyCss())
 		.pipe($.autoprefixer())
-		.pipe(gulp.dest(paths.build.css));
+		.pipe($.rename('main.min.css'))
+		.pipe(Gulp.dest(paths.build.css));
 });
 
 
 // Process all javascript files
-gulp.task('js', function() {
-	return gulp.src(paths.src.js)
-		.pipe($.uglify())
-		.pipe(gulp.dest(paths.build.js));
+Gulp.task('js', function() {
+	return Gulp.src(paths.src.js)
+		.pipe($.plumber())
+		.pipe($.if(isJSX, $.react()))
+		.pipe($.concat('main.min.js'))
+		.pipe(Gulp.dest(paths.build.js));
 });
