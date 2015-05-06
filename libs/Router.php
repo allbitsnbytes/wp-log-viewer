@@ -11,8 +11,9 @@ if (!defined('WPLOGVIEWER_BASE')) {
 /**
  * Dependencies
  */
-use Allbitsnbytes\WPLogViewer\Helper;
+use Allbitsnbytes\WPLogViewer\Auth;
 use Allbitsnbytes\WPLogViewer\Characteristic\IsSingleton;
+use Allbitsnbytes\WPLogViewer\Helper;
 
 
 /**
@@ -28,15 +29,6 @@ class Router {
 	 * @since 0.1.0
 	 */
 	private $handlers = [];
-	
-	/**
-	 * Initialize
-	 * @since 0.1.0
-	 */
-	public function init() {
-		
-	}
-	
 	
 	/**
 	 * Get all request headers
@@ -71,6 +63,18 @@ class Router {
 	
 	
 	/**
+	 * Get requested action
+	 * @return string The requested action
+	 * @since 0.1.0
+	 */
+	private function getAction() {
+		$action = '';
+		
+		return $action;
+	}
+	
+	
+	/**
 	 * Register an action and handler
 	 * @param string $action The action to handle
 	 * @param array $handler An array with the following keys: method, call, auth.  Method must be either POST or GET, call must be a callable function, and auth a boolean.
@@ -93,6 +97,7 @@ class Router {
 	 * @param string $action The action to handle
 	 * @param callable $fn The callable function to call if action is matched
 	 * @param boolean $auth Whether must be authenticated to perform action
+	 * @return void
 	 * @since 0.1.0
 	 */
 	public function get($action, $fn, $auth) {
@@ -109,6 +114,7 @@ class Router {
 	 * @param string $action The action to handle
 	 * @param callable $fn The callable function to call if action is matched
 	 * @param boolean $auth Whether must be authenticated to perform action
+	 * @return void
 	 * @since 0.1.0
 	 */
 	public function post($action, $fn, $auth) {
@@ -122,10 +128,40 @@ class Router {
 	
 	/**
 	 * Process incoming request
+	 * @return void
 	 * @since 0.1.0
 	 */
 	public function run() {
+		$headers = $this->getRequestHeaders();
+		$method = $this->getRequestMethod();
+		$action = $this->getAction();
+		$handled = 0;
 		
+		if (isset($this->handlers[$action])) {
+			$handlers = $this->handlers[$action];
+			
+			foreach ($handlers as $handler) {
+				if ($method === strtoupper($handler['method'])) {
+					if ($handler['auth']) {
+						$auth = Auth::getInstance();
+						
+						// TODO: Check if authenticated
+					}
+					
+					if (is_callable($handler['call'])) {
+						$handled++;
+						$params = [
+							'action'	=> $action,
+						];
+						call_user_func_array($handler['call'], $params);
+					}
+				}
+			}
+		}
+		
+		if ($handled === 0) {
+			header('HTTP/1.0 404 Not Found');
+			die;
+		}
 	}
-		
 }

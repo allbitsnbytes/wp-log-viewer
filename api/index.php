@@ -24,5 +24,12 @@ if (!is_object($router)) {
 	die;
 }
 
+
+/**
+ * Register routes
+ */
+
+
+// Run Router
 $router->run();
 
