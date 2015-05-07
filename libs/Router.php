@@ -169,7 +169,7 @@ class Router {
 						$handled++;
 	
 						// Execute handler
-						$response = call_user_func_array($handler['call'], $request, $response);
+						$response = call_user_func_array($handler['call'], [$request, $response]);
 					}
 				}
 			}

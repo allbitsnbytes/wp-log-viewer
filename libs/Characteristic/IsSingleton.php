@@ -15,6 +15,7 @@ trait IsSingleton
 	/**
 	 * Singleton instance variable
 	 * @var object 
+	 * @static
 	 */
 	static $instance;
 
@@ -22,6 +23,7 @@ trait IsSingleton
 	/**
 	 * Get and return the instance of service
 	 * @return object
+	 * @static
 	 */
 	public static function getInstance() 
 	{
@@ -32,6 +34,7 @@ trait IsSingleton
 
 	/**
      * Private constructor to prevent creating a new instance of the *Singleton* via the `new` operator from outside of this class.
+	 * @final
      */
 	final private function __construct() 
 	{
@@ -42,6 +45,7 @@ trait IsSingleton
     /**
      * Private clone method to prevent cloning of the instance of the *Singleton* instance.
      * @return void
+	 * @final
      */
 	final private function __clone() {}
 
@@ -49,6 +53,7 @@ trait IsSingleton
     /**
      * Private unserialize method to prevent unserializing of the *Singleton* instance.
      * @return void
+	 * @final
      */
 	final private function __wakeup() {}
 

@@ -16,9 +16,10 @@ class Response {
 	
 	/**
 	 * @var constant Default response type
+	 * @static
 	 * @since 0.1.0
 	 */
-	const DEFAULT_RESPONSE_TYPE = 'application/html';
+	static $default_content_type = 'text/html';
 	
 	/**
 	 * @var int The response code
@@ -98,7 +99,7 @@ class Response {
 	 * @since 0.1.0
 	 */
 	public function send() {
-		$content_type = empty($this->type) ? DEFAULT_CONTENT_TYPE : $this->type;
+		$content_type = empty($this->type) ? self::$default_content_type : $this->type;
 		$content = implode('', $this->data);
 		
 		// Set headers
