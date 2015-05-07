@@ -172,6 +172,8 @@ class Api {
 	 */
 	public static function login_user($req, $res) {
 		// TODO
+		
+		return $res;
 	}
 	
 	
@@ -184,5 +186,7 @@ class Api {
 	 */
 	public static function logout_user($req, $res) {
 		// TODO
+		
+		return $res;
 	}
 }

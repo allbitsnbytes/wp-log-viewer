@@ -49,7 +49,7 @@ class Log {
 	 * @return boolean True if was modified
 	 * @since 0.1.0
 	 */
-	public function is_modified($timestamp) {
+	public function is_modified($timestamp='') {
 		// TODO
 	}
 
@@ -80,7 +80,7 @@ class Log {
 	 * @return boolean True if file is smaller
 	 * @since 0.1.0
 	 */
-	public function is_smaller($size) {
+	public function is_smaller($size='') {
 		// TODO
 	}
 
