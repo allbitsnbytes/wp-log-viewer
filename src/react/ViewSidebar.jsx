@@ -11,7 +11,7 @@ var ViewSidebar = React.createClass({
 				
 				</ul>
 				
-				<h3>Sort</h3>
+				<h3>Date Range</h3>
 				<ul>
 				
 				</ul>
