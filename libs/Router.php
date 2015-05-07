@@ -163,13 +163,24 @@ class Router {
 						$auth = Auth::getInstance();
 						
 						// TODO: Check if authenticated
+						
+						//if (false) {
+						//	$response->setCode(401);
+						//	$response->send();
+						//}
 					}
 
 					if (is_callable($handler['call'])) {
-						$handled++;
-	
 						// Execute handler
 						$response = call_user_func_array($handler['call'], [$request, $response]);
+						
+						// If response instance was not returned, let's invalite this request
+						if (!isset($response) || !is_object($response)) {
+							$response = new Response(400);
+							$response->send();
+						}
+						
+						$handled++;
 					}
 				}
 			}
