@@ -14,6 +14,8 @@ if (!defined('WPLOGVIEWER_BASE')) {
 use Allbitsnbytes\WPLogViewer\Auth;
 use Allbitsnbytes\WPLogViewer\Characteristic\IsSingleton;
 use Allbitsnbytes\WPLogViewer\Helper;
+use Allbitsnbytes\WPLogViewer\Http\Request;
+use Allbitsnbytes\WPLogViewer\Http\Response;
 
 
 /**
@@ -68,9 +70,21 @@ class Router {
 	 * @since 0.1.0
 	 */
 	private function getAction() {
-		$action = '';
+		return isset($_REQUEST['do']) ? $_REQUEST['do'] : '';
+	}
+	
+	
+	/**
+	 * Get parameters sent in the request
+	 * @return array Array of parameters
+	 * @since 0.1.0
+	 */
+	private function getParams() {
+		$params = $_REQUEST;
 		
-		return $action;
+		unset($params['do']);
+		
+		return $params;
 	}
 	
 	
@@ -100,7 +114,7 @@ class Router {
 	 * @return void
 	 * @since 0.1.0
 	 */
-	public function get($action, $fn, $auth) {
+	public function get($action, $fn, $auth=true) {
 		$this->handle($action, [
 			'method'	=> 'GET',
 			'call'		=> $fn,
@@ -117,7 +131,7 @@ class Router {
 	 * @return void
 	 * @since 0.1.0
 	 */
-	public function post($action, $fn, $auth) {
+	public function post($action, $fn, $auth=true) {
 		$this->handle($action, [
 			'method'	=> 'POST',
 			'call'		=> $fn,
@@ -135,8 +149,11 @@ class Router {
 		$headers = $this->getRequestHeaders();
 		$method = $this->getRequestMethod();
 		$action = $this->getAction();
+		$params = $this->getParams();
+		$request = new Request($action, $method, $headers, $params);
+		$response = new Response();
 		$handled = 0;
-		
+
 		if (isset($this->handlers[$action])) {
 			$handlers = $this->handlers[$action];
 			
@@ -147,21 +164,21 @@ class Router {
 						
 						// TODO: Check if authenticated
 					}
-					
+
 					if (is_callable($handler['call'])) {
 						$handled++;
-						$params = [
-							'action'	=> $action,
-						];
-						call_user_func_array($handler['call'], $params);
+	
+						// Execute handler
+						$response = call_user_func_array($handler['call'], $request, $response);
 					}
 				}
 			}
 		}
 		
 		if ($handled === 0) {
-			header('HTTP/1.0 404 Not Found');
-			die;
-		}
+			$response->setCode(404);
+		} 
+		
+		$response->send();
 	}
 }
