@@ -38,7 +38,20 @@ class Response {
 	 * @since 0.1.0
 	 */
 	private $data = [];
-		
+	
+	
+	/**
+	 * Constructor
+	 * @param int $code The code to initialize the response with
+	 * @param string $type The response type to initialize the response with
+	 * @since 0.1.0
+	 */
+	public function __construct($code=200, $type='') {
+		$this->code = $code;
+		$this->type = $type;
+	}
+
+
 	/**
 	 * Set data to send
 	 * @param string $data Data to send 
