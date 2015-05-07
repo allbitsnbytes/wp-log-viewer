@@ -69,7 +69,7 @@ class Response {
 	 */
 	public function setJSON($data) {
 		$this->setType('application/json');
-		$this->set(json_encode($data, JSON_FORCE_OBJECT));
+		$this->set(json_encode($data));
 	}
 	
 	
@@ -80,7 +80,7 @@ class Response {
 	 */
 	public function setJSONP($data) {
 		$this->setType('application/javascript');
-		$this->set(json_encode($data, JSON_FORCE_OBJECT));
+		$this->set(json_encode($data));
 	}
 	
 	

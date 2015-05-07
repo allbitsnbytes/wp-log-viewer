@@ -45,7 +45,7 @@ class Plugin {
 		wp_enqueue_script('wplogviewer-js', WPLOGVIEWER_URL . 'assets/js/main.min.js', false, false, true);
 		
 		// Localize some variables
-		wp_localize_script('wplogviewer-js', 'WPLOGVIEWER', ['api' => WPLOGVIEWER_API]);
+		wp_localize_script('wplogviewer-js', 'WPLOGVIEWER', ['api' => WPLOGVIEWER_API, 'debugEnabled' => WP_DEBUG]);
 	}
 	
 	
