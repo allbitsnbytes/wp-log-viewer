@@ -1,4 +1,4 @@
 React.render(
-	<Viewer api={ WPLOGVIEWER.api } />,
+	<Viewer />,
 	document.getElementById('wp-log-viewer')
 );

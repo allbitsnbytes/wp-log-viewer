@@ -12,26 +12,21 @@ var Viewer = React.createClass({
 				timezone: '',
 				modified: ''
 			},
-			debuggingEnabled: false,
 			ready: false
-		}
-	},
-	
-	// Get default props
-	getDefaultProps: function() {
-		return {
-			api: ''
 		};
-	},
-	
-	// Property types
-	propTypes: {
-		api: React.PropTypes.string
 	},
 	
 	// Initialize when component is to be mounted
 	componentWillMount: function() {
-		this.setState({ready: true});
+		var self = this;
+		
+		reqwest(WPLOGVIEWER.api + '?do=get-log', function(res) {
+			self.state.log.entries = res.entries;
+			self.state.log.found = res.found;
+			self.state.log.timezone = res.timezone;
+			self.state.log.modified = res.modified;
+			self.setState({ready: true});		
+		});	
 	},
 	
 	// Render component
@@ -40,25 +35,25 @@ var Viewer = React.createClass({
 			if (this.state.log.found) {
 				return (
 					<div id="viewer-pane">
-						<h2>Log Viewer <DebugStatus debuggingEnabled={ this.state.debuggingEnabled } /></h2>
+						<h2>Log Viewer <DebugStatus /></h2>
 						
 						<LogView log={ this.state.log } />
 						<ViewSidebar />
 					</div>
 				);
 			} else { 
-				if (this.state.debuggingEnabled) {
-					return (
-						<div id="viewer-pane">
-							<h2>Log Viewer <DebugStatus debuggingEnabled={ this.state.debuggingEnabled } /></h2>
+				//if (WPLOGVIEWER.debugEnabled) {
+				//	return (
+				//		<div id="viewer-pane">
+				//			<h2>Log Viewer <DebugStatus /></h2>
 							
-							<p>Debugging is enabled. However, <strong>debug.log does not exist</strong>.</p>
-						</div> 
-					);
-				} else {
+				//			<p>Debugging is enabled. However, <strong>debug.log does not exist</strong>.</p>
+				//		</div> 
+				//	);
+				//} else {
 					return (
 						<div id="viewer-pane">
-							<h2>Log Viewer <DebugStatus debuggingEnabled={ this.state.debuggingEnabled } /></h2>
+							<h2>Log Viewer <DebugStatus /></h2>
 
 							<p><strong>Debugging is currently <span className="highlight">disabled</span>.</strong></p>
 							<br />
@@ -72,7 +67,7 @@ var Viewer = React.createClass({
 							</p>
 						</div>
 					);
-				}
+				//}
 			}
 		} 
 	}
