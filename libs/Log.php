@@ -22,6 +22,23 @@ use Allbitsnbytes\WPLogViewer\Helper;
 class Log {
 
 	use IsSingleton;
+	
+	/**
+	 * @var string Path to debug.log
+	 * @since 0.1.0
+	 */
+	private $log_file = '';
+	
+	
+	/**
+	 * Initialize Log
+	 * @since 0.1.0
+	 */
+	public function init() {
+		$base = str_replace('plugins/wp-log-viewer/', '', WPLOGVIEWER_BASE);
+		$this->log_file = $base . 'debug.log';
+	}
+	
 
 	/**
 	 * Check if debug.log file exists
@@ -29,7 +46,7 @@ class Log {
 	 * @since 0.1.0
 	 */
 	public function file_exists() {
-		// TODO
+		return file_exists($this->log_file);
 	}
 
 
@@ -38,9 +55,9 @@ class Log {
 	 * @return boolean True if debugging is enabled
 	 * @since 0.1.0
 	 */
-	public function debug_enabled() {
+	//public function debug_enabled() {
 		// TODO
-	}
+	//}
 
 
 	/**
@@ -51,6 +68,8 @@ class Log {
 	 */
 	public function is_modified($timestamp='') {
 		// TODO
+		
+		return false;
 	}
 
 
@@ -61,6 +80,8 @@ class Log {
 	 */
 	public function last_modified() {
 		// TODO
+		
+		return '';
 	}
 
 
@@ -71,6 +92,8 @@ class Log {
 	 */
 	public function get_timezone() {
 		// TODO
+		
+		return '';
 	}
 
 
@@ -82,6 +105,8 @@ class Log {
 	 */
 	public function is_smaller($size='') {
 		// TODO
+		
+		return false; 
 	}
 
 
@@ -92,6 +117,8 @@ class Log {
 	 */
 	public function get_entries() {
 		// TODO
+		
+		return [];
 	}
 
 
@@ -103,6 +130,8 @@ class Log {
 	 */
 	public function get_recent_entries($timestamp) {
 		// TODO
+		
+		return [];
 	}
 
 
@@ -113,5 +142,7 @@ class Log {
 	 */
 	public function clear() {
 		// TODO
+		
+		return false;
 	}
 }
