@@ -57,12 +57,34 @@ class Auth {
 	
 	
 	/**
+	 * Remove session for an authenticated user
+	 * @param string $username The user to remove session for
+	 * @return void
+	 * @since 0.1.0
+	 */
+	public function clearUserSession($username) {
+		// TODO
+	}
+	
+	
+	/**
 	 * Create a session for an api user
 	 * @param string $apikey The api key to create session for
 	 * @return void
 	 * @since 0.1.0
 	 */
 	public function createAPISession($apikey) {
+		// TODO
+	}
+	
+	
+	/**
+	 * Remove an api session
+	 * @param string apikey The apikey to remove session for
+	 * @return void
+	 * @since 0.1.0
+	 */
+	public function clearAPISession($apikey) {
 		// TODO
 	}
 }

@@ -79,9 +79,7 @@ class Log {
 	 * @since 0.1.0
 	 */
 	public function last_modified() {
-		// TODO
-		
-		return '';
+		return filemtime($this->log_file);
 	}
 
 
@@ -91,9 +89,7 @@ class Log {
 	 * @since 0.1.0
 	 */
 	public function get_timezone() {
-		// TODO
-		
-		return '';
+		return date_default_timezone_get();
 	}
 
 
@@ -116,9 +112,29 @@ class Log {
 	 * @since 0.1.0
 	 */
 	public function get_entries() {
-		// TODO
+		$sep = '$!$';
+		$entries = [];
 		
-		return [];
+		if ($this->file_exists()) {
+			$fp = @fopen($this->log_file, 'r');
+
+			if ($fp) {
+    			while (($line = @fgets($fp)) !== false) {
+					$line = preg_replace("/^\[([0-9a-zA-Z-]+) ([0-9:]+) ([a-zA-Z_]+)\] (.*)$/i", "$1".$sep."$2".$sep."$3".$sep."$4", $line);
+					$parts = explode($sep, $line);
+        			$entries[] = [
+						'date' => $parts[0], 
+						'time' => $parts[1],
+						'timezone' => $parts[2],
+						'message' => stripslashes($parts[3]),
+					];
+    			}
+    			
+				@fclose($fp);
+			}
+		}
+
+		return $entries;
 	}
 
 
@@ -141,8 +157,9 @@ class Log {
 	 * @since 0.1.0
 	 */
 	public function clear() {
-		// TODO
+		$fp = @fopen($this->log_file, 'r+');
 		
-		return false;
+		return @ftruncate($fp, 0);
 	}
+	
 }
