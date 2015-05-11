@@ -30,7 +30,7 @@ var ViewSidebar = React.createClass({
 	},
 	
 	render: function() {
-		var lastModified = moment(new Date(this.state.modified)).format('MMMM D, YYYY, h:mm a');
+		var lastModified = new Date(this.state.modified);
 		
 		return (
 			<div className="sidebar">
@@ -47,7 +47,7 @@ var ViewSidebar = React.createClass({
 
 				<small>
 					<strong>Last modified</strong><br />
-					<span className="last-modified">{ lastModified }</span>
+					<span className="last-modified">{ lastModified.toLocaleDateString() } { lastModified.toLocaleTimeString() }</span>
 				</small>				
 			</div>
 		);

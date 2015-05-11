@@ -11,7 +11,6 @@ var paths = {
 		js: [
 			'src/bower/react/react.min.js',
 			'src/bower/reqwest/reqwest.min.js',
-			'src/bower/moment/min/moment.min.js',
 			'src/react/**/*.jsx',
 			'src/js/main.jsx'
 		]
