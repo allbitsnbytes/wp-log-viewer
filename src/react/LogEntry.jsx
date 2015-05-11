@@ -4,11 +4,13 @@
 var LogEntry = React.createClass({
 
 	// Get properties
-	getProps: function() {
+	getDefaultProps: function() {
 		return {
 			entry: {
-				date: '',
-				time: '',
+				formatted: {
+					date: '',
+					time: ''
+				},
 				message: ''	
 			}
 		};
@@ -20,12 +22,13 @@ var LogEntry = React.createClass({
 	},
 	 
 	render: function() {
-		var date = this.props.entry.date + " " + this.props.entry.time;
-		
+		var entry = this.props.entry;
+
 		return (
 			<div className="log-entry">
-				<div className="when">{ moment(date).format('MMMM Do YYYY, h:mm a') }</div>
-				<div className="message">{ this.props.entry.message }</div>
+				<div className="when">{ entry.formatted.date }</div>
+				<div className="time">{ entry.formatted.time }</div>
+				<div className="message">{ entry.message }</div>
 			</div>
 		);
 	}

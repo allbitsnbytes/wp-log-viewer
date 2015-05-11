@@ -4,16 +4,14 @@
 var LogView = React.createClass({
 	
 	// Get properties
-	getProps: function() {
+	getDefaultProps: function() {
 		return {
-			viewer: false,
 			entries: []
 		};
 	},
 	
 	// Property types
 	propTypes: {
-		viewer: React.PropTypes.object,
 		entries: React.PropTypes.array
 	},
 		
@@ -21,7 +19,23 @@ var LogView = React.createClass({
 		var entries = this.props.entries;
 		
 		if (entries.length) {
+			var today = (new Date()).toLocaleDateString();
+			
 			var logEntries = entries.map(function(entry) {
+				var entryDate = new Date(entry.date + ' ' + entry.time + ' ' + entry.timezone);
+				var day = entryDate.toLocaleDateString();
+
+				entry.formatted = {
+					date: '',
+					time: entryDate.toLocaleTimeString()
+				}
+
+				if (today == day) {
+					entry.formatted.date = 'Today';
+				} else {
+					entry.formatted.date = day;
+				}
+
 				return (
 					<LogEntry entry={ entry } />
 				);
