@@ -9,10 +9,11 @@ var Viewer = React.createClass({
 			entries: [],
 			found: false,
 			timezone: '',
-			modified: ''
+			modified: '',
+			sort: 'oldest'
 		};
 	},
-			
+
 	// Initialize when component is to be mounted
 	componentWillMount: function() {
 		reqwest(WPLOGVIEWER.api + '?do=get-log', function(res) {
@@ -22,7 +23,38 @@ var Viewer = React.createClass({
 				timezone: res.timezone,
 				modified: res.modified
 			});
+			
+			// Default sort from newest to oldest
+			this.sortNewest();
 		}.bind(this));
+	},
+	
+	// Clear log entries
+	clearLogEntries: function() {
+		reqwest(WPLOGVIEWER.api + '?do=clear-log', function(res) {
+			if (res.cleared) {
+				this.setState({entries: []});
+			}
+		}.bind(this));
+	},
+	
+	// Download log file
+	downloadFile: function() {
+		console.log('Download log file');
+	},
+	
+	// Sort newest
+	sortNewest: function() {
+		if (this.state.sort === 'oldest') {
+			this.setState({sort: 'newest', entries: this.state.entries.reverse()});
+		}
+	},
+	
+	// Sort oldest
+	sortOldest: function() {
+		if (this.state.sort === 'newest') {
+			this.setState({sort: 'oldest', entries: this.state.entries.reverse()});
+		}
 	},
 
 	// Render component
@@ -33,7 +65,7 @@ var Viewer = React.createClass({
 					<h2>Log Viewer <DebugStatus /></h2>
 						
 					<LogView entries={ this.state.entries } />
-					<ViewSidebar viewer={ this.viewer } />
+					<ViewSidebar viewer={ this } />
 				</div>
 			);
 		} else { 

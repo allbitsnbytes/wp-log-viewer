@@ -79,7 +79,7 @@ class Log {
 	 * @since 0.1.0
 	 */
 	public function last_modified() {
-		return filemtime($this->log_file);
+		return date('c', filemtime($this->log_file));
 	}
 
 
