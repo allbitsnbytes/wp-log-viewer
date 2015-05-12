@@ -21,14 +21,14 @@ var ViewSidebar = React.createClass({
 	propTypes: {
 		viewer: React.PropTypes.object
 	},
-	
+
 	// Component mounted
 	componentDidMount: function() {
 		if (this.props.viewer) {
 			this.setState({modified: this.props.viewer.state.modified});
 		}
 	},
-	
+
 	render: function() {
 		var lastModified = new Date(this.state.modified);
 		

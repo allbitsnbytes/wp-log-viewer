@@ -10,23 +10,24 @@ var Viewer = React.createClass({
 			found: false,
 			timezone: '',
 			modified: '',
-			sort: 'oldest'
+			sort: 'newest'
 		};
 	},
 
 	// Initialize when component is to be mounted
-	componentWillMount: function() {
+	componentDidMount: function() {
+		// Initialize component
 		reqwest(WPLOGVIEWER.api + '?do=get-log', function(res) {
 			this.setState({
-				entries: res.entries,
 				found: res.found,
-				timezone: res.timezone,
-				modified: res.modified
+				timezone: res.timezone
 			});
 			
-			// Default sort from newest to oldest
-			this.sortNewest();
+			this.updateEntries(res.entries, res.modified);
 		}.bind(this));
+		
+		// Check for changes
+		var timer = setInterval(this.checkLastest, 15000);
 	},
 	
 	// Clear log entries
@@ -36,6 +37,33 @@ var Viewer = React.createClass({
 				this.setState({entries: []});
 			}
 		}.bind(this));
+	},
+	
+	// Get log entries if modified
+	checkLastest: function() {
+		reqwest({
+			url: WPLOGVIEWER.api + '?do=get-entries-if-modified',
+			data: {
+				modified: this.state.modified
+			}, 
+			success: function(res) {
+				if (res.changed) {		
+					this.updateEntries(res.entries, res.modified);
+				}
+			}.bind(this)
+		});
+	},
+	
+	// Update entries
+	updateEntries: function(entries, modified) {
+		if (this.state.sort === 'newest') {
+			entries.reverse();
+		}
+					
+		this.setState({
+			entries: entries,
+			modified: modified
+		});
 	},
 	
 	// Download log file

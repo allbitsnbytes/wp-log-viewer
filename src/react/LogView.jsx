@@ -19,25 +19,37 @@ var LogView = React.createClass({
 		var entries = this.props.entries;
 		
 		if (entries.length) {
-			var today = (new Date()).toLocaleDateString();
+			var now = new Date();
+			var today = now.toLocaleDateString();
+			var section = '';
 			
 			var logEntries = entries.map(function(entry) {
 				var entryDate = new Date(entry.date + ' ' + entry.time + ' ' + entry.timezone);
 				var day = entryDate.toLocaleDateString();
-
+				var currentSection = entryDate.getMonth() + ' ' + entryDate.getFullYear();
+				var additionalClasses = '';
+				
 				entry.formatted = {
 					date: '',
 					time: entryDate.toLocaleTimeString()
 				}
-
+				
 				if (today == day) {
 					entry.formatted.date = 'Today';
 				} else {
 					entry.formatted.date = day;
 				}
+				
+				if (section !== currentSection) {
+					if (section !== '') {
+						additionalClasses = 'padded-top';
+					}
+					
+					section = currentSection;
+				}
 
 				return (
-					<LogEntry entry={ entry } />
+					<LogEntry entry={ entry } additionalClasses={ additionalClasses } />
 				);
 			});
 			
