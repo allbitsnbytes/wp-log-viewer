@@ -67,7 +67,13 @@ class Log {
 	 * @since 0.1.0
 	 */
 	public function is_modified($timestamp='') {
-		// TODO
+		$now = filemtime($this->log_file);
+		
+		if (is_int($timestamp)) {
+			return $timestamp != $now ? true : false;
+		} else if(is_string($timestamp)) {
+			return $timestamp != date('c', $now) ? true : false;
+		}
 		
 		return false;
 	}
