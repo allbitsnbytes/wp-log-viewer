@@ -54,7 +54,7 @@ class Api {
 		$log = Log::getInstance();
 		
 		$res->setJSON([
-			'modified'		=> $log->is_modified(),
+			'modified'		=> isset($req->params['modified']) && $log->is_modified($req->params['modified']) ? true : false,
 			'truncated'		=> $log->is_smaller(),
 		]);
 		
@@ -128,13 +128,15 @@ class Api {
 	 */
 	public static function get_log_entries_if_modified($req, $res) {
 		$log = Log::getInstance();
-		
-		if ($log->is_modified()) {
-			return self::get_log_entries($req, $res);
+		$changed = false;
+
+		if (isset($req->params['modified']) && $log->is_modified($req->params['modified'])) {
+			$res = self::get_log_entries($req, $res);
+			$changed = true;
 		} 
-		
+
 		$res->setJSON([
-			'modified'		=> false,
+			'changed'		=> $changed,
 		]);
 		
 		return $res;
