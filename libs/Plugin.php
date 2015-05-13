@@ -68,4 +68,47 @@ class Plugin {
 			</div>
 		';
 	}
+	
+	
+	/**
+	 * Load some worpdress functionality
+	 * @return boolean Whether WP functionality was loaded or not
+	 * @since 0.1.0
+	 */
+	public static function initWP() {
+		$loaded = false;
+		$config_path = $_SERVER['DOCUMENT_ROOT'] . '/wp-config.php';
+		$db_path = $_SERVER['DOCUMENT_ROOT'] . '/wp-includes/wp-db.php';
+
+		// Check if required files found
+		if (file_exists($config_path) && file_exists($db_path)) {
+			$fp = @fopen($config_path, 'r');
+
+			if ($fp) {
+				$sep = '$|$';
+
+				// loop, parse and define wp-config constants
+    			while (($line = @fgets($fp)) !== false) {
+					$line = preg_replace("/^define\([ '\"]+(\w+)[ '\"]+,[ '\"]+(.*)[ '\"]+\)/i", "$1".$sep."$2", $line);
+
+					if (!empty($line)) {
+						$info = explode($sep, $line);
+
+						if (is_array($info) && count($info) == 2 && !defined($info[0])) {
+							define($info[0], $info[1]);
+						}
+					}
+    			}
+    			
+				@fclose($fp);
+			
+				$loaded = true;
+				
+				// Require dependencies
+				require_once $db_path;
+			}			
+		}
+				
+		return $loaded;
+	}
 }
