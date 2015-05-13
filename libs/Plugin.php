@@ -89,17 +89,17 @@ class Plugin {
 
 				// loop, parse and define wp-config constants
     			while (($line = @fgets($fp)) !== false) {
-					$line = preg_replace("/^define\([ '\"]+(\w+)[ '\"]+,[ '\"]+(.*)[ '\"]+\)/i", "$1".$sep."$2", $line);
-
-					if (!empty($line)) {
-						$info = explode($sep, $line);
+					$parsed_line = preg_replace("/^define\([ '\"]+(\w+)[ '\"]+, (.*)\);/i", "$1".$sep."$2", $line);
+					
+					if ($line !== $parsed_line) {
+						$info = explode($sep, $parsed_line);
 
 						if (is_array($info) && count($info) == 2 && !defined($info[0])) {
-							define($info[0], $info[1]);
+							define($info[0], trim(trim(str_replace(["'", '"'], '', $info[1]))));
 						}
 					}
     			}
-    			
+  			
 				@fclose($fp);
 			
 				$loaded = true;
