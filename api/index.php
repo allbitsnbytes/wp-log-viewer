@@ -11,7 +11,18 @@ require_once WPLOGVIEWER_BASE . 'autoload.php';
 /**
  * Dependencies
  */
+use Allbitsnbytes\WPLogViewer\Auth;
+use Allbitsnbytes\WPLogViewer\Plugin;
 use Allbitsnbytes\WPLogViewer\Router;
+
+
+/**
+ * Load WP Env and authenticate
+ */
+if (!Plugin::initWP()) {
+	header('HTTP/1.0 400 Bad Request');
+	die;
+}
 
 
 /**

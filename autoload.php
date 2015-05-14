@@ -27,14 +27,12 @@ spl_autoload_register(function ($class) {
     // If the class doesn't use the namespace prefix continue to next autoloader
     $len = strlen($prefix);
     if (strncmp($prefix, $class, $len) !== 0) {
-error_log('*** Failed');
         return;
     }
 
     $relative_class = substr($class, $len);
     $file = $base_dir . str_replace('\\', '/', $relative_class) . '.php';
-error_log('class: '.$relative_class);
-error_log('file: '.$file);
+
     if (file_exists($file)) {
         require $file;
     }

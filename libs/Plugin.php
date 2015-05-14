@@ -76,12 +76,14 @@ class Plugin {
 	 * @since 0.1.0
 	 */
 	public static function initWP() {
+		define('ABSPATH', $_SERVER['DOCUMENT_ROOT']);
+		define('WPINC', '/wp-includes');
+		
 		$loaded = false;
-		$config_path = $_SERVER['DOCUMENT_ROOT'] . '/wp-config.php';
-		$db_path = $_SERVER['DOCUMENT_ROOT'] . '/wp-includes/wp-db.php';
+		$config_path = ABSPATH . '/wp-config.php';
 
 		// Check if required files found
-		if (file_exists($config_path) && file_exists($db_path)) {
+		if (file_exists($config_path) && file_exists(ABSPATH . WPINC)) {
 			$fp = @fopen($config_path, 'r');
 
 			if ($fp) {
@@ -101,11 +103,41 @@ class Plugin {
     			}
   			
 				@fclose($fp);
-			
-				$loaded = true;
 				
-				// Require dependencies
-				require_once $db_path;
+				// Define additional constants if missing
+				if (!defined('WP_DEBUG')) {
+					define('WP_DEBUG', false);
+				}
+
+				if (defined('DB_NAME') && defined('DB_USER') && defined('DB_PASSWORD') && defined('DB_HOST')) {								
+					$includes = [
+						'capabilities.php',
+						'class-wp-error.php',
+						'default-constants.php',
+						'formatting.php',
+						'functions.php',
+						'l10n.php',
+						'pluggable.php',
+						'plugin.php',
+						'pomo/translations.php',
+						'user.php',
+						'wp-db.php',
+					];
+					
+					// Require dependencies
+					foreach ($includes as $include) {
+						require_once ABSPATH . WPINC . '/' . $include;
+					}
+
+					// Setup wpdb global variable
+					global $wpdb;
+				
+					if (!isset($wpdb)) {
+						$wpdb = new \wpdb(DB_USER, DB_PASSWORD, DB_NAME, DB_HOST);
+					}
+
+					$loaded = true;
+				}
 			}			
 		}
 				

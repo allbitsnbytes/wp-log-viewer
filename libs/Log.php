@@ -91,7 +91,7 @@ class Log {
 
 	/**
 	 * Get timezone for server
-	 * @return The server timezone
+	 * @return string The server timezone
 	 * @since 0.1.0
 	 */
 	public function get_timezone() {

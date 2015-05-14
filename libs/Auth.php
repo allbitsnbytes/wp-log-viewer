@@ -31,7 +31,9 @@ class Auth {
 	 * @since 0.1.0
 	 */
 	public function isValidLogin($username, $password) {
-		// TODO
+		global $wpdb;
+		
+		
 	}
 	
 	
@@ -41,7 +43,7 @@ class Auth {
 	 * @since 0.1.0
 	 */
 	public function isValidSession() {
-		// TODO
+		global $wpdb;
 	}
 	
 	
@@ -52,7 +54,7 @@ class Auth {
 	 * @since 0.1.0
 	 */
 	public function createUserSession($username) {
-		// TODO
+		global $wpdb;
 	}
 	
 	
@@ -63,7 +65,7 @@ class Auth {
 	 * @since 0.1.0
 	 */
 	public function clearUserSession($username) {
-		// TODO
+		global $wpdb;
 	}
 	
 	
@@ -74,7 +76,7 @@ class Auth {
 	 * @since 0.1.0
 	 */
 	public function createAPISession($apikey) {
-		// TODO
+		global $wpdb;
 	}
 	
 	
@@ -85,6 +87,6 @@ class Auth {
 	 * @since 0.1.0
 	 */
 	public function clearAPISession($apikey) {
-		// TODO
+		global $wpdb;
 	}
 }
