@@ -3,13 +3,6 @@
  */
 var ViewSidebar = React.createClass({
 
-	// Get default state
-	getInitialState: function() {
-		return {
-			modified: ''
-		}
-	},
-
 	// Get properties
 	getDefaultProps: function() {
 		return {
@@ -22,15 +15,15 @@ var ViewSidebar = React.createClass({
 		viewer: React.PropTypes.object
 	},
 
-	// Component mounted
-	componentDidMount: function() {
-		if (this.props.viewer) {
-			this.setState({modified: this.props.viewer.state.modified});
-		}
-	},
-
 	render: function() {
-		var lastModified = new Date(this.state.modified);
+		var lastModified = 'n/a';
+		
+		if (this.props.viewer) {
+			var date = new Date(this.props.viewer.state.modified);
+			lastModified = ( 
+				<span className="last-modified">{ date.toLocaleDateString() }<br />{ date.toLocaleTimeString() }</span> 
+			);
+		} 
 		
 		return (
 			<div className="sidebar">
@@ -45,9 +38,15 @@ var ViewSidebar = React.createClass({
 					<ViewAction action={ this.props.viewer.sortOldest }>By Oldest</ViewAction>
 				</ul>
 
+				<h3>View</h3>
+				<ul>
+					<ViewAction action={ this.props.viewer.listView }>List view</ViewAction>
+					<ViewAction action={ this.props.viewer.groupView }>Group view</ViewAction>
+				</ul>
+
 				<small>
 					<strong>Last modified</strong><br />
-					<span className="last-modified">{ lastModified.toLocaleDateString() } { lastModified.toLocaleTimeString() }</span>
+					{ lastModified }
 				</small>				
 			</div>
 		);

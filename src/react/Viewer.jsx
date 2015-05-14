@@ -10,7 +10,8 @@ var Viewer = React.createClass({
 			found: false,
 			timezone: '',
 			modified: '',
-			sort: 'newest'
+			sort: 'newest',
+			view: 'list'
 		};
 	},
 
@@ -60,10 +61,15 @@ var Viewer = React.createClass({
 			entries.reverse();
 		}
 					
-		this.setState({
-			entries: entries,
-			modified: modified
-		});
+		var data = {
+			entries: entries
+		};
+		
+		if (modified) {
+			data.modified = modified;
+		}
+		
+		this.setState(data);
 	},
 	
 	// Download log file
@@ -84,18 +90,39 @@ var Viewer = React.createClass({
 			this.setState({sort: 'oldest', entries: this.state.entries.reverse()});
 		}
 	},
+	
+	// List view
+	listView: function() {
+		this.setState({view: 'list'});
+	},
+	
+	// Group view
+	groupView: function() {
+		this.setState({view: 'group'});
+	},
 
 	// Render component
 	render: function() { 
 		if (this.state.found) {
-			return (
-				<div id="viewer-pane">
-					<h2>Log Viewer <DebugStatus /></h2>
+			if (this.state.view == 'list') {
+				return (
+					<div id="viewer-pane">
+						<h2>Log Viewer <DebugStatus /></h2>
 						
-					<LogView entries={ this.state.entries } />
-					<ViewSidebar viewer={ this } />
-				</div>
-			);
+						<LogListView entries={ this.state.entries } />
+						<ViewSidebar viewer={ this } />
+					</div>
+				);
+			} else {
+				return (
+					<div id="viewer-pane">
+						<h2>Log Viewer <DebugStatus /></h2>
+						
+						<LogGroupView entries={ this.state.entries } />
+						<ViewSidebar viewer={ this } />
+					</div>
+				);
+			}
 		} else { 
 			if (WPLOGVIEWER.debugEnabled) {
 				return (
