@@ -40,8 +40,8 @@ var ViewSidebar = React.createClass({
 
 				<h3>View</h3>
 				<ul>
-					<ViewAction action={ this.props.viewer.listView }>List view</ViewAction>
 					<ViewAction action={ this.props.viewer.groupView }>Group view</ViewAction>
+					<ViewAction action={ this.props.viewer.listView }>List view</ViewAction>
 				</ul>
 
 				<small>
