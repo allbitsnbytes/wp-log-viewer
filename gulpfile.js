@@ -11,6 +11,7 @@ var paths = {
 		js: [
 			'src/bower/react/react.min.js',
 			'src/bower/reqwest/reqwest.min.js',
+			'src/bower/blueimp-md5/js/md5.min.js',
 			'src/react/**/*.jsx',
 			'src/js/main.jsx'
 		]
