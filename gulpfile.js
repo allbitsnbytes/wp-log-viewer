@@ -53,7 +53,7 @@ Gulp.task('css', function() {
 	return Gulp.src(paths.src.css)
 		.pipe($.plumber())
 		.pipe($.stylus({
-			use: [Jeet]
+			use: [Jeet()]
 		}))
 		.pipe($.minifyCss())
 		.pipe($.autoprefixer())

@@ -1,15 +1,20 @@
+@import 'Jeet'
+
+
 body
 	min-height 1200px
 	height 100%
 	
 .debugger-status.enabled
-	background #006600
+	background #C0E69F
 	
 .debugger-status.disabled
-	background #ff0000
-	
+	background #DA8F92
+
 #viewer-pane
-	
+	span()
+	cf()
+
 	h2
 		margin 0 0 15px
 		
@@ -17,46 +22,73 @@ body
 			display inline-block
 			font-size 11px
 			line-height 11px
-			color #fff
+			color #444
 			border-radius 6px
-			padding: 5px
-			margin-left 8px
-		
+			padding: 5px 10px
+			margin-left 22px
+
+	.group-entries,
 	.log-entries
-		display inline-block
-		width 75%
+		col(0.75)
 		min-height 530px
 		height 100%
-		float left
-		background #f5f5f5
 		border none
-		border-bottom 1px solid #d9d9d9
+		border-right 1px solid #d9d9d9
 		box-sizing border-box
-		padding 15px
-		
+		padding 15px 0
+
+	.log-entries
 		.log-entry
+			span()
 			margin-bottom 5px
 			
 			.when
-				display inline-block
+				col(0.15)
 				font-size 0.8em
-				width 125px
-				
+				font-weight bold
+								
 			.time
-				display inline-block
+				col(0.15)
 				font-size 0.8em
-				width 160px
-			
+							
 			.message
-				display inline-block
+				col(0.7)
+				font-size 1em
 				
 			&.padded-top
 				margin-top 22px
+	
+	.group-entries
+		.group-entry
+			span()
+			margin-bottom 15px
+			
+			.when
+				col(0.15)
+				font-size 0.8em
+				
+				.date
+					display block
+					font-weight bold
+				
+				.time
+					display block
+					
+			.message
+				col(0.82)
+				font-size 1.1em
+			
+			.group-actions
+				span()
+				font-size 0.8em
+				margin-top 3px
+				
+			.entry-detail
+				display none
 
 	.sidebar
-		display inline-block
-		float left
-		padding-left 4%
+		col(0.25)
+		padding 15px 0
 		
 		h3
 			font-size 1.2em
