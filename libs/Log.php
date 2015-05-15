@@ -55,9 +55,9 @@ class Log {
 	 * @return boolean True if debugging is enabled
 	 * @since 0.1.0
 	 */
-	//public function debug_enabled() {
-		// TODO
-	//}
+	public function debug_enabled() {
+		return defined('WP_DEBUG') ? WP_DEBUG : false;	
+	}
 
 
 	/**

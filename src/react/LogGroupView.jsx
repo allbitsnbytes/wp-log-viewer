@@ -14,14 +14,49 @@ var LogGroupView = React.createClass({
 	propTypes: {
 		entries: React.PropTypes.array
 	},
+	
+	// Sort entries into groups
+	getGroupedEntries: function() {
+		var groups = {};
+
+		for (var i=0, length=this.props.entries.length; i < length; i++) {
+			var entry = this.props.entries[i];
+			var key = md5(entry.message);
+
+			if (groups[key] === undefined) {
+				groups[key] = {
+					date: entry.date,
+					message: entry.message,
+					entries: []
+				};
+			}
+
+			groups[key].entries.concat(entry);
+		}
+
+		return groups;
+	},
 		
 	render: function() {
-		var entries = this.props.entries;
+		var groups = this.getGroupedEntries();
+		var groupSections = [];
 		
-		if (entries.length) {
+		for (group of groups) {
+			groupSections.concat((
+				<GroupEntry group={ group } />
+			));
+		}
+		
+		if (groups.length) {
+			var groupEntries = groups.for(function(group) {
+				return (
+					<GroupEntry group={ group } />
+				);
+			});
+			
 			return (
-				<div className="log-entries">
-					Group view coming soon.
+				<div className="group-entries">
+					{ groupEntries }
 				</div>
 			);		
 		} else {
