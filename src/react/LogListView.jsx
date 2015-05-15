@@ -55,8 +55,6 @@ var LogListView = React.createClass({
 			
 			return (
 				<div className="log-entries">
-					<p>There are <strong>{ entries.length }</strong> entries.</p><br />
-					
 					{ logEntries }
 				</div>
 			);		

@@ -26,12 +26,14 @@ var LogGroupView = React.createClass({
 			if (groups[key] === undefined) {
 				groups[key] = {
 					date: entry.date,
+					time: entry.time,
+					timezone: entry.timezone,
 					message: entry.message,
 					entries: []
 				};
 			}
 
-			groups[key].entries.concat(entry);
+			groups[key].entries.push(entry);
 		}
 
 		return groups;
@@ -40,25 +42,19 @@ var LogGroupView = React.createClass({
 	render: function() {
 		var groups = this.getGroupedEntries();
 		var groupSections = [];
-		
-		for (group of groups) {
-			groupSections.concat((
-				<GroupEntry group={ group } />
+
+		for (var key in groups) {
+			groupSections.push((
+				<GroupEntry group={ groups[key] } />
 			));
 		}
-		
-		if (groups.length) {
-			var groupEntries = groups.for(function(group) {
-				return (
-					<GroupEntry group={ group } />
-				);
-			});
-			
+
+		if (groupSections.length) {
 			return (
 				<div className="group-entries">
-					{ groupEntries }
+					{ groupSections }
 				</div>
-			);		
+			);
 		} else {
 			return (
 				<div className="log-entries">

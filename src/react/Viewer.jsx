@@ -11,7 +11,7 @@ var Viewer = React.createClass({
 			timezone: '',
 			modified: '',
 			sort: 'newest',
-			view: 'list'
+			view: 'group'
 		};
 	},
 
@@ -57,7 +57,7 @@ var Viewer = React.createClass({
 	
 	// Update entries
 	updateEntries: function(entries, modified) {
-		if (this.state.sort === 'newest') {
+		if (this.state.sort === 'oldest') {
 			entries.reverse();
 		}
 					
