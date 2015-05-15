@@ -90,20 +90,37 @@ body
 		col(0.25)
 		padding 15px 0
 		
-		h3
-			font-size 1.2em
-			margin 0 0 10px
-			
-		ul
-			display block
-			list-style none
-			padding 0
+		.menu-group
 			margin 0 0 25px
 			
-			li
+			h3
+				font-size 1.2em
+				margin 0 0 6px
+		
+			ul
+				display block
 				list-style none
-				padding 1px 0
-				margin 0
+				padding 0
+				
+				li
+					list-style none
+					padding 1px 0
+					margin 0
+					
+					a
+						display inline-block
+						color #333
+						font-size 0.9em
+						border-radius 4px
+						text-decoration none
+						padding 4px 10px
+						margin-bottom 1px
+						
+						&:hover
+							color #444
+							
+					&.active a
+						background-color #e4e4e4
 				
 		small
 			font-size 0.85em

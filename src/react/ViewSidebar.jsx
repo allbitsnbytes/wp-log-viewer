@@ -3,6 +3,44 @@
  */
 var ViewSidebar = React.createClass({
 
+	// Menu Config
+	getMenuOptions: function() {
+		return [
+			
+			// Log actions
+			{
+				name: 'Actions',
+				default: '',
+				trackSelected: false,
+				options: [
+					{ label: 'Clear Log',	key: 'clear',	action: this.props.viewer.clearLogEntries }
+				]
+			},
+			
+			// Sort options
+			{
+				name: 'Sort',
+				default: 'newest',
+				trackSelected: true,
+				options: [
+					{ label: 'By Newest',	key: 'newest',	action: this.props.viewer.sortNewest },
+					{ label: 'By Oldest',	key: 'oldest',	action: this.props.viewer.sortOldest }
+				]
+			},
+			
+			// View options
+			{
+				name: 'View',
+				default: 'group',
+				trackSelected: true,
+				options: [
+					{ label: 'Group View',	key: 'group',	action: this.props.viewer.showGroupView },
+					{ label: 'List View',	key: 'list',	action: this.props.viewer.showListView }
+				]
+			}
+		];
+	},
+	
 	// Get properties
 	getDefaultProps: function() {
 		return {
@@ -14,9 +52,15 @@ var ViewSidebar = React.createClass({
 	propTypes: {
 		viewer: React.PropTypes.object
 	},
-
+	
 	render: function() {
 		var lastModified = 'n/a';
+		var defaultMenuOptions = this.getMenuOptions();
+		var menuOptions = defaultMenuOptions.map(function(menuGroup) {
+			return (
+				<ViewActionGroup group={ menuGroup } />
+			);
+		});
 		
 		if (this.props.viewer) {
 			var date = new Date(this.props.viewer.state.modified);
@@ -27,22 +71,7 @@ var ViewSidebar = React.createClass({
 		
 		return (
 			<div className="sidebar">
-				<h3>Actions</h3>
-				<ul>
-					<ViewAction action={ this.props.viewer.clearLogEntries }>Clear Log</ViewAction>			
-				</ul>
-
-				<h3>Sort</h3>
-				<ul>
-					<ViewAction action={ this.props.viewer.sortNewest }>By Newest</ViewAction>
-					<ViewAction action={ this.props.viewer.sortOldest }>By Oldest</ViewAction>
-				</ul>
-
-				<h3>View</h3>
-				<ul>
-					<ViewAction action={ this.props.viewer.groupView }>Group view</ViewAction>
-					<ViewAction action={ this.props.viewer.listView }>List view</ViewAction>
-				</ul>
+				{ menuOptions }
 
 				<small>
 					<strong>Last modified</strong><br />

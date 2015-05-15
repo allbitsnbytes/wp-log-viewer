@@ -92,12 +92,12 @@ var Viewer = React.createClass({
 	},
 	
 	// List view
-	listView: function() {
+	showListView: function() {
 		this.setState({view: 'list'});
 	},
 	
 	// Group view
-	groupView: function() {
+	showGroupView: function() {
 		this.setState({view: 'group'});
 	},
 
