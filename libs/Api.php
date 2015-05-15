@@ -111,7 +111,8 @@ class Api {
 
 		$res->setJSON([
 			'truncated'		=> $truncated,
-			'entries'		=> $truncated ? $log->get_recent_entries() : $log->get_entries(),
+			//'entries'		=> $truncated ? $log->get_recent_entries() : $log->get_entries(),
+			'entries'		=> $log->get_entries(),
 			'modified'		=> $log->last_modified(),
 		]);
 		

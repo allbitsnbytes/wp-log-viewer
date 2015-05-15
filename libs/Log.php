@@ -140,7 +140,7 @@ class Log {
 			}
 		}
 
-		return $entries;
+		return array_reverse($entries);
 	}
 
 
