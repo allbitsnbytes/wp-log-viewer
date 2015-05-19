@@ -50,8 +50,8 @@ class Plugin {
 	 */
 	public function create_session($user_login, $user) {
 		$auth = Auth::get_instance();
-		
-		$auth->create_api_session();
+
+		$auth->create_api_session($user->ID);
 	}
 	
 	
@@ -62,7 +62,7 @@ class Plugin {
 	 */
 	public function clear_session() {
 		$auth = Auth::get_instance();
-		
+
 		$auth->clear_api_session();
 	}
 
@@ -77,10 +77,10 @@ class Plugin {
 		$localized = [
 			'api' 			=> WPLOGVIEWER_URL . 'api/',
 			'debugEnabled' 	=> WP_DEBUG,
-			'api_key'		=> '',
+			'cookie_token'	=> '',
 			'session_key'	=> '',
 		];
-		
+
 		// Stylesheet files
 		wp_enqueue_style('wplogviewer-css', WPLOGVIEWER_URL . 'assets/css/main.min.css');
 
@@ -89,10 +89,10 @@ class Plugin {
 
 		// Localize some variables
 		$session_info = $auth->get_api_session();
-		
+	
 		// If session is not valid, create one
 		if ($session_info['valid'] === true) {
-			$localized['api_key']		= $session_info['api_key']; 
+			$localized['cookie_token']	= $session_info['cookie_token']; 
 			$localized['session_key']	= $session_info['session_key'];
 		}
 
@@ -136,6 +136,7 @@ class Plugin {
 
 		$loaded = false;
 		$config_path = ABSPATH . '/wp-config.php';
+		$table_prefix = 'wp_';
 		
 		// Check if required files found
 		if (file_exists($config_path) && file_exists(ABSPATH . '/wp-includes')) {
@@ -154,6 +155,8 @@ class Plugin {
 						if (is_array($info) && count($info) == 2 && !defined($info[0])) {
 							define($info[0], trim(trim(str_replace(["'", '"'], '', $info[1]))));
 						}
+					} else if (strpos($line, '$table_prefix') !== false) {
+						$table_prefix = trim(preg_replace("/^[\$ ]+table_prefix[ =\"']+([a-zA-Z0-9_-]+)[\"';]+/i", "$1", $line));
 					}
     			}
 
@@ -190,12 +193,11 @@ class Plugin {
 //					require_once ABSPATH . '/wp-settings.php';
 
 					// Setup wpdb global variable
-					if (!isset($GLOBALS['wpdb'])) {
-						$GLOBALS['wpdb'] = new \wpdb(DB_USER, DB_PASSWORD, DB_NAME, DB_HOST);
-					}
-
-					if (!isset($GLOBALS['wp_object_cache'])) {
-						$GLOBALS['wp_object_cache'] = new \WP_Object_Cache();
+					global $wpdb;
+					
+					if (!is_object($wpdb)) {
+						$wpdb = new \wpdb(DB_USER, DB_PASSWORD, DB_NAME, DB_HOST);
+						$wpdb->set_prefix($table_prefix);
 					}
 
 					$loaded = true;

@@ -8,7 +8,7 @@ function wplv_remote(action, method, data, success) {
 		method: method,
 		data: data,
 		headers: {
-			'wplv-api': WPLOGVIEWER.api_key,
+			'wplv-cookie': WPLOGVIEWER.cookie_token,
 			'wplv-session': WPLOGVIEWER.session_key
 		},
 		success: success

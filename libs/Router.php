@@ -179,7 +179,7 @@ class Router {
 					if ($handler['auth']) {
 						$auth = Auth::get_instance();
 
-						if (!isset($headers['wplv-api']) || !isset($headers['wplv-session']) || !$auth->is_valid_api_session($headers['wplv-api'], $headers['wplv-session'])) {
+						if (!isset($headers['wplv-cookie']) || !isset($headers['wplv-session']) || !$auth->is_valid_api_session($headers['wplv-cookie'], $headers['wplv-session'])) {
 							$response->set_code(401);
 							$response->send();
 						}

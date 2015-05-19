@@ -106,12 +106,13 @@ class Auth {
 	public function is_valid_api_session($cookie_token, $session_key) {
 		global $wpdb;
 
-		if (isset($_COOKIE[self::$cookie_prefix . $cookie_token]) && $_COOKIE[self::$cookie_prefix . $cookie_token] === $session_key) {
-			$sql = 'select count(option_id) from ' . $wpdb->options . ' where option_name=%s';
+		if (isset($_COOKIE[self::$cookie_prefix . $cookie_token]) && $_COOKIE[self::$cookie_prefix . $cookie_token] == $session_key) {
+			$sql = 'select option_id from ' . $wpdb->options . ' where option_name=%s';
 			$count = $wpdb->get_var($wpdb->prepare($sql, self::$db_prefix . $session_key));
 
-			return intval($count) === 1 ? true : false; 
+			return intval($count) > 0 ? true : false; 
 		}
+
 		return false;
 	}
 
@@ -121,62 +122,32 @@ class Auth {
 	 *
 	 * @since 0.1.0
 	 *
+	 * @param int $user_id The user id to create a session for
 	 * @return boolean Whether API session was successfully created
 	 */
-	public function create_api_session() {
+	public function create_api_session($user_id) {
 		global $wpdb;
 
-		$api_key = $this->get_api_key();
+		$api_key = $this->get_api_key($user_id);
 		$created = false;
-		
-		if ($api_key !== false) {
-			$cookie_token = \wp_generate_password(self::$cookie_token_length, true, true);
-			$session_key = \wp_generate_password(self::$key_length, true, true);
 
+		if (!empty($api_key)) {
+			$cookie_token = \wp_generate_password(self::$cookie_token_length, true);
+			$session_key = \wp_generate_password(self::$key_length, true, true);
 			$created = $wpdb->replace($wpdb->options, [
 				'option_name'	=> self::$db_prefix . $session_key,
 				'option_value'	=> $api_key,
 			]);
 
 			if ($created !== false) {
-				setcookie(self::$cookie_prefix . $cookie_token, $session_key, 12 * HOUR_IN_SECONDS, '/', $_SERVER['name'], false, true);
+				setcookie(self::$cookie_prefix . $cookie_token, $session_key, (time() + DAY_IN_SECONDS), '/', $_SERVER['SERVER_NAME'], false, true);
 			}
 		}
-		
+
 		return $created;
 	}
-
-
-	/**
-	 * Get api session information for currently logged in user
-	 *
-	 * @since 0.1.0
-	 *
-	 * @return array The session information
-	 */
-	public function get_api_session() {
-		global $wpdb;
-		
-		$info = [
-			'api_key'		=> $this->get_api_key(),
-			'session_key'	=> $this->get_session_key(),
-			'cookie_token'	=> $this->get_cookie_token(),
-			'valid'			=> false,
-		];
-
-		if ($info['api_key'] !== false) {
-			$sql = 'select option_value from ' . $wpdb->options . ' where option_name=%s';
-			$info['session_key'] = $wpdb->get_var($wpdb->prepare($sql, self::$db_prefix . $info['api_key']));
-
-			if ($info['session_key'] !== false) {
-				$info['valid'] = true;
-			}
-		}
-
-		return $info;
-	}
-
-
+	
+	
 	/**
 	 * Destroy an api session
 	 *
@@ -206,6 +177,32 @@ class Auth {
 
 
 	/**
+	 * Get api session information for currently logged in user
+	 *
+	 * @since 0.1.0
+	 *
+	 * @return array The session information
+	 */
+	public function get_api_session() {
+		global $wpdb;
+		
+		$user_id = \get_current_user_id();
+		$info = [
+			'api_key'		=> $this->get_api_key($user_id),
+			'session_key'	=> $this->get_session_key(),
+			'cookie_token'	=> $this->get_cookie_token(),
+			'valid'			=> false,
+		];
+		
+		if (!empty($info['cookie_token']) && !empty($info['session_key'])) {
+			$info['valid'] = true;
+		}
+
+		return $info;
+	}
+
+
+	/**
 	 * Get session key from cookie
 	 * 
 	 * If no session key is found an empty string will be returned
@@ -217,7 +214,7 @@ class Auth {
 	public function get_session_key() {
 		$cookie_token = $this->get_cookie_token();
 
-		return isset($_COOKIE[$cookie_token]) ? $_COOKIE[$cookie_token] : '';
+		return isset($_COOKIE[self::$cookie_prefix . $cookie_token]) ? $_COOKIE[self::$cookie_prefix . $cookie_token] : '';
 	}
 	
 	
@@ -232,8 +229,8 @@ class Auth {
 	 */
 	public function get_cookie_token() {
 		foreach ($_COOKIE as $key => $value) {
-			if (str_pos($key, self::$cookie_prefix, 0) === 0)	{
-				return substr($key, 0, strlen(self::$cookie_prefix));
+			if (strpos($key, self::$cookie_prefix, 0) === 0)	{
+				return substr($key, strlen(self::$cookie_prefix));
 			}
 		}
 		
@@ -248,24 +245,23 @@ class Auth {
 	 *
 	 * @since 0.1.0
 	 *
+	 * @param int $user_id The user id of the user to get api key for
 	 * @return string API key for logged in user
 	 */
-	public function get_api_key() {
+	public function get_api_key($user_id) {
 		global $wpdb;
-
-		$user_id = \get_current_user_id();
 
 		if (is_int($user_id) && $user_id > 0) {		
 			$sql = 'select meta_value from ' . $wpdb->usermeta . ' where meta_key="wplv_api_key" and user_id=%d';
 			$api_key = $wpdb->get_var($wpdb->prepare($sql, $user_id));
-	
+
 			if (empty($api_key)) {
 				$api_key = \wp_generate_password(self::$key_length, true, true);
 
 				$wpdb->insert($wpdb->usermeta, [
-					user_id		=> $user_id,
-					meta_key	=> 'wplv_api_key',
-					meta_value	=> $api_key,
+					'user_id'		=> $user_id,
+					'meta_key'		=> 'wplv_api_key',
+					'meta_value'	=> $api_key,
 				]);
 			}
 
