@@ -20,6 +20,7 @@ use Allbitsnbytes\WPLogViewer\Http\Response;
 
 /**
  * Request router
+ *
  * @since 0.1.0
  */
 class Router {
@@ -34,10 +35,12 @@ class Router {
 	
 	/**
 	 * Get all request headers
-	 * @return array The request headers
+	 *
 	 * @since 0.1.0
+	 *
+	 * @return array The request headers
 	 */
-	private function getRequestHeaders() {
+	private function get_request_headers() {
 		if (function_exists('getallheaders')) {
 			return getallheaders();
 		}
@@ -46,7 +49,7 @@ class Router {
 		
 		foreach ($_SERVER as $key => $value) {
 			if ((substr($key, 0, 5) == 'HTTP_')) {
-				$headers[str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', substr($key, 5)))))] = $value;
+				$headers[str_replace(' ', '-', strtolower(str_replace('_', ' ', substr($key, 5))))] = $value;
 			}
 		}
 		
@@ -56,44 +59,52 @@ class Router {
 	
 	/**
 	 * Get request method
-	 * @return string The request method
+	 *
 	 * @since 0.1.0
+	 *
+	 * @return string The request method
 	 */
-	private function getRequestMethod() {
+	private function get_request_method() {
 		return $_SERVER['REQUEST_METHOD'];
 	}
 	
 	
 	/**
 	 * Get requested action
-	 * @return string The requested action
+	 *
 	 * @since 0.1.0
+	 *
+	 * @return string The requested action
 	 */
-	private function getAction() {
+	private function get_action() {
 		return isset($_REQUEST['do']) ? $_REQUEST['do'] : '';
 	}
 	
 	
 	/**
 	 * Get parameters sent in the request
-	 * @return array Array of parameters
+	 *
 	 * @since 0.1.0
+	 *
+	 * @return array Array of parameters
 	 */
-	private function getParams() {
+	private function get_params() {
 		$params = $_REQUEST;
 		
 		unset($params['do']);
 		
 		return $params;
 	}
-	
+
 	
 	/**
 	 * Register an action and handler
+	 *
+	 * @since 0.1.0
+	 *
 	 * @param string $action The action to handle
 	 * @param array $handler An array with the following keys: method, call, auth.  Method must be either POST or GET, call must be a callable function, and auth a boolean.
 	 * @return void
-	 * @since 0.1.0
 	 */
 	public function handle($action, $handler) {
 		if (!isset($this->handlers[$action]) || !is_array($this->handlers[$action])) {
@@ -108,11 +119,13 @@ class Router {
 	
 	/**
 	 * Register a GET handler
+	 *
+	 * @since 0.1.0
+	 *
 	 * @param string $action The action to handle
 	 * @param callable $fn The callable function to call if action is matched
 	 * @param boolean $auth Whether must be authenticated to perform action
 	 * @return void
-	 * @since 0.1.0
 	 */
 	public function get($action, $fn, $auth=true) {
 		$this->handle($action, [
@@ -125,11 +138,13 @@ class Router {
 	
 	/**
 	 * Register a POST handler
+	 *
+	 * @since 0.1.0
+	 *
 	 * @param string $action The action to handle
 	 * @param callable $fn The callable function to call if action is matched
 	 * @param boolean $auth Whether must be authenticated to perform action
 	 * @return void
-	 * @since 0.1.0
 	 */
 	public function post($action, $fn, $auth=true) {
 		$this->handle($action, [
@@ -138,58 +153,58 @@ class Router {
 			'auth'		=> $auth,
 		]);
 	}
-	
-	
+
+
 	/**
 	 * Process incoming request
-	 * @return void
+	 *
 	 * @since 0.1.0
+	 *
+	 * @return void
 	 */
 	public function run() {
-		$headers = $this->getRequestHeaders();
-		$method = $this->getRequestMethod();
-		$action = $this->getAction();
-		$params = $this->getParams();
+		$headers = $this->get_request_headers();
+		$method = $this->get_request_method();
+		$action = $this->get_action();
+		$params = $this->get_params();
 		$request = new Request($action, $method, $headers, $params);
 		$response = new Response();
 		$handled = 0;
 
 		if (isset($this->handlers[$action])) {
 			$handlers = $this->handlers[$action];
-			
+
 			foreach ($handlers as $handler) {
 				if ($method === strtoupper($handler['method'])) {
 					if ($handler['auth']) {
-						$auth = Auth::getInstance();
-						
-						// TODO: Check if authenticated
-						
-						//if (false) {
-						//	$response->setCode(401);
-						//	$response->send();
-						//}
+						$auth = Auth::get_instance();
+
+						if (!isset($headers['wplv-api']) || !isset($headers['wplv-session']) || !$auth->is_valid_api_session($headers['wplv-api'], $headers['wplv-session'])) {
+							$response->set_code(401);
+							$response->send();
+						}
 					}
 
 					if (is_callable($handler['call'])) {
 						// Execute handler
 						$response = call_user_func_array($handler['call'], [$request, $response]);
-						
+
 						// If response instance was not returned, let's invalite this request
 						if (!isset($response) || !is_object($response)) {
 							$response = new Response(400);
 							$response->send();
 						}
-						
+
 						$handled++;
 					}
 				}
 			}
 		}
-		
+
 		if ($handled === 0) {
-			$response->setCode(404);
+			$response->set_code(404);
 		} 
-		
+
 		$response->send();
 	}
 }

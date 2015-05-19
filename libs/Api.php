@@ -17,21 +17,24 @@ use Allbitsnbytes\WPLogViewer\Log;
 
 /**
  * Handle authentication
+ *
  * @since 0.1.0
  */
 class Api {
 	
 	/**
 	 * Get log file details
+	 *
+	 * @since 0.1.0
+	 *
 	 * @param Request $req Request instance
 	 * @param Response $res Response instance
 	 * @return Response The current response instance
-	 * @since 0.1.0
 	 */
 	public static function get_log_details($req, $res) {
-		$log = Log::getInstance();
+		$log = Log::get_instance();
 	
-		$res->setJSON([
+		$res->set_json([
 			'entries'		=> $log->get_entries(),
 			'found'			=> $log->file_exists(),
 //			'debug_enabled'	=> $log->debug_enabled(),
@@ -45,15 +48,17 @@ class Api {
 
 	/**
 	 * Check if log file has been modified
+	 *
+	 * @since 0.1.0
+	 *
 	 * @param Request $req Request instance
 	 * @param Response $res Response instance
 	 * @return Response The current response instance
-	 * @since 0.1.0
 	 */
 	public static function check_if_log_modified($req, $res) {
-		$log = Log::getInstance();
+		$log = Log::get_instance();
 		
-		$res->setJSON([
+		$res->set_json([
 			'modified'		=> isset($req->params['modified']) && $log->is_modified($req->params['modified']) ? true : false,
 			'truncated'		=> $log->is_smaller(),
 		]);
@@ -64,15 +69,17 @@ class Api {
 
 	/**
 	 * Check if log file exists
+	 *
+	 * @since 0.1.0
+	 *
 	 * @param Request $req Request instance
 	 * @param Response $res Response instance
 	 * @return Response The current response instance
-	 * @since 0.1.0
 	 */
 	public static function check_if_log_exists($req, $res) {
-		$log = Log::getInstance();
+		$log = Log::get_instance();
 		
-		$res->setJSON([
+		$res->set_json([
 			'exists'		=> $log->file_exists(),
 		]);
 		
@@ -82,15 +89,17 @@ class Api {
 
 	/**
 	 * Check if debugging is enabled
+	 *
+	 * @since 0.1.0
+	 *
 	 * @param Request $req Request instance
 	 * @param Response $res Response instance
 	 * @return Response The current response instance
-	 * @since 0.1.0
 	 */
 	//public static function check_if_debug_enabled($req, $res) {
-	//	$log = Log::getInstance();
+	//	$log = Log::get_instance();
 		
-	//	$res->setJSON([
+	//	$res->set_json([
 	//		'debug_enabled'	=> $log->debug_enabled(),
 	//	]);
 		
@@ -100,16 +109,18 @@ class Api {
 
 	/**
 	 * Get log entries
+	 *
+	 * @since 0.1.0
+	 *
 	 * @param Request $req Request instance
 	 * @param Response $res Response instance
 	 * @return Response The current response instance
-	 * @since 0.1.0
 	 */
 	public static function get_log_entries($req, $res) {
-		$log = Log::getInstance();
+		$log = Log::get_instance();
 		$truncated = $log->is_smaller();
 
-		$res->setJSON([
+		$res->set_json([
 			'truncated'		=> $truncated,
 			//'entries'		=> $truncated ? $log->get_recent_entries() : $log->get_entries(),
 			'entries'		=> $log->get_entries(),
@@ -122,13 +133,15 @@ class Api {
 	
 	/**
 	 * Get log entries if log file has been modified
+	 *
+	 * @since 0.1.0
+	 *
 	 * @param Request $req Request instance
 	 * @param Response $res Response instance
 	 * @return Response The current response instance
-	 * @since 0.1.0
 	 */
 	public static function get_log_entries_if_modified($req, $res) {
-		$log = Log::getInstance();
+		$log = Log::get_instance();
 		$changed = false;
 
 		if (isset($req->params['modified']) && $log->is_modified($req->params['modified'])) {
@@ -136,7 +149,7 @@ class Api {
 			$changed = true;
 		} 
 
-		$res->setJSON([
+		$res->set_json([
 			'changed'		=> $changed,
 		]);
 		
@@ -146,15 +159,17 @@ class Api {
 	
 	/**
 	 * Clear log file
+	 *
+	 * @since 0.1.0
+	 *
 	 * @param Request $req Request instance
 	 * @param Response $res Response instance
 	 * @return Response The current response instance
-	 * @since 0.1.0
 	 */
 	public static function clear_log($req, $res) {
-		$log = Log::getInstance();
+		$log = Log::get_instance();
 		
-		$res->setJSON([
+		$res->set_json([
 			'cleared'		=> $log->clear(),
 		]);
 		
@@ -164,10 +179,12 @@ class Api {
 	
 	/**
 	 * Process user login
+	 *
+	 * @since 0.1.0
+	 *
 	 * @param Request $req Request instance
 	 * @param Response $res Response instance
 	 * @return Response The current response instance
-	 * @since 0.1.0
 	 *
 	 * @todo
 	 *		- Add brute force protection
@@ -182,10 +199,12 @@ class Api {
 	
 	/**
 	 * Process user login
+	 *
+	 * @since 0.1.0
+	 *
 	 * @param Request $req Request instance
 	 * @param Response $res Response instance
 	 * @return Response The current response instance
-	 * @since 0.1.0
 	 */
 	public static function logout_user($req, $res) {
 		// TODO

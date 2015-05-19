@@ -67,8 +67,8 @@ class Response {
 	 * @param array $data The data to JSONify and return
 	 * @since 0.1.0
 	 */
-	public function setJSON($data) {
-		$this->setType('application/json');
+	public function set_json($data) {
+		$this->set_type('application/json');
 		$this->set(json_encode($data));
 	}
 	
@@ -78,8 +78,8 @@ class Response {
 	 * @param array $data The data to JSONify and return
 	 * @since 0.1.0
 	 */
-	public function setJSONP($data) {
-		$this->setType('application/javascript');
+	public function set_jsonp($data) {
+		$this->set_type('application/javascript');
 		$this->set(json_encode($data));
 	}
 	
@@ -89,7 +89,7 @@ class Response {
 	 * @param string $type The type to set
 	 * @since 0.1.0
 	 */
-	public function setType($type) {
+	public function set_type($type) {
 		if (empty($this->type)) {
 			$this->type = $type;
 		}
@@ -101,7 +101,7 @@ class Response {
 	 * @param int $code The response code to set
 	 * @since 0.1.0
 	 */
-	public function setCode($code) {
+	public function set_code($code) {
 		$this->code = $code;
 	}
 	

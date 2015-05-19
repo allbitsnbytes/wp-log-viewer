@@ -28,7 +28,7 @@ if (!Plugin::initWP()) {
 /**
  * Get Router instance and process requests
  */
-$router = Router::getInstance();
+$router = Router::get_instance();
 
 if (!is_object($router)) {
 	header('HTTP/1.0 403 Forbidden');

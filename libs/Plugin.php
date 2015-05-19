@@ -11,12 +11,14 @@ if (!defined('WPLOGVIEWER_BASE')) {
 /**
  * Dependencies
  */
+use Allbitsnbytes\WPLogViewer\Auth;
 use Allbitsnbytes\WPLogViewer\Characteristic\IsSingleton;
 use Allbitsnbytes\WPLogViewer\Helper;
 
 
 /**
  * Plugin class
+ *
  * @since 0.1.0
  */
 class Plugin {
@@ -25,32 +27,82 @@ class Plugin {
 	
 	/**
 	 * Initialize plugin
+	 *
 	 * @since 0.1.0
 	 */
 	public function init() {
 		add_action('admin_enqueue_scripts', [$this, 'load_css_and_js']);
 		add_action('admin_menu', [$this, 'add_navigation']);
+		add_action('wp_login',  [$this, 'create_session'], 10, 2);
+		add_action('wp_logout', [$this, 'clear_session']);
 	}
 	
 	
 	/**
+	 * Create user session when user logins
+	 *
+	 * This session is use to authenticate user api requests
+	 *
+	 * @since 0.1.0
+	 *
+	 * @param string $user_login The login for the user
+	 * @param object $user User object
+	 */
+	public function create_session($user_login, $user) {
+		$auth = Auth::get_instance();
+		
+		$auth->create_api_session();
+	}
+	
+	
+	/**
+	 * Destroy session
+	 *
+	 * @since 0.1.0
+	 */
+	public function clear_session() {
+		$auth = Auth::get_instance();
+		
+		$auth->clear_api_session();
+	}
+
+
+	/**
 	 * Enqueue css and js files
+	 *
 	 * @since 0.1.0
 	 */
 	public function load_css_and_js() {
+		$auth = Auth::get_instance();
+		$localized = [
+			'api' 			=> WPLOGVIEWER_URL . 'api/',
+			'debugEnabled' 	=> WP_DEBUG,
+			'api_key'		=> '',
+			'session_key'	=> '',
+		];
+		
 		// Stylesheet files
 		wp_enqueue_style('wplogviewer-css', WPLOGVIEWER_URL . 'assets/css/main.min.css');
 
 		// Javascript files
 		wp_enqueue_script('wplogviewer-js', WPLOGVIEWER_URL . 'assets/js/main.min.js', false, false, true);
-		
+
 		// Localize some variables
-		wp_localize_script('wplogviewer-js', 'WPLOGVIEWER', ['api' => WPLOGVIEWER_API, 'debugEnabled' => WP_DEBUG]);
+		$session_info = $auth->get_api_session();
+		
+		// If session is not valid, create one
+		if ($session_info['valid'] === true) {
+			$localized['api_key']		= $session_info['api_key']; 
+			$localized['session_key']	= $session_info['session_key'];
+		}
+
+		wp_localize_script('wplogviewer-js', 'WPLOGVIEWER', $localized);
 	}
-	
-	
+
+
 	/**
 	 * Add navigation entry
+	 *
 	 * @since 0.1.0
 	 */
 	public function add_navigation() {
@@ -60,6 +112,7 @@ class Plugin {
 
 	/**
 	 * Get main view
+	 *
 	 * @since 0.1.0
 	 */
 	public function get_view() {
@@ -68,22 +121,24 @@ class Plugin {
 			</div>
 		';
 	}
-	
-	
+
+
 	/**
 	 * Load some worpdress functionality
-	 * @return boolean Whether WP functionality was loaded or not
+	 *
 	 * @since 0.1.0
+	 *
+	 * @return boolean Whether WP functionality was loaded or not
 	 */
 	public static function initWP() {
-		define('ABSPATH', $_SERVER['DOCUMENT_ROOT']);
+		define('ABSPATH', $_SERVER['DOCUMENT_ROOT'].'/');
 		define('WPINC', '/wp-includes');
-		
+
 		$loaded = false;
 		$config_path = ABSPATH . '/wp-config.php';
-
+		
 		// Check if required files found
-		if (file_exists($config_path) && file_exists(ABSPATH . WPINC)) {
+		if (file_exists($config_path) && file_exists(ABSPATH . '/wp-includes')) {
 			$fp = @fopen($config_path, 'r');
 
 			if ($fp) {
@@ -101,9 +156,9 @@ class Plugin {
 						}
 					}
     			}
-  			
+
 				@fclose($fp);
-				
+
 				// Define additional constants if missing
 				if (!defined('WP_DEBUG')) {
 					define('WP_DEBUG', false);
@@ -111,6 +166,8 @@ class Plugin {
 
 				if (defined('DB_NAME') && defined('DB_USER') && defined('DB_PASSWORD') && defined('DB_HOST')) {								
 					$includes = [
+						'load.php',
+						'cache.php',
 						'capabilities.php',
 						'class-wp-error.php',
 						'default-constants.php',
@@ -123,24 +180,30 @@ class Plugin {
 						'user.php',
 						'wp-db.php',
 					];
-					
+
 					// Require dependencies
 					foreach ($includes as $include) {
 						require_once ABSPATH . WPINC . '/' . $include;
 					}
+//					define('SHORTINIT', 1);
+//					require_once ABSPATH . '/wp-includes/option.php';
+//					require_once ABSPATH . '/wp-settings.php';
 
 					// Setup wpdb global variable
-					global $wpdb;
-				
-					if (!isset($wpdb)) {
-						$wpdb = new \wpdb(DB_USER, DB_PASSWORD, DB_NAME, DB_HOST);
+					if (!isset($GLOBALS['wpdb'])) {
+						$GLOBALS['wpdb'] = new \wpdb(DB_USER, DB_PASSWORD, DB_NAME, DB_HOST);
+					}
+
+					if (!isset($GLOBALS['wp_object_cache'])) {
+						$GLOBALS['wp_object_cache'] = new \WP_Object_Cache();
 					}
 
 					$loaded = true;
 				}
 			}			
 		}
-				
+
 		return $loaded;
 	}
+
 }

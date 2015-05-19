@@ -17,6 +17,7 @@ use Allbitsnbytes\WPLogViewer\Helper;
 
 /**
  * Log file handler
+ *
  * @since 0.1.0
  */
 class Log {
@@ -32,6 +33,7 @@ class Log {
 	
 	/**
 	 * Initialize Log
+	 *
 	 * @since 0.1.0
 	 */
 	public function init() {
@@ -42,8 +44,10 @@ class Log {
 
 	/**
 	 * Check if debug.log file exists
-	 * @return boolean True if debug.log exists
+	 *
 	 * @since 0.1.0
+	 *
+	 * @return boolean True if debug.log exists
 	 */
 	public function file_exists() {
 		return file_exists($this->log_file);
@@ -52,8 +56,10 @@ class Log {
 
 	/**
 	 * Check if debugging is enabled
-	 * @return boolean True if debugging is enabled
+	 *
 	 * @since 0.1.0
+	 *
+	 * @return boolean True if debugging is enabled
 	 */
 	public function debug_enabled() {
 		return defined('WP_DEBUG') ? WP_DEBUG : false;	
@@ -62,9 +68,11 @@ class Log {
 
 	/**
 	 * Check if file was modified since provided timestamp
+	 *
+	 * @since 0.1.0
+	 *
 	 * @param $timestamp int Timestamp to check against
 	 * @return boolean True if was modified
-	 * @since 0.1.0
 	 */
 	public function is_modified($timestamp='') {
 		$now = filemtime($this->log_file);
@@ -81,8 +89,10 @@ class Log {
 
 	/**
 	 * Get last modified timestamp
-	 * @return int Last modified timestamp
+	 *
 	 * @since 0.1.0
+	 *
+	 * @return int Last modified timestamp
 	 */
 	public function last_modified() {
 		return date('c', filemtime($this->log_file));
@@ -91,8 +101,10 @@ class Log {
 
 	/**
 	 * Get timezone for server
-	 * @return string The server timezone
+	 *
 	 * @since 0.1.0
+	 *
+	 * @return string The server timezone
 	 */
 	public function get_timezone() {
 		return date_default_timezone_get();
@@ -101,9 +113,11 @@ class Log {
 
 	/**
 	 * Check if file is smaller in size than provided size in bytes
+	 *
+	 * @since 0.1.0
+	 *
 	 * @param $size int Size to check against
 	 * @return boolean True if file is smaller
-	 * @since 0.1.0
 	 */
 	public function is_smaller($size='') {
 		// TODO
@@ -114,8 +128,10 @@ class Log {
 
 	/**
 	 * Get all log entries
-	 * @return array Array of entries
+	 *
 	 * @since 0.1.0
+	 *
+	 * @return array Array of entries
 	 */
 	public function get_entries() {
 		$sep = '$!$';
@@ -146,9 +162,11 @@ class Log {
 
 	/**
 	 * Get all entries newer than specified timestamp
+	 *
+	 * @since 0.1.0
+	 *
 	 * @param $timestamp int The oldest date and time to get entries for
 	 * @return array Array of entries
-	 * @since 0.1.0
 	 */
 	public function get_recent_entries($timestamp) {
 		// TODO
@@ -159,8 +177,10 @@ class Log {
 
 	/**
 	 * Clear debug.log file
-	 * @return boolean True if file was cleared
+	 *
 	 * @since 0.1.0
+	 *
+	 * @return boolean True if file was cleared
 	 */
 	public function clear() {
 		$fp = @fopen($this->log_file, 'r+');

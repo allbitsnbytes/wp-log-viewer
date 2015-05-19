@@ -25,7 +25,7 @@ trait IsSingleton
 	 * @return object
 	 * @static
 	 */
-	public static function getInstance() 
+	public static function get_instance() 
 	{
 		$class = __CLASS__;
 		return isset(static::$instance) ? static::$instance : static::$instance = new $class;
