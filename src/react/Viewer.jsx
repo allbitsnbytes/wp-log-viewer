@@ -18,22 +18,22 @@ var Viewer = React.createClass({
 	// Initialize when component is to be mounted
 	componentDidMount: function() {
 		// Initialize component
-		reqwest(WPLOGVIEWER.api + '?do=get-log', function(res) {
+		wplv_remote('get-log', 'GET', {}, function(res) {
 			this.setState({
 				found: res.found,
 				timezone: res.timezone
 			});
-			
+
 			this.updateEntries(res.entries, res.modified);
 		}.bind(this));
-		
+
 		// Check for changes
 		var timer = setInterval(this.checkLastest, 15000);
 	},
-	
+
 	// Clear log entries
 	clearLogEntries: function() {
-		reqwest(WPLOGVIEWER.api + '?do=clear-log', function(res) {
+		wplv_remote('clear-log', 'GET', {}, function(res) {
 			if (res.cleared) {
 				this.setState({entries: []});
 			}
@@ -42,17 +42,15 @@ var Viewer = React.createClass({
 	
 	// Get log entries if modified
 	checkLastest: function() {
-		reqwest({
-			url: WPLOGVIEWER.api + '?do=get-entries-if-modified',
-			data: {
-				modified: this.state.modified
-			}, 
-			success: function(res) {
-				if (res.changed) {		
-					this.updateEntries(res.entries, res.modified);
-				}
-			}.bind(this)
-		});
+		var data = {
+			modified: this.state.modified
+		};
+		
+		wplv_remote('get-entries-if-modified', 'GET', data, function(res) {
+			if (res.changed) {		
+				this.updateEntries(res.entries, res.modified);
+			}
+		}.bind(this));
 	},
 	
 	// Update entries

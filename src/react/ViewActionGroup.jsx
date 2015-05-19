@@ -39,12 +39,12 @@ var ViewActionGroup = React.createClass({
 	render: function() {
 		var group = this.props.group;
 		var options = group.options.map(function(option) {
-			var selected = option.key && option.key === group.default ? true : false;
+			var selected = (option.key && option.key == this.state.selected) ? true : false;
 			
 			return (
 				<ViewAction notify={ this.updateSelected } selected={ selected } nav={ option } />
 			);
-		});
+		}.bind(this));
 
 		return (
 			<div className="menu-group">

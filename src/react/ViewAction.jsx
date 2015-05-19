@@ -3,13 +3,6 @@
  */
 var ViewAction = React.createClass({
 	
-	// Get initial state
-	getInitialState: function() {
-		return {
-			selected: false
-		}
-	},
-	
 	// Default properties
 	getDefaultProps: function() {
 		return {
@@ -32,9 +25,8 @@ var ViewAction = React.createClass({
 	
 	// Component mounted
 	componentDidMount: function() {
-		if (this.props.selected && this.state.selected !== this.props.selected) {
+		if (this.props.selected) {
 			this.props.nav.action();
-			this.setState({selected: this.props.selected});
 		}
 	},
 	
@@ -47,13 +39,13 @@ var ViewAction = React.createClass({
 		}
 		
 		if (this.props.notify) {
-			this.props.notify.updateSelected(this.props.nav.key);
+			this.props.notify(this.props.nav.key);
 		}
 	},
 	
 	// Render component
 	render: function() {
-		var className = this.state.selected ? 'active' : '';
+		var className = this.props.selected ? 'active' : '';
 		
 		if (className === 'active') {
 			return (

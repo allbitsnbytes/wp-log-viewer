@@ -44,7 +44,7 @@ var LogListView = React.createClass({
 					if (section !== '') {
 						additionalClasses = 'padded-top';
 					}
-					
+
 					section = currentSection;
 				}
 
