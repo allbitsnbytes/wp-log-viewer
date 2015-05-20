@@ -31,7 +31,7 @@ class Auth {
 	 *
 	 * @var string
 	 */
-	public static $db_prefix = '_wplv_';
+	const DB_PREFIX = '_wplv_';
 	
 	/**
 	 * Prefix to use for session cookie
@@ -40,7 +40,7 @@ class Auth {
 	 *
 	 * @var string
 	 */
-	public static $cookie_prefix = '_wplv_sess';
+	const COOKIE_PREFIX = '_wplv_sess';
 	
 	/**
 	 * Length of generated keys
@@ -49,7 +49,7 @@ class Auth {
 	 *
 	 * @var int
 	 */
-	public static $key_length = 40;
+	const KEY_LENGTH = 40;
 	
 	/**
 	 * Cookie token length
@@ -58,7 +58,7 @@ class Auth {
 	 *
 	 * @var int
 	 */
-	public static $cookie_token_length = 25;
+	const COOKIE_TOKEN_LENGTH = 25;
 	
 	/**
 	 * Authenticate code
@@ -151,9 +151,9 @@ class Auth {
 	public function is_valid_api_session($cookie_token, $session_key) {
 		global $wpdb;
 
-		if (isset($_COOKIE[self::$cookie_prefix . $cookie_token]) && $_COOKIE[self::$cookie_prefix . $cookie_token] == $session_key) {
+		if (isset($_COOKIE[self::COOKIE_PREFIX . $cookie_token]) && $_COOKIE[self::COOKIE_PREFIX . $cookie_token] == $session_key) {
 			$sql = 'select option_id from ' . $wpdb->options . ' where option_name=%s';
-			$count = $wpdb->get_var($wpdb->prepare($sql, self::$db_prefix . $session_key));
+			$count = $wpdb->get_var($wpdb->prepare($sql, self::DB_PREFIX . $session_key));
 
 			return intval($count) > 0 ? true : false; 
 		}
@@ -177,15 +177,15 @@ class Auth {
 		$created = false;
 
 		if (!empty($api_key)) {
-			$cookie_token = \wp_generate_password(self::$cookie_token_length, true);
-			$session_key = \wp_generate_password(self::$key_length, true, true);
+			$cookie_token = \wp_generate_password(self::COOKIE_TOKEN_LENGTH, true);
+			$session_key = \wp_generate_password(self::KEY_LENGTH, true, true);
 			$created = $wpdb->replace($wpdb->options, [
-				'option_name'	=> self::$db_prefix . $session_key,
+				'option_name'	=> self::DB_PREFIX . $session_key,
 				'option_value'	=> $api_key,
 			]);
 
 			if ($created !== false) {
-				setcookie(self::$cookie_prefix . $cookie_token, $session_key, (time() + DAY_IN_SECONDS), '/', $_SERVER['SERVER_NAME'], false, true);
+				setcookie(self::COOKIE_PREFIX . $cookie_token, $session_key, (time() + DAY_IN_SECONDS), '/', $_SERVER['SERVER_NAME'], false, true);
 			}
 		}
 
@@ -209,13 +209,13 @@ class Auth {
 
 		if (!empty($session_key)) {
 			$deleted = $wpdb->delete($wpdb->options, [
-				'option_name'	=> self::$db_prefix . $session_key,
+				'option_name'	=> self::DB_PREFIX . $session_key,
 			]);
 
 			$cleared = intval($deleted) > 0 ? true : false;
 		}
 		
-		setcookie(self::$cookie_prefix . $cookie_token, null, -1);
+		setcookie(self::COOKIE_PREFIX . $cookie_token, null, -1);
 
 		return $cleared;
 	}
@@ -259,7 +259,7 @@ class Auth {
 	public function get_session_key() {
 		$cookie_token = $this->get_cookie_token();
 
-		return isset($_COOKIE[self::$cookie_prefix . $cookie_token]) ? $_COOKIE[self::$cookie_prefix . $cookie_token] : '';
+		return isset($_COOKIE[self::COOKIE_PREFIX . $cookie_token]) ? $_COOKIE[self::COOKIE_PREFIX . $cookie_token] : '';
 	}
 	
 	
@@ -274,8 +274,8 @@ class Auth {
 	 */
 	public function get_cookie_token() {
 		foreach ($_COOKIE as $key => $value) {
-			if (strpos($key, self::$cookie_prefix, 0) === 0)	{
-				return substr($key, strlen(self::$cookie_prefix));
+			if (strpos($key, self::COOKIE_PREFIX, 0) === 0)	{
+				return substr($key, strlen(self::COOKIE_PREFIX));
 			}
 		}
 		
@@ -301,7 +301,7 @@ class Auth {
 			$api_key = $wpdb->get_var($wpdb->prepare($sql, $user_id));
 
 			if (empty($api_key)) {
-				$api_key = \wp_generate_password(self::$key_length, true, true);
+				$api_key = \wp_generate_password(self::KEY_LENGTH, true, true);
 
 				$wpdb->insert($wpdb->usermeta, [
 					'user_id'		=> $user_id,
