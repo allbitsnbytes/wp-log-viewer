@@ -25,8 +25,11 @@ class Log {
 	use IsSingleton;
 	
 	/**
-	 * @var string Path to debug.log
+	 * Path to debug.log file
+	 *
 	 * @since 0.1.0
+	 *
+	 * @var string
 	 */
 	private $log_file = '';
 	
@@ -62,7 +65,7 @@ class Log {
 	 * @return boolean True if debugging is enabled
 	 */
 	public function debug_enabled() {
-		return defined('WP_DEBUG') ? WP_DEBUG : false;	
+		return defined('WP_DEBUG') && WP_DEBUG == true ? true : false;	
 	}
 
 

@@ -29,7 +29,10 @@ class Router {
 	
 	/**
 	 * @var array Registered handlers
+	 *
 	 * @since 0.1.0
+	 *
+	 * @var array
 	 */
 	private $handlers = [];
 	
@@ -124,14 +127,14 @@ class Router {
 	 *
 	 * @param string $action The action to handle
 	 * @param callable $fn The callable function to call if action is matched
-	 * @param boolean $auth Whether must be authenticated to perform action
+	 * @param int $auth_code The authentication code, Check Allbitsnbytes\WPLogViewer\Auth for more details
 	 * @return void
 	 */
-	public function get($action, $fn, $auth=true) {
+	public function get($action, $fn, $auth_code=Auth::AUTHENTICATED) {
 		$this->handle($action, [
 			'method'	=> 'GET',
 			'call'		=> $fn,
-			'auth'		=> $auth,
+			'auth'		=> $auth_code,
 		]);
 	}
 	
@@ -143,14 +146,14 @@ class Router {
 	 *
 	 * @param string $action The action to handle
 	 * @param callable $fn The callable function to call if action is matched
-	 * @param boolean $auth Whether must be authenticated to perform action
+	 * @param int $auth_code The authentication code, Check Allbitsnbytes\WPLogViewer\Auth for more details
 	 * @return void
 	 */
-	public function post($action, $fn, $auth=true) {
+	public function post($action, $fn, $auth_code=Auth::AUTHENTICATED) {
 		$this->handle($action, [
 			'method'	=> 'POST',
 			'call'		=> $fn,
-			'auth'		=> $auth,
+			'auth'		=> $auth_code,
 		]);
 	}
 

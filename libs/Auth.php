@@ -26,27 +26,72 @@ class Auth {
 	
 	/**
 	 * Transient prefix
+	 *
+	 * @since 0.1.0
+	 *
 	 * @var string
 	 */
 	public static $db_prefix = '_wplv_';
 	
 	/**
 	 * Prefix to use for session cookie
+	 *
+	 * @since 0.1.0
+	 *
 	 * @var string
 	 */
 	public static $cookie_prefix = '_wplv_sess';
 	
 	/**
 	 * Length of generated keys
+	 *
+	 * @since 0.1.0
+	 *
 	 * @var int
 	 */
 	public static $key_length = 40;
 	
 	/**
 	 * Cookie token length
+	 *
+	 * @since 0.1.0
+	 *
 	 * @var int
 	 */
 	public static $cookie_token_length = 25;
+	
+	/**
+	 * Authenticate code
+	 * 
+	 * Authentication will check for cookie token and session key, then use session key to check for api key
+	 *
+	 * @since 0.1.0
+	 *
+	 * @var int
+	 */
+	const AUTHENTICATED = 3;
+
+	/**
+	 * Verification code
+	 * 
+	 * Check if cookie token is set and if session key was provided
+	 *
+	 * @since 0.1.0
+	 *
+	 * @var int
+	 */
+	const VERIFIED = 2;
+	
+	/**
+	 * Skip authentication code
+	 * 
+	 * Allow request through
+	 *
+	 * @since 0.1.0
+	 *
+	 * @var int
+	 */
+	const SKIP = 1;
 	
 	/**
 	 * Check if user credentials are valid

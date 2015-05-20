@@ -50,7 +50,7 @@ $router->get('log-changed', ['\Allbitsnbytes\WPLogViewer\Api', 'check_if_log_mod
 $router->get('log-exists', ['\Allbitsnbytes\WPLogViewer\Api', 'check_if_log_exists']);
 
 // Check if debugging is enabled
-//$router->get('debug-enabled', ['\Allbitsnbytes\WPLogViewer\Api', 'check_if_debug_enabled']);
+$router->get('debug-enabled', ['\Allbitsnbytes\WPLogViewer\Api', 'check_if_debug_enabled']);
 
 // Get log entries
 $router->get('get-entries', ['\Allbitsnbytes\WPLogViewer\Api', 'get_log_entries']);
@@ -62,7 +62,7 @@ $router->get('get-entries-if-modified', ['\Allbitsnbytes\WPLogViewer\Api', 'get_
 $router->get('clear-log', ['\Allbitsnbytes\WPLogViewer\Api', 'clear_log']);
 
 // Login user
-$router->get('login', ['\Allbitsnbytes\WPLogViewer\Api', 'login_user'], false);
+$router->get('login', ['\Allbitsnbytes\WPLogViewer\Api', 'login_user'], Auth::SKIP);
 
 // Logout user
 $router->get('logout', ['\Allbitsnbytes\WPLogViewer\Api', 'logout_user']);

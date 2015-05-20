@@ -33,11 +33,11 @@ class Api {
 	 */
 	public static function get_log_details($req, $res) {
 		$log = Log::get_instance();
-	
+
 		$res->set_json([
 			'entries'		=> $log->get_entries(),
 			'found'			=> $log->file_exists(),
-//			'debug_enabled'	=> $log->debug_enabled(),
+			'debug_enabled'	=> $log->debug_enabled(),
 			'timezone'		=> $log->get_timezone(),
 			'modified'		=> $log->last_modified(),
 		]);
@@ -96,15 +96,15 @@ class Api {
 	 * @param Response $res Response instance
 	 * @return Response The current response instance
 	 */
-	//public static function check_if_debug_enabled($req, $res) {
-	//	$log = Log::get_instance();
+	public static function check_if_debug_enabled($req, $res) {
+		$log = Log::get_instance();
 		
-	//	$res->set_json([
-	//		'debug_enabled'	=> $log->debug_enabled(),
-	//	]);
+		$res->set_json([
+			'debug_enabled'	=> $log->debug_enabled(),
+		]);
 		
-	//	return $res;
-	//}
+		return $res;
+	}
 	
 
 	/**
