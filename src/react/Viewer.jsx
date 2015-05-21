@@ -60,7 +60,7 @@ var Viewer = React.createClass({
 		if (this.state.sort === 'oldest') {
 			entries.reverse();
 		}
-					
+
 		var data = {
 			entries: entries
 		};
@@ -129,7 +129,7 @@ var Viewer = React.createClass({
 					<div id="viewer-pane">
 						<h2>Log Viewer <DebugStatus enabled={ this.state.debugEnabled } /></h2>
 					
-						<p>Debugging is enabled. However, <strong>debug.log does not exist</strong>.</p>
+						<p>Debugging is enabled. However, the <strong>debug.log file does not exist</strong>.</p>
 					</div> 
 				);
 			} else {
@@ -147,6 +147,8 @@ var Viewer = React.createClass({
 							define('WP_DEBUG_LOG', true);<br />
 							define('WP_DEBUG_DISPLAY', false);
 						</p>
+						
+						<p>For more info: <a href="https://codex.wordpress.org/Debugging_in_WordPress" target="_blank">Debugging In Wordpress</a></p>
 					</div>
 				);
 			}
