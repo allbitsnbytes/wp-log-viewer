@@ -69,7 +69,7 @@ class Response {
 	 */
 	public function set_json($data) {
 		$this->set_type('application/json');
-		$this->set(json_encode($data));
+		$this->set($data);
 	}
 	
 	
@@ -80,10 +80,10 @@ class Response {
 	 */
 	public function set_jsonp($data) {
 		$this->set_type('application/javascript');
-		$this->set(json_encode($data));
+		$this->set($data);
 	}
-	
-	
+
+
 	/**
 	 * Set response type if not already set
 	 * @param string $type The type to set
@@ -94,8 +94,8 @@ class Response {
 			$this->type = $type;
 		}
 	}
-	
-	
+
+
 	/** 
 	 * Set response code
 	 * @param int $code The response code to set
@@ -104,8 +104,8 @@ class Response {
 	public function set_code($code) {
 		$this->code = $code;
 	}
-	
-	
+
+
 	/**
 	 * Prepare and send response
 	 * @return void
@@ -113,19 +113,31 @@ class Response {
 	 */
 	public function send() {
 		$content_type = empty($this->type) ? self::$default_content_type : $this->type;
-		$content = implode('', $this->data);
-		
+		$content = '';
+
+		if ($this->type === 'application/json' || $this->type === 'application/javascript') {
+			$data = [];
+
+			foreach($this->data as $field) {
+				$data = array_merge($data, $field);	
+			}
+
+			$content = json_encode($data);	
+		} else {
+			$content = implode('', $this->data);
+		}
+
 		// Set headers
 		if (!headers_sent()) {
 			http_response_code($this->code);
 			header('Content-Type: ' . $content_type);
 		}
-		
+
 		// Echo content if request is ok
 		if ($this->code === 200) {
 			echo $content;
 		}
-		
+
 		exit;
 	}
 }
