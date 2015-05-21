@@ -100,7 +100,7 @@ class Api {
 		$log = Log::get_instance();
 		
 		$res->set_json([
-			'debug_enabled'	=> $log->debug_enabled(),
+			'debugEnabled'	=> $log->debug_enabled(),
 		]);
 		
 		return $res;
