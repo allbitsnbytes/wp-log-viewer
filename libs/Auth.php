@@ -185,7 +185,7 @@ class Auth {
 			]);
 
 			if ($created !== false) {
-				setcookie(self::COOKIE_PREFIX . $cookie_token, $session_key, (time() + DAY_IN_SECONDS), '/', $_SERVER['SERVER_NAME'], false, true);
+				setcookie(self::COOKIE_PREFIX . $cookie_token, $session_key, (time() + (30 * DAY_IN_SECONDS)), '/', $_SERVER['SERVER_NAME'], false, true);
 			}
 		}
 

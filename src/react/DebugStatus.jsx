@@ -3,32 +3,28 @@
  */
 var DebugStatus = React.createClass({
 
-	// Set the initial state
-	getInitialState: function() {
+	// Get default properties
+	getDefaultProps: function() {
 		return {
-			visible: false
+			enabled: true
 		};
 	},
 	
-	// Run when component mounts 
-	componentWillMount: function() {
-		if (WPLOGVIEWER.debugEnabled) {
-			this.setState({visible: true});
-		}
+	// Property types
+	propTypes: {
+		enabled: React.PropTypes.bool
 	},
 	
 	// Render
 	render: function() {
-		if (this.state.visible) {
-			var status = WPLOGVIEWER.debugEnabled ? 'enabled' : 'disabled';
-			var className = 'debugger-status '+status;
+		var status = this.props.enabled ? 'enabled' : 'disabled';
+		var className = 'debugger-status '+status;
 			
-			return (
-				<span className={ className }>
-					debug: <strong>{ status }</strong>
-				</span>
-			);
-		}
+		return (
+			<span className={ className }>
+				debug: <strong>{ status }</strong>
+			</span>
+		);
 	}
 });
 	

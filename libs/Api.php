@@ -37,7 +37,7 @@ class Api {
 		$res->set_json([
 			'entries'		=> $log->get_entries(),
 			'found'			=> $log->file_exists(),
-			'debug_enabled'	=> $log->debug_enabled(),
+			'debugEnabled'	=> $log->debug_enabled(),
 			'timezone'		=> $log->get_timezone(),
 			'modified'		=> $log->last_modified(),
 		]);

@@ -8,6 +8,7 @@ var Viewer = React.createClass({
 		return {
 			entries: [],
 			found: false,
+			debugEnabled: false,
 			timezone: '',
 			modified: '',
 			sort: 'newest',
@@ -21,7 +22,8 @@ var Viewer = React.createClass({
 		wplv_remote('get-log', 'GET', {}, function(res) {
 			this.setState({
 				found: res.found,
-				timezone: res.timezone
+				timezone: res.timezone,
+				debugEnabled: res.debugEnabled
 			});
 
 			this.updateEntries(res.entries, res.modified);
@@ -105,7 +107,7 @@ var Viewer = React.createClass({
 			if (this.state.view == 'list') {
 				return (
 					<div id="viewer-pane">
-						<h2>Log Viewer <DebugStatus /></h2>
+						<h2>Log Viewer <DebugStatus enabled={ this.state.debugEnabled } /></h2>
 						
 						<LogListView entries={ this.state.entries } />
 						<ViewSidebar viewer={ this } />
@@ -114,7 +116,7 @@ var Viewer = React.createClass({
 			} else {
 				return (
 					<div id="viewer-pane">
-						<h2>Log Viewer <DebugStatus /></h2>
+						<h2>Log Viewer <DebugStatus enabled={ this.state.debugEnabled } /></h2>
 						
 						<LogGroupView entries={ this.state.entries } />
 						<ViewSidebar viewer={ this } />
@@ -122,10 +124,10 @@ var Viewer = React.createClass({
 				);
 			}
 		} else { 
-			if (WPLOGVIEWER.debugEnabled) {
+			if (this.state.debugEnabled) {
 				return (
 					<div id="viewer-pane">
-						<h2>Log Viewer <DebugStatus /></h2>
+						<h2>Log Viewer <DebugStatus enabled={ this.state.debugEnabled } /></h2>
 					
 						<p>Debugging is enabled. However, <strong>debug.log does not exist</strong>.</p>
 					</div> 
@@ -133,7 +135,7 @@ var Viewer = React.createClass({
 			} else {
 				return (
 					<div id="viewer-pane">
-						<h2>Log Viewer <DebugStatus /></h2>
+						<h2>Log Viewer <DebugStatus enabled={ this.state.debugEnabled } /></h2>
 
 						<p><strong>Debugging is currently <span className="highlight">disabled</span>.</strong></p>
 						<br />
