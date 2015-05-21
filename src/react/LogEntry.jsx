@@ -6,33 +6,27 @@ var LogEntry = React.createClass({
 	// Get properties
 	getDefaultProps: function() {
 		return {
-			additionalClasses: '',
-			entry: {
-				formatted: {
-					date: '',
-					time: ''
-				},
-				message: ''	
-			}
+			date: '',
+			message: '',
+			className: ''
 		};
 	},
-	
+
 	// Property types
 	propTypes: {
-		additionalClasses: React.PropTypes.string,
-		entry: React.PropTypes.object
+		date: React.PropTypes.object,
+		message: React.PropTypes.string,
+		className: React.PropTypes.string
 	},
-	 
+
 	render: function() {
 		var defaultClass = 'log-entry';
-		var classes = this.props.additionalClasses === '' ? defaultClass : defaultClass + ' ' + this.props.additionalClasses; 
-		var entry = this.props.entry;
+		var classes = this.props.className === '' ? defaultClass : defaultClass + ' ' + this.props.className; 
 
 		return (
 			<div className={ classes }>
-				<div className="when">{ entry.formatted.date }</div>
-				<div className="time">{ entry.formatted.time }</div>
-				<div className="message">{ entry.message }</div>
+				<TimeStamp date={ this.props.date } />
+				<div className="message">{ this.props.message }</div>
 			</div>
 		);
 	}

@@ -15,8 +15,6 @@ var GroupEntry = React.createClass({
 		return {
 			group: {
 				date: '',
-				time: '',
-				timezone: '',
 				message: '',
 				entries: []	
 			}
@@ -36,7 +34,6 @@ var GroupEntry = React.createClass({
 
 	render: function() {
 		var group = this.props.group;
-		var when = new Date(group.date+' '+group.time+' '+group.timezone);
 		var groupDetails = '';
 
 		if (this.state.showDetails) {
@@ -44,13 +41,10 @@ var GroupEntry = React.createClass({
 			
 			for (var key in group.entries) {
 				var entry = group.entries[key];
-				var entryWhen = new Date(entry.date + ' ' + entry.time + ' ' + entry.timezone);
+				var entryDate = new Date(entry.date + ' ' + entry.time + ' ' + entry.timezone);
 
 				groupEntryDetails.push((
-					<div className="when">
-						<div className="date">{ entryWhen.toLocaleDateString() }</div>
-						<div className="time">{ entryWhen.toLocaleTimeString() }</div>
-					</div>
+					<TimeStamp date={ entryDate } />
 				));
 			}
 			
@@ -72,10 +66,7 @@ var GroupEntry = React.createClass({
 
 		return (
 			<div className="group-entry">
-				<div className="when">
-					<span className="date">{ when.toLocaleDateString() }</span>
-					<span className="time">{ when.toLocaleTimeString() }</span>
-				</div>
+				<TimeStamp date={ group.date } />
 				<div className="message">
 					{ group.message }
 					{ groupDetails }

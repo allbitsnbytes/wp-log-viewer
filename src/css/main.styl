@@ -4,10 +4,10 @@
 body
 	min-height 1200px
 	height 100%
-	
+
 .debugger-status.enabled
 	background #C0E69F
-	
+
 .debugger-status.disabled
 	background #DA8F92
 
@@ -17,7 +17,7 @@ body
 
 	h2
 		margin 0 0 15px
-		
+
 		.debugger-status
 			display inline-block
 			font-size 11px
@@ -40,93 +40,95 @@ body
 	.log-entries
 		.log-entry
 			span()
-			margin-bottom 5px
-			
+			margin-bottom 8px
+
 			.when
-				col(0.15)
+				col(0.30)
 				font-size 0.8em
-				font-weight bold
-								
-			.time
-				col(0.15)
-				font-size 0.8em
-							
+
+				.date
+					display block
+					font-weight bold
+
 			.message
 				col(0.7)
 				font-size 1em
 
 			&.padded-top
 				margin-top 22px
-	
+
 	.group-entries
 		.group-entry
 			span()
 			margin-bottom 15px
-			
+
 			.when
 				col(0.15)
 				font-size 0.8em
-				
+
 				.date
 					display block
 					font-weight bold
-				
+
 				.time
 					display block
-					
+
 			.message
 				col(0.82)
 				font-size 1.1em
-			
+
 			.group-actions
 				span()
 				font-size 0.8em
 				margin-top 3px
-				
+
 			.group-entry-details
 				display block
 				margin 5px 0 10px
-				
+
 				.when
 					span()
 					margin 0 0 4px
-					
+
 					.date
 						col(0.20)
-						
+
 					.time
 						col(0.80)
-							
+
+			.group-entry-details.active
+				margin-bottom 15px
+
 			.show-group-details,
 			.hide-group-details
 				display block
 				font-size 0.8em
 				text-decoration none
-			
+
 			.hide-group-details
 				margin-bottom 10px
 
 	.sidebar
 		col(0.25)
 		padding 15px 0
-		
+
 		.menu-group
 			margin 0 0 25px
-			
+
 			h3
 				font-size 1.2em
 				margin 0 0 6px
-		
+
 			ul
 				display block
 				list-style none
 				padding 0
-				
+
 				li
 					list-style none
 					padding 1px 0
 					margin 0
-					
+
 					a
 						display inline-block
 						color #333
@@ -135,16 +137,20 @@ body
 						text-decoration none
 						padding 4px 10px
 						margin-bottom 1px
-						
+
 						&:hover
 							color #444
-							
+
 					&.active a
 						background-color #e2e2e2
-				
-		small
+
+		.last-modified
 			font-size 0.85em
-	
+			padding-top 5px
+
+			.when
+				display block;
+
 	.highlight
 		color #ff0000
 		background transparent
@@ -153,4 +159,3 @@ body
 		border 1px solid #f0f0f0
 		background #fafafa
 		padding 15px
-				

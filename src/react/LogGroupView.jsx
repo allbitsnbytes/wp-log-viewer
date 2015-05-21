@@ -25,9 +25,7 @@ var LogGroupView = React.createClass({
 
 			if (groups[key] === undefined) {
 				groups[key] = {
-					date: entry.date,
-					time: entry.time,
-					timezone: entry.timezone,
+					date: new Date(entry.date + ' ' + entry.time + ' ' + entry.timezone),
 					message: entry.message,
 					entries: []
 				};

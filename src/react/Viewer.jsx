@@ -30,7 +30,7 @@ var Viewer = React.createClass({
 		}.bind(this));
 
 		// Check for changes
-		var timer = setInterval(this.checkLastest, 15000);
+		//var timer = setInterval(this.checkLastest, 15000);
 	},
 
 	// Clear log entries

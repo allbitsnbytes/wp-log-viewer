@@ -2,57 +2,31 @@
  * Display log entries
  */
 var LogListView = React.createClass({
-	
+
 	// Get properties
 	getDefaultProps: function() {
 		return {
 			entries: []
 		};
 	},
-	
+
 	// Property types
 	propTypes: {
 		entries: React.PropTypes.array
 	},
-		
+
 	render: function() {
 		var entries = this.props.entries;
-		
-		if (entries.length) {
-			var now = new Date();
-			var today = now.toLocaleDateString();
-			var section = '';
-			
+
+		if (entries.length) {		
 			var logEntries = entries.map(function(entry) {
 				var entryDate = new Date(entry.date + ' ' + entry.time + ' ' + entry.timezone);
-				var day = entryDate.toLocaleDateString();
-				var currentSection = entryDate.getMonth() + ' ' + entryDate.getFullYear();
-				var additionalClasses = '';
-				
-				entry.formatted = {
-					date: '',
-					time: entryDate.toLocaleTimeString()
-				}
-				
-				if (today == day) {
-					entry.formatted.date = 'Today';
-				} else {
-					entry.formatted.date = day;
-				}
-				
-				if (section !== currentSection) {
-					if (section !== '') {
-						additionalClasses = 'padded-top';
-					}
-
-					section = currentSection;
-				}
 
 				return (
-					<LogEntry entry={ entry } additionalClasses={ additionalClasses } />
+					<LogEntry date={ entryDate } message={ entry.message } />
 				);
 			});
-			
+
 			return (
 				<div className="log-entries">
 					{ logEntries }

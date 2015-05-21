@@ -52,34 +52,28 @@ var ViewSidebar = React.createClass({
 	propTypes: {
 		viewer: React.PropTypes.object
 	},
-	
-	render: function() {
-		var lastModified = 'n/a';
-		var defaultMenuOptions = this.getMenuOptions();
-		var menuOptions = defaultMenuOptions.map(function(menuGroup) {
-			return (
-				<ViewActionGroup group={ menuGroup } />
-			);
-		});
-		
-		if (this.props.viewer) {
-			var lastModifieidDate = new Date(this.props.viewer.state.modified);
-			lastModified = ( 
-				<span className="last-modified">
-					{ lastModifieidDate.toLocaleDateString() }<br />{ lastModifieidDate.toLocaleTimeString() }
-				</span> 
-			);
-		} 
-		
-		return (
-			<div className="sidebar">
-				{ menuOptions }
 
-				<small>
-					<strong>Last modified</strong><br />
-					{ lastModified }
-				</small>				
-			</div>
-		);
+	render: function() {
+		if (this.props.viewer) {
+			var lastModifiedDate = new Date(this.props.viewer.state.modified);
+			var defaultMenuOptions = this.getMenuOptions();
+			var menuOptions = defaultMenuOptions.map(function(menuGroup) {
+				return (
+					<ViewActionGroup group={ menuGroup } />
+				);
+			});
+
+			return (
+				<div className="sidebar">
+					{ menuOptions }
+
+					<div className="last-modified">
+						<strong>Last modified</strong><br />
+						<TimeStamp date={ lastModifiedDate } />
+					</div>
+			
+				</div>
+			);
+		}
 	}
 });
