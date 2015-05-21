@@ -65,7 +65,7 @@ class Log {
 	 * @return boolean True if debugging is enabled
 	 */
 	public function debug_enabled() {
-		return defined('WP_DEBUG') && WP_DEBUG == true ? true : false;	
+		 return defined('WP_DEBUG') && (WP_DEBUG === true || WP_DEBUG === 'true') ? true : false;	
 	}
 
 
@@ -78,14 +78,16 @@ class Log {
 	 * @return boolean True if was modified
 	 */
 	public function is_modified($timestamp='') {
-		$now = filemtime($this->log_file);
-		
-		if (is_int($timestamp)) {
-			return $timestamp != $now ? true : false;
-		} else if(is_string($timestamp)) {
-			return $timestamp != date('c', $now) ? true : false;
+		if (file_exists($this->log_file)) {
+			$now = filemtime($this->log_file);
+
+			if (is_int($timestamp)) {
+				return $timestamp != $now ? true : false;
+			} else if (is_string($timestamp)) {
+				return $timestamp != date('c', $now) ? true : false;
+			}
 		}
-		
+
 		return false;
 	}
 
@@ -98,7 +100,11 @@ class Log {
 	 * @return int Last modified timestamp
 	 */
 	public function last_modified() {
-		return date('c', filemtime($this->log_file));
+		if (file_exists($this->log_file)) {
+			return date('c', filemtime($this->log_file));
+		}
+
+		return false;
 	}
 
 
