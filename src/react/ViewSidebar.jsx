@@ -63,9 +63,11 @@ var ViewSidebar = React.createClass({
 		});
 		
 		if (this.props.viewer) {
-			var date = new Date(this.props.viewer.state.modified);
+			var lastModifieidDate = new Date(this.props.viewer.state.modified);
 			lastModified = ( 
-				<span className="last-modified">{ date.toLocaleDateString() }<br />{ date.toLocaleTimeString() }</span> 
+				<span className="last-modified">
+					{ lastModifieidDate.toLocaleDateString() }<br />{ lastModifieidDate.toLocaleTimeString() }
+				</span> 
 			);
 		} 
 		
