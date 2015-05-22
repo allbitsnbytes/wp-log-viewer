@@ -1,5 +1,5 @@
 @import 'Jeet'
-@import '../bower/humane/themes/jackedup.css'
+@import '../bower/humane/themes/flatty.css'
 
 body
 	min-height 1200px
@@ -10,6 +10,25 @@ body
 
 .debugger-status.disabled
 	background #DA8F92
+
+.humane-wplv-alert, 
+.humane-wplv-error, 
+.humane-wplv-success
+	text-align left
+	box-shadow: 0px 2px 21px 0px rgba(0,0,0,0.53);
+	padding 8px 20px 12px
+	
+.humane-wplv-alert
+	color #000
+	background #f4f4f4
+
+.humane-wplv-error
+	color #fff
+	background #B52E29
+	
+.humane-wplv-success
+	color #fff
+	background #6A9D35
 
 #viewer-pane
 	span()
@@ -113,6 +132,21 @@ body
 	.sidebar
 		col(0.25)
 		padding 15px 0
+		
+		.refresh-status
+			margin 0 0 25px
+			
+			.refresh-btn
+				display inline-block
+				font-size 0.9em
+				color #fff
+				background #555
+				border 1px solid #444
+				border-left 1px solid #666
+				border-top 1px solid #666
+				padding 6px 20px
+				border-radius 4px
+				text-decoration none
 
 		.menu-group
 			margin 0 0 25px

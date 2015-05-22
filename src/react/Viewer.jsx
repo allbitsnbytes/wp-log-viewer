@@ -40,6 +40,25 @@ var Viewer = React.createClass({
 		wplv_remote('clear-log', 'GET', {}, function(res) {
 			if (res.cleared) {
 				this.setState({entries: []});
+				wplv_notify.success('Log file <strong>successfully cleared</strong>');
+			} else {
+				wplv_notify.error('Failed to clear log file.  You might not have write permission');
+			}
+		}.bind(this));
+	},
+	
+	// Refresh the viewer by checking for new log entries
+	refreshViewer: function() {
+		var data = {
+			modified: this.state.modified
+		};
+		
+		wplv_remote('get-entries-if-modified', 'GET', data, function(res) {
+			if (res.changed) {
+				this.updateEntries(res.entries, res.modified);
+				wplv_notify.success('Viewer updated with new entries');
+			} else {
+				wplv_notify.alert('No new entries found.');
 			}
 		}.bind(this));
 	},
@@ -53,6 +72,7 @@ var Viewer = React.createClass({
 		wplv_remote('get-entries-if-modified', 'GET', data, function(res) {
 			if (res.changed) {		
 				this.updateEntries(res.entries, res.modified);
+				wplv_notify.alert('<strong>Log entries updated</strong>.');
 			}
 		}.bind(this));
 	},

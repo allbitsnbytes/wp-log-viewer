@@ -13,6 +13,7 @@ var ViewSidebar = React.createClass({
 				default: '',
 				trackSelected: false,
 				options: [
+					{ label: 'Refresh',		key: 'refresh',	action: this.props.viewer.refreshViewer },
 					{ label: 'Clear Log',	key: 'clear',	action: this.props.viewer.clearLogEntries }
 				]
 			},
@@ -65,6 +66,7 @@ var ViewSidebar = React.createClass({
 
 			return (
 				<div className="sidebar">
+					
 					{ menuOptions }
 
 					<div className="last-modified">

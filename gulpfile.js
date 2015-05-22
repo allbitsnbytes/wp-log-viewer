@@ -2,7 +2,6 @@
 var $			= require('gulp-load-plugins')();
 var Gulp		= require('gulp');
 var Jeet		= require('Jeet');
-var Nib			= require('nib');
 
 
 // Paths
