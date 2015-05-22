@@ -34,7 +34,7 @@ class Plugin {
 		add_action('admin_enqueue_scripts', [$this, 'load_css_and_js']);
 		add_action('admin_menu', [$this, 'add_navigation']);
 		add_action('wp_login',  [$this, 'create_session'], 10, 2);
-		add_action('wp_logout', [$this, 'clear_session']);
+		add_action('clear_auth_cookie', [$this, 'clear_session']);
 	}
 	
 	
