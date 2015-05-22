@@ -179,12 +179,16 @@ class Router {
 
 			foreach ($handlers as $handler) {
 				if ($method === strtoupper($handler['method'])) {
-					if ($handler['auth']) {
+					if ($handler['auth'] === Auth::AUTHENTICATED || $handler['auth'] === Auth::VERIFIED) {
 						$auth = Auth::get_instance();
 
-						if (!isset($headers['wplv-cookie']) || !isset($headers['wplv-session']) || !$auth->is_valid_api_session($headers['wplv-cookie'], $headers['wplv-session'])) {
-							$response->set_code(401);
-							$response->send();
+						if (
+							(!isset($headers['wplv-cookie']) || !isset($headers['wplv-session'])) && 
+						    (($handler['auth'] === Auth::VERIFIED && !$auth->is_verified_api_session()) ||
+						    ($handler['auth'] === Auth::AUTHENTICATED && !$auth->is_authenticated_api_session()))
+						   ) {
+								$response->set_code(401);
+								$response->send();
 						}
 					}
 
