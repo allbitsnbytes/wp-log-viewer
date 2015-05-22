@@ -129,9 +129,27 @@ class Log {
 	 * @return boolean True if file is smaller
 	 */
 	public function is_smaller($size='') {
-		// TODO
+		if (file_exists($this->log_file)) {
+			return filesize($this->log_file) < intval($size) ? true : false;
+		}
 		
 		return false; 
+	}
+	
+	
+	/**
+	 * Get the file size for the log file
+	 *
+	 * @since 0.1.0
+	 *
+	 * @return int The size in bytes
+	 */
+	public function get_file_size() {
+		if (file_exists($this->log_file)) {
+			return filesize($this->log_file);
+		}
+		
+		return false;
 	}
 
 
