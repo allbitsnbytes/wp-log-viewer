@@ -93,7 +93,7 @@ var Viewer = React.createClass({
 					modified: res.modified, 
 					filesize: res.filesize
 				});
-				wplv_notify.alert('<strong>Log entries updated</strong>.');
+				wplv_notify.success('Log entries updated.');
 			}
 		}.bind(this));
 	},
