@@ -11,6 +11,7 @@ var Viewer = React.createClass({
 			debugEnabled: false,
 			timezone: '',
 			modified: '',
+			filesize: 0,
 			sort: 'newest',
 			view: 'group',
 			ready: false
@@ -28,7 +29,11 @@ var Viewer = React.createClass({
 				ready: true
 			});
 
-			this.updateEntries(res.entries, res.modified);
+			this.updateEntries({
+				entries: res.entries, 
+				modified: res.modified,
+				filesize: res.filesize
+			});
 		}.bind(this));
 
 		// Check for changes
@@ -39,7 +44,7 @@ var Viewer = React.createClass({
 	clearLogEntries: function() {
 		wplv_remote('clear-log', 'GET', {}, function(res) {
 			if (res.cleared) {
-				this.setState({entries: []});
+				this.setState({entries: [], filesize: 0});
 				wplv_notify.success('Log file <strong>successfully cleared</strong>');
 			} else {
 				wplv_notify.error('Failed to clear log file.  You might not have write permission');
@@ -55,7 +60,11 @@ var Viewer = React.createClass({
 		
 		wplv_remote('get-entries-if-modified', 'GET', data, function(res) {
 			if (res.changed) {
-				this.updateEntries(res.entries, res.modified);
+				this.updateEntries({
+					entries: res.entries, 
+					modified: res.modified,
+					filesize: res.filesize
+				});
 				wplv_notify.success('Viewer updated with new entries');
 			} else {
 				wplv_notify.alert('No new entries found.');
@@ -71,24 +80,20 @@ var Viewer = React.createClass({
 
 		wplv_remote('get-entries-if-modified', 'GET', data, function(res) {
 			if (res.changed) {		
-				this.updateEntries(res.entries, res.modified);
+				this.updateEntries({
+					entries: res.entries, 
+					modified: res.modified, 
+					filesize: res.filesize
+				});
 				wplv_notify.alert('<strong>Log entries updated</strong>.');
 			}
 		}.bind(this));
 	},
 
 	// Update entries
-	updateEntries: function(entries, modified) {
-		if (this.state.sort === 'oldest') {
-			entries.reverse();
-		}
-
-		var data = {
-			entries: entries
-		};
-
-		if (modified) {
-			data.modified = modified;
+	updateEntries: function(data) {
+		if (data.entries && data.entries instanceof Array && this.state.sort === 'oldest') {
+			data.entries.reverse();
 		}
 
 		this.setState(data);

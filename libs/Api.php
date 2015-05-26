@@ -40,6 +40,7 @@ class Api {
 			'debugEnabled'	=> $log->debug_enabled(),
 			'timezone'		=> $log->get_timezone(),
 			'modified'		=> $log->last_modified(),
+			'filesize'		=> $log->get_file_size(),
 		]);
 	
 		return $res;
@@ -125,6 +126,7 @@ class Api {
 			//'entries'		=> $truncated ? $log->get_recent_entries() : $log->get_entries(),
 			'entries'		=> $log->get_entries(),
 			'modified'		=> $log->last_modified(),
+			'filesize'		=> $log->get_file_size(),
 		]);
 		
 		return $res;

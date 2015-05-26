@@ -74,6 +74,10 @@ var ViewSidebar = React.createClass({
 						<TimeStamp date={ lastModifiedDate } />
 					</div>
 			
+					<div className="log-filesize">
+						<strong>Filesize</strong><br />
+						<PrettyFilesize filesize={ this.props.viewer.state.filesize } />
+					</div>
 				</div>
 			);
 		}
