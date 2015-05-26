@@ -6,13 +6,21 @@ var PrettyFilesize = React.createClass({
 	// Get default properties
 	getDefaultProps: function() {
 		return {
-			filesize: 0
+			filesize: 0,
+			precision: 2
 		};
 	},
 
 	// Property types
 	propTypes: {
 		filesize: React.PropTypes.number
+	},
+
+	// Format filesize decimal position
+	formatDecimal: function(filesize, precision) {
+		var divider = parseInt(1 + Array(precision).join('0'));
+
+		return Math.round(filesize * divider)/divider;
 	},
 
 	render: function() {
@@ -39,7 +47,7 @@ var PrettyFilesize = React.createClass({
 
 		return (
 			<div className="filesize">
-				{ filesize } { format }
+				{ this.formatDecimal(filesize, this.props.precision) } { format }
 			</div>
 		);
 	}
