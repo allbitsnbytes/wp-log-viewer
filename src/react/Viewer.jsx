@@ -3,6 +3,12 @@
  */
 var Viewer = React.createClass({
 
+	// Reference to currently active timer
+	currentTimer: false,
+	
+	// Current active time check interval
+	currentTimerInterval: 15000,
+	
 	// Get initial state
 	getInitialState: function() {
 		return {
@@ -34,10 +40,12 @@ var Viewer = React.createClass({
 				modified: res.modified,
 				filesize: res.filesize
 			});
-		}.bind(this));
 
-		// Check for changes
-		//var timer = setInterval(this.checkLastest, 15000);
+			// If File was found and debugging is enabled, start auto checker
+			if (res.found && res.debugEnabled) {
+				this.currentTimer = setInterval(this.checkLatest, this.currentTimerInterval);
+			}
+		}.bind(this));
 	},
 
 	// Clear log entries
@@ -73,7 +81,7 @@ var Viewer = React.createClass({
 	},
 
 	// Get log entries if modified
-	checkLastest: function() {
+	checkLatest: function() {
 		var data = {
 			modified: this.state.modified
 		};

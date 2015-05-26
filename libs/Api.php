@@ -103,7 +103,7 @@ class Api {
 		$res->set_json([
 			'debugEnabled'	=> $log->debug_enabled(),
 		]);
-		
+
 		return $res;
 	}
 	
