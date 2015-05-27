@@ -31,7 +31,7 @@ class Auth {
 	 *
 	 * @var string
 	 */
-	const DB_SESS_PREFIX = '_wplv_sess';
+	const DB_SESS_PREFIX = '_wplv_sess_';
 	
 	/**
 	 * Database session user prefix
@@ -40,7 +40,7 @@ class Auth {
 	 *
 	 * @var string
 	 */
-	const DB_SESS_USER_PREFIX = '_wplv_usr';
+	const DB_SESS_USER_PREFIX = '_wplv_usr_';
 	
 	/**
 	 * Prefix to use for session cookie
@@ -230,19 +230,19 @@ class Auth {
 	 *
 	 * @since 0.1.0
 	 *
+	 * @param $user_id The user id to get api session for
 	 * @return array The session information
 	 */
-	public function get_api_session() {
+	public function get_api_session($user_id) {
 		global $wpdb;
 		
-		$user_id = \get_current_user_id();
 		$info = [
 			'api_key'		=> $this->get_api_key($user_id),
 			'session_key'	=> $this->get_session_key(),
 			'cookie_token'	=> $this->get_cookie_token(),
 			'valid'			=> false,
 		];
-		
+
 		if (!empty($info['cookie_token']) && !empty($info['session_key'])) {
 			$info['valid'] = true;
 		}

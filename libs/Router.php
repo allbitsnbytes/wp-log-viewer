@@ -183,7 +183,7 @@ class Router {
 					if ($handler['auth'] !== Auth::SKIP) {
 						$auth = Auth::get_instance();
 
-						if ((!isset($headers['wplv-cookie']) || !isset($headers['wplv-session'])) && ($handler['auth'] === Auth::AUTHENTICATED && !$auth->is_authenticated_api_session())) {
+						if ((!isset($headers['wplv-cookie']) || !isset($headers['wplv-session'])) || ($handler['auth'] === Auth::AUTHENTICATED && !$auth->is_authenticated_api_session($headers['wplv-cookie'], $headers['wplv-session']))) {
 								$response->set_code(401);
 								$response->send();
 						}

@@ -157,8 +157,8 @@ class Api {
 		
 		return $res;
 	}
-	
-	
+
+
 	/**
 	 * Clear log file
 	 *
@@ -170,15 +170,31 @@ class Api {
 	 */
 	public static function clear_log($req, $res) {
 		$log = Log::get_instance();
-		
+
 		$res->set_json([
 			'cleared'		=> $log->clear(),
 		]);
-		
+
 		return $res;
 	}
-	
-	
+
+
+	/**
+	 * Clear currently logged in session
+	 *
+	 * @since 0.1.0
+	 *
+	 * @return Response Whether the session was cleared
+	 */
+	public static function clear_session($req, $res) {
+		$res->set_json([
+			'cleared'		=> $auth->clear_api_session(),
+		]);
+
+		return $res;
+	}
+
+
 	/**
 	 * Process user login
 	 *
@@ -194,11 +210,11 @@ class Api {
 	 */
 	public static function login_user($req, $res) {
 		// TODO
-		
+
 		return $res;
 	}
-	
-	
+
+
 	/**
 	 * Process user login
 	 *
@@ -210,7 +226,7 @@ class Api {
 	 */
 	public static function logout_user($req, $res) {
 		// TODO
-		
+
 		return $res;
 	}
 }

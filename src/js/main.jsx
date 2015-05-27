@@ -1,4 +1,4 @@
-function wplv_remote(action, method, data, success) {
+function wplv_remote(action, method, data, done) {
 	var data = typeof data === 'object' ? data : {};
 	
 	data.do = action;
@@ -10,9 +10,8 @@ function wplv_remote(action, method, data, success) {
 		headers: {
 			'wplv-cookie': WPLOGVIEWER.cookie_token,
 			'wplv-session': WPLOGVIEWER.session_key
-		},
-		success: success
-	});
+		}
+	}).then(done);
 }
 
 var wplv_notify = (function() {
@@ -43,5 +42,5 @@ var wplv_notify = (function() {
 
 React.render(
 	<Viewer />,
-	document.getElementById('wp-log-viewer')
+	document.getElementById('wp-log-viewer-container')
 );

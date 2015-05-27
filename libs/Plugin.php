@@ -1,5 +1,5 @@
 <?php 
-	
+
 namespace Allbitsnbytes\WPLogViewer;
 
 if (!defined('WPLOGVIEWER_BASE')) {
@@ -22,48 +22,24 @@ use Allbitsnbytes\WPLogViewer\Helper;
  * @since 0.1.0
  */
 class Plugin {
-	
+
 	use IsSingleton;
-	
+
 	/**
 	 * Initialize plugin
 	 *
 	 * @since 0.1.0
 	 */
 	public function init() {
-		add_action('admin_enqueue_scripts', [$this, 'load_css_and_js']);
+		if (isset($_REQUEST['page']) && $_REQUEST['page'] == 'wp-log-viewer') {
+			add_action('admin_enqueue_scripts', [$this, 'load_css_and_js']);
+		} else if (isset($_COOKIE['wplv_logged_in'])) {
+			$auth = Auth::get_instance();
+			$auth->clear_api_session();
+			setcookie('wplv_logged_in', null, -1);
+		}
+
 		add_action('admin_menu', [$this, 'add_navigation']);
-		add_action('wp_login',  [$this, 'create_session'], 10, 2);
-		add_action('clear_auth_cookie', [$this, 'clear_session']);
-	}
-	
-	
-	/**
-	 * Create user session when user logins
-	 *
-	 * This session is use to authenticate user api requests
-	 *
-	 * @since 0.1.0
-	 *
-	 * @param string $user_login The login for the user
-	 * @param object $user User object
-	 */
-	public function create_session($user_login, $user) {
-		$auth = Auth::get_instance();
-
-		$auth->create_api_session($user->ID);
-	}
-	
-	
-	/**
-	 * Destroy session
-	 *
-	 * @since 0.1.0
-	 */
-	public function clear_session() {
-		$auth = Auth::get_instance();
-
-		$auth->clear_api_session();
 	}
 
 
@@ -74,6 +50,7 @@ class Plugin {
 	 */
 	public function load_css_and_js() {
 		$auth = Auth::get_instance();
+		$user_id = \get_current_user_id();
 		$localized = [
 			'api' 			=> WPLOGVIEWER_URL . 'api/',
 			'debugEnabled' 	=> WP_DEBUG,
@@ -88,12 +65,16 @@ class Plugin {
 		wp_enqueue_script('wplogviewer-js', WPLOGVIEWER_URL . 'assets/js/main.min.js', false, false, true);
 
 		// Localize some variables
-		$session_info = $auth->get_api_session();
-	
+		$wp_session_info = $auth->get_api_session($user_id);
+
 		// If session is not valid, create one
-		if ($session_info['valid'] === true) {
-			$localized['cookie_token']	= $session_info['cookie_token']; 
-			$localized['session_key']	= $session_info['session_key'];
+		if ($wp_session_info['valid'] === true) {
+			$localized['cookie_token']	= $wp_session_info['cookie_token']; 
+			$localized['session_key']	= $wp_session_info['session_key'];
+
+			if ($auth->create_api_session($user_id)) {
+				setcookie('wplv_logged_in', $wp_session_info['cookie_token'], 0, '/', $_SERVER['SERVER_NAME'], false, true);
+			}
 		}
 
 		wp_localize_script('wplogviewer-js', 'WPLOGVIEWER', $localized);
@@ -106,7 +87,7 @@ class Plugin {
 	 * @since 0.1.0
 	 */
 	public function add_navigation() {
-		add_management_page('Wordpress Log Viewer', 'Log Viewer', 'manage_options', 'wp-log-viewer', [$this, 'get_view']);
+		add_management_page('Wordpress Log Viewer', 'Log Viewer', 'manage_options', 'wp-log-viewer', [$this, 'display_viewer_page']);
 	}
 
 
@@ -115,11 +96,8 @@ class Plugin {
 	 *
 	 * @since 0.1.0
 	 */
-	public function get_view() {
-		echo '
-			<div id="wp-log-viewer" class="wrap">
-			</div>
-		';
+	public function display_viewer_page() {
+		echo '<div id="wp-log-viewer-container" class="wrap"></div>';
 	}
 
 
@@ -137,7 +115,7 @@ class Plugin {
 		$loaded = false;
 		$config_path = ABSPATH . '/wp-config.php';
 		$table_prefix = 'wp_';
-		
+
 		// Check if required files found
 		if (file_exists($config_path) && file_exists(ABSPATH . '/wp-includes')) {
 			$fp = @fopen($config_path, 'r');
@@ -148,7 +126,7 @@ class Plugin {
 				// loop, parse and define wp-config constants
     			while (($line = @fgets($fp)) !== false) {
 					$parsed_line = preg_replace("/^define\([ '\"]+(\w+)[ '\"]+, (.*)\);/i", "$1".$sep."$2", $line);
-					
+
 					if ($line !== $parsed_line) {
 						$info = explode($sep, $parsed_line);
 
@@ -194,7 +172,7 @@ class Plugin {
 
 					// Setup wpdb global variable
 					global $wpdb;
-					
+
 					if (!is_object($wpdb)) {
 						$wpdb = new \wpdb(DB_USER, DB_PASSWORD, DB_NAME, DB_HOST);
 						$wpdb->set_prefix($table_prefix);
