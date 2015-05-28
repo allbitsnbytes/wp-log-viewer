@@ -45,5 +45,8 @@
     "gulp-uglify": "^1.2.0",
     "jeet": "^6.1.2",
     "react-intl": "^1.2.0"
+  },
+  "devDependencies": {
+    "mocha-jshint": "^2.2.3"
   }
 }
