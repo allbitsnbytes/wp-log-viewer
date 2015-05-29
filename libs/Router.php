@@ -35,7 +35,7 @@ class Router {
 	 * @var array
 	 */
 	private $handlers = [];
-	
+
 	/**
 	 * Get all request headers
 	 *
@@ -47,19 +47,19 @@ class Router {
 		if (function_exists('getallheaders')) {
 			return getallheaders();
 		}
-		
+
 		$headers = [];
-		
+
 		foreach ($_SERVER as $key => $value) {
 			if ((substr($key, 0, 5) == 'HTTP_')) {
 				$headers[str_replace(' ', '-', strtolower(str_replace('_', ' ', substr($key, 5))))] = $value;
 			}
 		}
-		
+
 		return $headers;
 	}
-	
-	
+
+
 	/**
 	 * Get request method
 	 *
@@ -70,8 +70,8 @@ class Router {
 	private function get_request_method() {
 		return $_SERVER['REQUEST_METHOD'];
 	}
-	
-	
+
+
 	/**
 	 * Get requested action
 	 *
@@ -80,7 +80,7 @@ class Router {
 	 * @return string The requested action
 	 */
 	private function get_action() {
-		return isset($_REQUEST['do']) ? $_REQUEST['do'] : '';
+		return isset($_REQUEST['do']) ? filter_var($_REQUEST['do'], FILTER_SANITIZE_STRING) : '';
 	}
 	
 	
