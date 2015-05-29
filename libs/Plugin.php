@@ -166,9 +166,6 @@ class Plugin {
 					foreach ($includes as $include) {
 						require_once ABSPATH . WPINC . '/' . $include;
 					}
-//					define('SHORTINIT', 1);
-//					require_once ABSPATH . '/wp-includes/option.php';
-//					require_once ABSPATH . '/wp-settings.php';
 
 					// Setup wpdb global variable
 					global $wpdb;
