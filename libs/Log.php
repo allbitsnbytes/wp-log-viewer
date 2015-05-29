@@ -171,12 +171,15 @@ class Log {
     			while (($line = @fgets($fp)) !== false) {
 					$line = preg_replace("/^\[([0-9a-zA-Z-]+) ([0-9:]+) ([a-zA-Z_]+)\] (.*)$/i", "$1".$sep."$2".$sep."$3".$sep."$4", $line);
 					$parts = explode($sep, $line);
-        			$entries[] = [
-						'date' => $parts[0], 
-						'time' => $parts[1],
-						'timezone' => $parts[2],
-						'message' => stripslashes($parts[3]),
-					];
+					
+					if (count($parts) >= 4) {
+	        			$entries[] = [
+							'date' => $parts[0], 
+							'time' => $parts[1],
+							'timezone' => $parts[2],
+							'message' => stripslashes($parts[3]),
+						];
+					}
     			}
     			
 				@fclose($fp);
