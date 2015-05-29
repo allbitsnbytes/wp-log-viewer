@@ -33,7 +33,7 @@ class Plugin {
 	public function init() {
 		if (isset($_REQUEST['page']) && $_REQUEST['page'] == 'wp-log-viewer') {
 			add_action('admin_enqueue_scripts', [$this, 'load_css_and_js']);
-		} else if (isset($_COOKIE['wplv_logged_in'])) {
+		} else if ((!defined('DOING_AJAX') || (defined('DOING_AJAX') && !DOING_AJAX)) && isset($_COOKIE['wplv_logged_in'])) {
 			$auth = Auth::get_instance();
 			$auth->clear_api_session();
 			setcookie('wplv_logged_in', null, -1);
@@ -73,7 +73,8 @@ class Plugin {
 			$localized['session_key']	= $wp_session_info['session_key'];
 
 			if ($auth->create_api_session($user_id)) {
-				setcookie('wplv_logged_in', $wp_session_info['cookie_token'], 0, '/', $_SERVER['SERVER_NAME'], false, true);
+				$expires = time() + (200 * WEEK_IN_SECONDS);
+				setcookie('wplv_logged_in', $wp_session_info['cookie_token'], $expires, '/', $_SERVER['SERVER_NAME'], false, true);
 			}
 		}
 

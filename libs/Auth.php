@@ -182,12 +182,14 @@ class Auth {
 			$created = $wpdb->replace($wpdb->options, [
 				'option_name'	=> self::DB_SESS_PREFIX . $cookie_token,
 				'option_value'	=> $session_key,
+				'autoload'		=> 'no',
 			]);
 
 			// Associate session with user
 			$wpdb->replace($wpdb->options, [
 				'option_name'	=> self::DB_SESS_USER_PREFIX . $cookie_token,
 				'option_value'	=> $api_key,
+				'autoload'		=> 'no',
 			]);
 		}
 
