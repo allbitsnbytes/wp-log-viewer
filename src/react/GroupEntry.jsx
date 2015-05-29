@@ -50,16 +50,20 @@ var GroupEntry = React.createClass({
 			
 			groupDetails = (
 				<div className="group-entry-details active">
-					<a href="#" className="hide-group-details" onClick={ this.toggleDetails }>Hide details</a>
+					<div className="details">
+						<a href="#" className="hide-group-details" onClick={ this.toggleDetails }>Hide details</a>
 					
-					<p>Date and time errors occured:</p>
-					{ groupEntryDetails }
+						<p>Date and time errors occured:</p>
+						{ groupEntryDetails }
+					</div>
 				</div>
 			);
 		} else {
 			groupDetails = (
 				<div className="group-entry-details">
-					<a href="#" className="show-group-details" onClick={ this.toggleDetails }>More details</a>
+					<div className="details">
+						<a href="#" className="show-group-details" onClick={ this.toggleDetails }>More details</a>
+					</div>
 				</div>
 			);
 		}
