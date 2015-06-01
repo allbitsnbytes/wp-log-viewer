@@ -37,3 +37,7 @@ Log automatically refreshes to display new errors.  No need to manually refresh 
 Debugging status is located at the top of the viewer to make it easy to see if debugging is enabled or disabled.  
 	
 You can also see log size and last modified timestamp.  This information automatically updates when changed.
+
+# Change Log
+
+View the [change log](https://github.com/allbitsnbytes/wp-log-viewer/blob/master/CHANGELOG.md) to keep track of changes.
