@@ -19,6 +19,7 @@ var LogEntry = React.createClass({
 		className: React.PropTypes.string
 	},
 
+	// Render component
 	render: function() {
 		var defaultClass = 'log-entry';
 		var classes = this.props.className === '' ? defaultClass : defaultClass + ' ' + this.props.className; 

@@ -26,12 +26,14 @@ var GroupEntry = React.createClass({
 		group: React.PropTypes.object
 	},
 
+	// Toggle entry details
 	toggleDetails: function(e) {
 		e.preventDefault();
 
 		this.setState({showDetails: !this.state.showDetails});
 	},
 
+	// Render component
 	render: function() {
 		var group = this.props.group;
 		var groupDetails = '';

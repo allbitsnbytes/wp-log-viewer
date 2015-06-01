@@ -1,6 +1,7 @@
 @import 'Jeet'
 @import '../bower/humane/themes/flatty.css'
 
+
 body
 	min-height 1200px
 	height 100%
@@ -17,7 +18,7 @@ body
 	text-align left
 	box-shadow: 0px 2px 21px 0px rgba(0,0,0,0.53);
 	padding 8px 20px 12px
-	
+
 .humane-wplv-alert
 	color #000
 	background #f4f4f4
@@ -25,7 +26,7 @@ body
 .humane-wplv-error
 	color #fff
 	background #B52E29
-	
+
 .humane-wplv-success
 	color #fff
 	background #6A9D35
@@ -34,17 +35,42 @@ body
 	span()
 	cf()
 
-	h2
+	.view-header
+		span()
 		margin 0 0 15px
 
-		.debugger-status
-			display inline-block
-			font-size 11px
-			line-height 11px
-			color #444
+		h2
+			col(0.76, gutter: 0)
+
+			.debugger-status
+				display inline-block
+				font-size 11px
+				line-height 11px
+				color #444
+				border-radius 6px
+				padding: 5px 10px
+				margin-left 22px
+
+		.search-group
+			col(0.18, gutter: 0)
+			border 1px solid #ddd
 			border-radius 6px
-			padding: 5px 10px
-			margin-left 22px
+			margin 12px 0 0
+			
+			.fa
+				margin-left 6px
+
+			.search-field
+				display inline-block
+				color #444
+				background none
+				box-shadow none
+				border none
+				margin-left 8px
+				
+				&::-webkit-input-placeholder
+					font-style italic
+					color #bbb
 
 	.group-entries,
 	.log-entries
@@ -107,11 +133,11 @@ body
 				border-bottom 1px solid #dadada
 				padding 10px 0
 				margin 12px 0
-				
+
 				.details
 					display block
 					padding 0 15px
-					
+
 				.when
 					span()		
 					margin 0 0 4px
@@ -138,10 +164,10 @@ body
 	.sidebar
 		col(0.25)
 		padding 15px 0
-		
+
 		.refresh-status
 			margin 0 0 25px
-			
+
 			.refresh-btn
 				display inline-block
 				font-size 0.9em
@@ -170,6 +196,9 @@ body
 					list-style none
 					padding 1px 0
 					margin 0
+					
+					.fa
+						margin-right 6px
 
 					a
 						display inline-block
@@ -192,7 +221,7 @@ body
 
 			.when
 				display block;
-				
+
 		.log-filesize
 			font-size 0.85em
 			margin-top 15px

@@ -5,22 +5,23 @@ var Viewer = React.createClass({
 
 	// Reference to currently active timer
 	currentTimer: false,
-	
+
 	// Current active time check interval
 	currentTimerInterval: 15000,
-	
+
 	// Get initial state
 	getInitialState: function() {
 		return {
 			entries: [],
-			found: false,
 			debugEnabled: false,
-			timezone: '',
-			modified: '',
 			filesize: 0,
+			found: false,
+			modified: '',
+			query: '',
+			ready: false,
 			sort: 'newest',
-			view: 'group',
-			ready: false
+			timezone: '',
+			view: 'group'
 		};
 	},
 
@@ -59,13 +60,13 @@ var Viewer = React.createClass({
 			}
 		}.bind(this));
 	},
-	
+
 	// Refresh the viewer by checking for new log entries
 	refreshViewer: function() {
 		var data = {
 			modified: this.state.modified
 		};
-		
+
 		wplv_remote('get-entries-if-modified', 'GET', data, function(res) {
 			if (res.changed) {
 				this.updateEntries({
@@ -96,6 +97,11 @@ var Viewer = React.createClass({
 				wplv_notify.success('Log entries updated.');
 			}
 		}.bind(this));
+	},
+
+	// Search entries
+	searchEntries: function(query) {
+		this.setState({query: query});
 	},
 
 	// Update entries
@@ -140,30 +146,58 @@ var Viewer = React.createClass({
 	render: function() { 
 		if (this.state.ready) {
 			if (this.state.found) {
+				var entries = [];
+				var query = this.state.query;
+				var viewHeader = (
+					<div className="view-header">
+						<h2>Log Viewer <DebugStatus enabled={ this.state.debugEnabled } /></h2>
+						<SearchField viewer={ this } />
+					</div>
+				);
+
+				if (query !== '') {
+					for (var index in this.state.entries) {
+						var entry = this.state.entries[index];
+						var match = new RegExp(query, 'gi');
+
+						if (entry && entry.message && match.test(entry.message)) {
+							entries.push(entry);
+						}
+					}
+				} else {
+					entries = this.state.entries;
+				}
+
 				if (this.state.view == 'list') {
 					return (
 						<div id="viewer-pane">
-							<h2>Log Viewer <DebugStatus enabled={ this.state.debugEnabled } /></h2>
-							
-							<LogListView entries={ this.state.entries } />
+							{ viewHeader }
+
+							<LogListView entries={ entries } />
 							<ViewSidebar viewer={ this } />
 						</div>
 					);
 				} else {
 					return (
 						<div id="viewer-pane">
-							<h2>Log Viewer <DebugStatus enabled={ this.state.debugEnabled } /></h2>
-							
-							<LogGroupView entries={ this.state.entries } />
+							{ viewHeader }
+
+							<LogGroupView entries={ entries } />
 							<ViewSidebar viewer={ this } />
 						</div>
 					);
 				}
 			} else { 
+				var viewHeader = (
+					<div className="view-header">
+						<h2>Log Viewer <DebugStatus enabled={ this.state.debugEnabled } /></h2>
+					</div>
+				);
+
 				if (this.state.debugEnabled) {
 					return (
 						<div id="viewer-pane">
-							<h2>Log Viewer <DebugStatus enabled={ this.state.debugEnabled } /></h2>
+							{ viewHeader }
 						
 							<p>Debugging is enabled. However, the <strong>debug.log file does not exist</strong>.</p>
 						</div> 
@@ -171,19 +205,19 @@ var Viewer = React.createClass({
 				} else {
 					return (
 						<div id="viewer-pane">
-							<h2>Log Viewer <DebugStatus enabled={ this.state.debugEnabled } /></h2>
-	
+							{ viewHeader }
+
 							<p><strong>Debugging is currently <span className="highlight">disabled</span>.</strong></p>
 							<br />
-													
+
 							<p>To turn on debugging, add the following to your wp-config.php file.</p>
-			
+
 							<p className="code-snippet">
 								define('WP_DEBUG', true);<br />
 								define('WP_DEBUG_LOG', true);<br />
 								define('WP_DEBUG_DISPLAY', false);
 							</p>
-							
+
 							<p>For more info: <a href="https://codex.wordpress.org/Debugging_in_WordPress" target="_blank">Debugging In Wordpress</a></p>
 						</div>
 					);

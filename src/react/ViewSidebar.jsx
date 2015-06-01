@@ -13,8 +13,8 @@ var ViewSidebar = React.createClass({
 				default: '',
 				trackSelected: false,
 				options: [
-					{ label: 'Refresh',		key: 'refresh',	action: this.props.viewer.refreshViewer },
-					{ label: 'Clear Log',	key: 'clear',	action: this.props.viewer.clearLogEntries }
+					{ label: 'Refresh',		key: 'refresh',		icon: 'refresh',	action: this.props.viewer.refreshViewer },
+					{ label: 'Clear Log',	key: 'clear',		icon: 'remove',		action: this.props.viewer.clearLogEntries }
 				]
 			},
 			
@@ -24,8 +24,8 @@ var ViewSidebar = React.createClass({
 				default: 'newest',
 				trackSelected: true,
 				options: [
-					{ label: 'By Newest',	key: 'newest',	action: this.props.viewer.sortNewest },
-					{ label: 'By Oldest',	key: 'oldest',	action: this.props.viewer.sortOldest }
+					{ label: 'By Newest',	key: 'newest',	icon: 'sort-down',	action: this.props.viewer.sortNewest },
+					{ label: 'By Oldest',	key: 'oldest',	icon: 'sort-up',	action: this.props.viewer.sortOldest }
 				]
 			},
 			
@@ -35,8 +35,8 @@ var ViewSidebar = React.createClass({
 				default: 'group',
 				trackSelected: true,
 				options: [
-					{ label: 'Group View',	key: 'group',	action: this.props.viewer.showGroupView },
-					{ label: 'List View',	key: 'list',	action: this.props.viewer.showListView }
+					{ label: 'Group View',	key: 'group',	icon: 'th',			action: this.props.viewer.showGroupView },
+					{ label: 'List View',	key: 'list',	icon: 'list',		action: this.props.viewer.showListView }
 				]
 			}
 		];
@@ -54,6 +54,7 @@ var ViewSidebar = React.createClass({
 		viewer: React.PropTypes.object
 	},
 
+	// Render component
 	render: function() {
 		if (this.props.viewer) {
 			var lastModifiedDate = new Date(this.props.viewer.state.modified);

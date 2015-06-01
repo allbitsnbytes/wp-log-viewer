@@ -36,7 +36,8 @@ var LogGroupView = React.createClass({
 
 		return groups;
 	},
-		
+	
+	// Render component
 	render: function() {
 		var groups = this.getGroupedEntries();
 		var groupSections = [];

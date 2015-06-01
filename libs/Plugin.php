@@ -59,6 +59,7 @@ class Plugin {
 		];
 
 		// Stylesheet files
+		wp_enqueue_style('wplogviewer-fontawesome', '//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css');
 		wp_enqueue_style('wplogviewer-css', WPLOGVIEWER_URL . 'assets/css/main.min.css');
 
 		// Javascript files

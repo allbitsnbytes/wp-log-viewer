@@ -10,10 +10,12 @@ var TimeStamp = React.createClass({
 		};
 	},
 	
+	// Property types
 	propTypes: {
 		date: React.PropTypes.object
 	},
 	
+	// Render component
 	render: function() {
 		if (this.props.date instanceof Date) {
 			var now = new Date();

@@ -15,7 +15,7 @@ var DebugStatus = React.createClass({
 		enabled: React.PropTypes.bool
 	},
 
-	// Render
+	// Render component
 	render: function() {
 		var status = this.props.enabled ? 'enabled' : 'disabled';
 		var className = 'debugger-status '+status;

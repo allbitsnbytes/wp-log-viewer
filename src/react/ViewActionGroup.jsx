@@ -35,7 +35,8 @@ var ViewActionGroup = React.createClass({
 	propTypes: {
 		group: React.PropTypes.object
 	},
-	
+
+	// Render component
 	render: function() {
 		var group = this.props.group;
 		var options = group.options.map(function(option) {

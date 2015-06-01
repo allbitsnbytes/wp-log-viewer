@@ -15,6 +15,7 @@ var LogListView = React.createClass({
 		entries: React.PropTypes.array
 	},
 
+	// Render component
 	render: function() {
 		var entries = this.props.entries;
 

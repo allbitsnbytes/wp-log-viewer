@@ -23,6 +23,7 @@ var PrettyFilesize = React.createClass({
 		return Math.round(filesize * divider)/divider;
 	},
 
+	// Render component
 	render: function() {
 		var kilobyte = 1000,
 			megabyte = 1000 * kilobyte,

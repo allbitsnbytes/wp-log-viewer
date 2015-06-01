@@ -9,7 +9,8 @@ var ViewAction = React.createClass({
 			nav: {
 				action: '',
 				label: '',
-				key: ''
+				key: '',
+				icon: ''
 			},
 			notify: null,
 			selected: false
@@ -46,17 +47,18 @@ var ViewAction = React.createClass({
 	// Render component
 	render: function() {
 		var className = this.props.selected ? 'active' : '';
+		var icon = 'fa fa-'+this.props.nav.icon;
 		
 		if (className === 'active') {
 			return (
 				<li className={ className }>
-					<a href="#" onClick={ this.handleLinkClicked } title={ this.props.nav.label }>{ this.props.nav.label }</a>
+					<a href="#" onClick={ this.handleLinkClicked } title={ this.props.nav.label }><i className={ icon }></i> { this.props.nav.label }</a>
 				</li>
 			);
 		} else {
 			return (
 				<li>
-					<a href="#" onClick={ this.handleLinkClicked } title={ this.props.nav.label }>{ this.props.nav.label }</a>
+					<a href="#" onClick={ this.handleLinkClicked } title={ this.props.nav.label }><i className={ icon }></i> { this.props.nav.label }</a>
 				</li>
 			);
 		}
