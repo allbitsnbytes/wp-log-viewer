@@ -8,6 +8,7 @@ var Jeet		= require('Jeet');
 var paths = {
 	src: {
 		css: 'src/css/**/*.styl',
+		img: 'src/img/**/*',
 		js: [
 			'src/bower/react/react.min.js',
 			'src/bower/reqwest/reqwest.min.js',
@@ -20,7 +21,8 @@ var paths = {
 	
 	build: {
 		css: 'assets/css',
-		js: 'assets/js',
+		img: 'assets/img',
+		js: 'assets/js'
 	}
 };
 
@@ -39,12 +41,13 @@ function isJSX(file) {
 
 
 // Default Task
-Gulp.task('default', ['css', 'js']);
+Gulp.task('default', ['css', 'images', 'js']);
 
 
 // Watch 
 Gulp.task('watch', function() {
 	Gulp.watch(paths.src.css, ['css']);
+	Gulp.watch(paths.src.img, ['images']);
 	Gulp.watch(paths.src.js, ['js']);
 });
 
@@ -60,6 +63,14 @@ Gulp.task('css', function() {
 		.pipe($.autoprefixer())
 		.pipe($.rename('main.min.css'))
 		.pipe(Gulp.dest(paths.build.css));
+});
+
+
+// Process all image files
+Gulp.task('images', function() {
+	return Gulp.src(paths.src.img)
+		.pipe($.plumber())
+		.pipe(Gulp.dest(paths.build.img));
 });
 
 
