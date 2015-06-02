@@ -1,7 +1,0 @@
-formatter.name: pretty
-suites:
-  wplv_suite:
-    psr4_prefix: Allbitsnbytes\WPLogViewer
-    namespace: Allbitsnbytes\WPLogViewer
-    src_path: libs
-code_generation: false
