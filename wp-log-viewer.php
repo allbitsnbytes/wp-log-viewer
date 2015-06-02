@@ -36,15 +36,3 @@ use Allbitsnbytes\WPLogViewer\Plugin;
 
 // Load plugin
 $plugin = Plugin::get_instance();
-
-
-/**
- * Register activation and deactivation hooks
- */
-//if (function_exists('register_activation_hook')) {
-//    register_activation_hook(__FILE__, array('\Allbitsnbytes\WPLogViewer\Plugin', 'activate'));
-//}
-//
-//if (function_exists('register_uninstall_hook')) {
-//    register_uninstall_hook(__FILE__, array('\Allbitsnbytes\WPLogViewer\Plugin', 'deactivate'));
-//}
