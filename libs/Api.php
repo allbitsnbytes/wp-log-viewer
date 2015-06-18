@@ -38,6 +38,7 @@ class Api {
 			'entries'		=> $log->get_entries(),
 			'found'			=> $log->file_exists(),
 			'debugEnabled'	=> $log->debug_enabled(),
+			'debugDetected'	=> $log->debug_status_detected(),
 			'timezone'		=> $log->get_timezone(),
 			'modified'		=> $log->last_modified(),
 			'filesize'		=> $log->get_file_size(),
@@ -102,6 +103,7 @@ class Api {
 		
 		$res->set_json([
 			'debugEnabled'	=> $log->debug_enabled(),
+			'debugDetected'	=> $log->debug_status_detected(),
 		]);
 
 		return $res;

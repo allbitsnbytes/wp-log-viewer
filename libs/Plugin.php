@@ -145,6 +145,9 @@ class Plugin {
 				// Define additional constants if missing
 				if (!defined('WP_DEBUG')) {
 					define('WP_DEBUG', false);
+					define('WP_DEBUG_DETECTED', false);
+				} else {
+					define('WP_DEBUG_DETECTED', true);
 				}
 
 				if (defined('DB_NAME') && defined('DB_USER') && defined('DB_PASSWORD') && defined('DB_HOST')) {								

@@ -12,6 +12,31 @@ body
 .debugger-status.disabled
 	background #DA8F92
 
+.debugger-status.not-detected
+	background #FAEE7D
+
+.enable-debugging-btn,
+.disable-debugging-btn
+	display inline-block
+	border-radius 4px
+	color #fff
+	font-size 1.1em
+	text-decoration none
+	padding 0.8em 1em
+	margin-right 8px
+	
+	i
+		margin-right 8px
+	
+	&:hover
+		color #fff
+
+.enable-debugging-btn
+	background darken(#C0E69F, 50%)
+	
+.disable-debugging-btn
+	background darken(#DA8F92, 50%)
+
 .humane-wplv-alert, 
 .humane-wplv-error, 
 .humane-wplv-success
@@ -34,6 +59,12 @@ body
 #viewer-pane
 	span()
 	cf()
+	
+	.loading-status
+		display block
+		width 50px
+		heigh 50px
+		margin 180px auto 0
 
 	.view-header
 		span()
@@ -44,12 +75,12 @@ body
 
 			.debugger-status
 				display inline-block
-				font-size 11px
-				line-height 11px
+				font-size 12px
+				line-height 12px
 				color #444
-				border-radius 6px
-				padding: 5px 10px
-				margin-left 22px
+				border-radius 5px
+				padding: 8px 12px
+				margin-left 20px
 
 		.search-group
 			col(0.18, gutter: 0)

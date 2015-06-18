@@ -13,7 +13,8 @@ var Viewer = React.createClass({
 	getInitialState: function() {
 		return {
 			entries: [],
-			debugEnabled: false,
+			debugEnabled: this.getDefaultDebuggingStatus(),
+			debugDetected: false,
 			filesize: 0,
 			found: false,
 			modified: '',
@@ -21,7 +22,8 @@ var Viewer = React.createClass({
 			ready: false,
 			sort: 'newest',
 			timezone: '',
-			view: 'group'
+			view: 'group',
+			simulating: this.isSimulationEnabled()
 		};
 	},
 
@@ -32,7 +34,8 @@ var Viewer = React.createClass({
 			this.setState({
 				found: res.found,
 				timezone: res.timezone,
-				debugEnabled: res.debugEnabled,
+				debugEnabled: res.debugDetected ? res.debugEnabled : this.state.debugEnabled,
+				debugDetected: res.debugDetected,
 				ready: true
 			});
 
@@ -43,8 +46,8 @@ var Viewer = React.createClass({
 			});
 
 			// If File was found and debugging is enabled, start auto checker
-			if (res.found && res.debugEnabled) {
-				this.currentTimer = setInterval(this.checkLatest, this.currentTimerInterval);
+			if (this.state.debugEnabled && (res.found || this.state.simulating)) {
+				this.startUpdateChecker();
 			}
 		}.bind(this));
 	},
@@ -141,87 +144,144 @@ var Viewer = React.createClass({
 	showGroupView: function() {
 		this.setState({view: 'group'});
 	},
+	
+	// Pretend debugging enabled
+	pretendDebugEnabled: function(e) {
+		e.preventDefault();
+		
+		document.cookie = '_wplv-sim=1';
+		document.cookie = '_wplv-dbg=1';
+		this.setState({debugEnabled: true, simulating: true});
+		this.startUpdateChecker();
+	},
+	
+	// Pretend debugging disabled
+	pretendDebugDisabled: function(e) {
+		e.preventDefault();
+		
+		document.cookie = '_wplv-sim=0';
+		document.cookie = '_wplv-dbg=0';
+		this.setState({debugEnabled: false, simulating: true});
+		this.startUpdateChecker();
+	},
+	
+	// Check if simulation enabled
+	isSimulationEnabled: function() {
+		return document.cookie.indexOf('_wplv-sim=1') > 0 ? true : false;
+	},
+	
+	// Get default debugging status
+	getDefaultDebuggingStatus: function() {
+		return document.cookie.indexOf('_wplv-dbg=1') > 0 ? true : false;
+	},
+			
+	// Start checking for debug log changes
+	startUpdateChecker: function() {
+		this.currentTimer = setInterval(this.checkLatest, this.currentTimerInterval);
+	},
 
 	// Render component
 	render: function() { 
 		if (this.state.ready) {
-			if (this.state.found) {
-				var entries = [];
-				var query = this.state.query;
-				var viewHeader = (
-					<div className="view-header">
-						<h2>Log Viewer <DebugStatus enabled={ this.state.debugEnabled } /></h2>
-						<SearchField viewer={ this } />
-					</div>
-				);
-
-				if (query !== '') {
-					for (var index in this.state.entries) {
-						var entry = this.state.entries[index];
-						var match = new RegExp(query, 'gi');
-
-						if (entry && entry.message && match.test(entry.message)) {
-							entries.push(entry);
+			if (this.state.debugDetected || this.state.simulating) {
+				if (this.state.found) {
+					var entries = [];
+					var query = this.state.query;
+					var viewHeader = (
+						<div className="view-header">
+							<h2>Log Viewer <DebugStatus enabled={ this.state.debugEnabled } detected={ this.state.debugDetected } simulating={ this.state.simulating } /></h2>
+							<SearchField viewer={ this } />
+						</div>
+					);
+	
+					if (query !== '') {
+						for (var index in this.state.entries) {
+							var entry = this.state.entries[index];
+							var match = new RegExp(query, 'gi');
+	
+							if (entry && entry.message && match.test(entry.message)) {
+								entries.push(entry);
+							}
 						}
+					} else {
+						entries = this.state.entries;
 					}
-				} else {
-					entries = this.state.entries;
-				}
-
-				if (this.state.view == 'list') {
-					return (
-						<div id="viewer-pane">
-							{ viewHeader }
-
-							<LogListView entries={ entries } />
-							<ViewSidebar viewer={ this } />
+	
+					if (this.state.view == 'list') {
+						return (
+							<div id="viewer-pane">
+								{ viewHeader }
+	
+								<LogListView entries={ entries } />
+								<ViewSidebar viewer={ this } />
+							</div>
+						);
+					} else {
+						return (
+							<div id="viewer-pane">
+								{ viewHeader }
+	
+								<LogGroupView entries={ entries } />
+								<ViewSidebar viewer={ this } />
+							</div>
+						);
+					}
+				} else { 
+					var viewHeader = (
+						<div className="view-header">
+							<h2>Log Viewer <DebugStatus enabled={ this.state.debugEnabled } detected={ this.state.debugDetected } simulating={ this.state.simulating } /></h2>
 						</div>
 					);
-				} else {
-					return (
-						<div id="viewer-pane">
-							{ viewHeader }
-
-							<LogGroupView entries={ entries } />
-							<ViewSidebar viewer={ this } />
-						</div>
-					);
+	
+					if (this.state.debugEnabled) {
+						return (
+							<div id="viewer-pane">
+								{ viewHeader }
+							
+								<p>Debugging is enabled. However, the <strong>debug.log file does not exist</strong>.</p>
+							</div> 
+						);
+					} else {
+						return (
+							<div id="viewer-pane">
+								{ viewHeader }
+	
+								<p><strong>Debugging is currently <span className="highlight">disabled</span>.</strong></p>
+								<br />
+	
+								<p>To turn on debugging, add the following to your wp-config.php file.</p>
+	
+								<p className="code-snippet">
+									define('WP_DEBUG', true);<br />
+									define('WP_DEBUG_LOG', true);<br />
+									define('WP_DEBUG_DISPLAY', false);
+								</p>
+	
+								<p>For more info: <a href="https://codex.wordpress.org/Debugging_in_WordPress" target="_blank">Debugging In Wordpress</a></p>
+							</div>
+						);
+					}
 				}
-			} else { 
-				var viewHeader = (
-					<div className="view-header">
-						<h2>Log Viewer <DebugStatus enabled={ this.state.debugEnabled } /></h2>
+			} else {
+				return (
+					<div id="viewer-pane">
+						<div className="view-header">
+							<h2>Log Viewer <DebugStatus enabled={ this.state.debugEnabled } detected={ this.state.debugDetected } simulating={ this.state.simulating } /></h2>
+						</div>
+					
+						<p>Sorry, we could not detect if debugging is enabled or disabled.  We can simulate the status of WP_DEBUG.</p>
+						
+						<p><strong>How you would like to proceed?</strong></p>
+						
+						<p>
+							<a href="#" onClick={ this.pretendDebugEnabled } className="enable-debugging-btn"><i className="fa fa-arrow-circle-right"></i> Enabled</a>
+							<a href="#" onClick={ this.pretendDebugDisabled } className="disable-debugging-btn"><i className="fa fa-arrow-circle-right"></i> Disabled</a>
+						</p>
+						<br />
+						
+						<p><small>** Please note that the status of WP_DEBUG is not actually being changed.  This is just a simulation.</small></p>
 					</div>
 				);
-
-				if (this.state.debugEnabled) {
-					return (
-						<div id="viewer-pane">
-							{ viewHeader }
-						
-							<p>Debugging is enabled. However, the <strong>debug.log file does not exist</strong>.</p>
-						</div> 
-					);
-				} else {
-					return (
-						<div id="viewer-pane">
-							{ viewHeader }
-
-							<p><strong>Debugging is currently <span className="highlight">disabled</span>.</strong></p>
-							<br />
-
-							<p>To turn on debugging, add the following to your wp-config.php file.</p>
-
-							<p className="code-snippet">
-								define('WP_DEBUG', true);<br />
-								define('WP_DEBUG_LOG', true);<br />
-								define('WP_DEBUG_DISPLAY', false);
-							</p>
-
-							<p>For more info: <a href="https://codex.wordpress.org/Debugging_in_WordPress" target="_blank">Debugging In Wordpress</a></p>
-						</div>
-					);
-				}
 			}
 		}
 
