@@ -40,9 +40,9 @@ var TimeStamp = React.createClass({
 				var currentDate = this.props.date.toLocaleDateString();
 				var currentTime = this.props.date.toLocaleTimeString();
 			} else {
-				var today = now.toDateString();
-				var currentDate = this.props.date.toDateString();
-				var currentTime = this.props.date.toTimeString();
+				var today = now.toDateString().replace(/([\w]+) ([\w]+) ([\d]+) ([\d]+)/, "$2 $3 $4");
+				var currentDate = this.props.date.toDateString().replace(/([\w]+) ([\w]+) ([\d]+) ([\d]+)/, "$2 $3 $4");
+				var currentTime = this.props.date.toTimeString().replace(/.*(\d{2}:\d{2}:\d{2})[ \w+-]+\(([\w]+)\)/, "$1 $2");
 			}
 			
 			if (today === currentDate) {

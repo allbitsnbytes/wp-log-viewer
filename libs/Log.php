@@ -178,7 +178,7 @@ class Log {
 		
 		if ($this->file_exists()) {
 			$fp = @fopen($this->log_file, 'r');
-
+						
 			if ($fp) {
     			while (($line = @fgets($fp)) !== false) {
 					$line = preg_replace("/^\[([0-9a-zA-Z-]+) ([0-9:]+) ([a-zA-Z_]+)\] (.*)$/i", "$1".$sep."$2".$sep."$3".$sep."$4", $line);
@@ -186,7 +186,7 @@ class Log {
 					
 					if (count($parts) >= 4) {
 	        			$entries[] = [
-							'date' => $parts[0], 
+							'date' => date('Y/m/d', strtotime($parts[0])), 
 							'time' => $parts[1],
 							'timezone' => $parts[2],
 							'message' => stripslashes($parts[3]),
