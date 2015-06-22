@@ -23,6 +23,7 @@
   "scripts": {
     "build-assets": "gulp assets",
     "cleanup": "rm -rf node_modules test src .bowerrc .jshintignore .jshintrc bower.json gulpfile.js phpspec.yml",
+    "prepare-master": "git checkout master && git fetch origin dev && git reset --hard",
     "release": "git checkout master && npm run update-deps && npm run build-assets && npm run cleanup && git add -A && git commit -m 'Cleaned up for release' && echo '*** Ready for release ***'",
     "update-deps": "bower install"
   },
