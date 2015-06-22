@@ -1,4 +1,4 @@
-function wplv_remote(action, method, data, done) {
+function wplv_remote(action, method, data, success, failed) {
 	var data = typeof data === 'object' ? data : {};
 	
 	data.do = action;
@@ -11,7 +11,8 @@ function wplv_remote(action, method, data, done) {
 			'wplv-cookie': WPLOGVIEWER.cookie_token,
 			'wplv-session': WPLOGVIEWER.session_key
 		}
-	}).then(done);
+	}).then(success)
+	.fail(failed);
 }
 
 var wplv_notify = (function() {

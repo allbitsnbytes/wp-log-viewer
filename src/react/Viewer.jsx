@@ -90,16 +90,25 @@ var Viewer = React.createClass({
 			modified: this.state.modified
 		};
 
-		wplv_remote('get-entries-if-modified', 'GET', data, function(res) {
-			if (res.changed) {		
-				this.updateEntries({
-					entries: res.entries, 
-					modified: res.modified, 
-					filesize: res.filesize
-				});
-				wplv_notify.success('Log entries updated.');
-			}
-		}.bind(this));
+		wplv_remote('get-entries-if-modified', 'GET', data, 
+			function(res) {
+				if (res.changed) {		
+					this.updateEntries({
+						entries: res.entries, 
+						modified: res.modified, 
+						filesize: res.filesize
+					});
+					wplv_notify.success('Log entries updated.');
+				}
+			}.bind(this),
+			function(res) {
+				if (res && res.status && res.status === 401) {
+					this.stopUpdateChecker();
+				}
+			}.bind(this)
+		);
+			
+		
 	},
 
 	// Search entries
@@ -164,20 +173,25 @@ var Viewer = React.createClass({
 		this.setState({debugEnabled: false, simulating: true});
 		this.startUpdateChecker();
 	},
-	
+
 	// Check if simulation enabled
 	isSimulationEnabled: function() {
 		return document.cookie.indexOf('_wplv-sim=1') > 0 ? true : false;
 	},
-	
+
 	// Get default debugging status
 	getDefaultDebuggingStatus: function() {
 		return document.cookie.indexOf('_wplv-dbg=1') > 0 ? true : false;
 	},
-			
+
 	// Start checking for debug log changes
 	startUpdateChecker: function() {
 		this.currentTimer = setInterval(this.checkLatest, this.currentTimerInterval);
+	},
+
+	// Stop checking for debug log changes
+	stopUpdateChecker: function() {
+		clearInterval(this.currentTimer);
 	},
 
 	// Render component
@@ -193,12 +207,12 @@ var Viewer = React.createClass({
 							<SearchField viewer={ this } />
 						</div>
 					);
-	
+
 					if (query !== '') {
 						for (var index in this.state.entries) {
 							var entry = this.state.entries[index];
 							var match = new RegExp(query, 'gi');
-	
+
 							if (entry && entry.message && match.test(entry.message)) {
 								entries.push(entry);
 							}
@@ -206,12 +220,12 @@ var Viewer = React.createClass({
 					} else {
 						entries = this.state.entries;
 					}
-	
+
 					if (this.state.view == 'list') {
 						return (
 							<div id="viewer-pane">
 								{ viewHeader }
-	
+
 								<LogListView entries={ entries } />
 								<ViewSidebar viewer={ this } />
 							</div>
