@@ -20,6 +20,12 @@
       "url": "https://github.com/allbitsnbytes/wp-log-viewer/blob/LICENSE"
     }
   ],
+  "scripts": {
+    "build-assets": "gulp assets",
+    "cleanup": "rm -rf node_modules test src .bowerrc .jshintignore .jshintrc bower.json gulpfile.js phpspec.yml",
+    "release": "git checkout master && npm run update-deps && npm run build-assets && npm run cleanup && git add -A && git commit -m 'Cleaned up for release' && echo '*** Ready for release ***'",
+    "update-deps": "bower install"
+  },
   "engines": {
     "node": ">= 0.10.x"
   },
