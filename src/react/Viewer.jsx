@@ -118,7 +118,30 @@ var Viewer = React.createClass({
 
 	// Update entries
 	updateEntries: function(data) {
-		if (data.entries && data.entries instanceof Array && this.state.sort === 'oldest') {
+		if (!data.entries || !(data.entries instanceof Array)) {
+			data.entries = [];
+		}
+		
+		// Process entries and prepare for use
+		data.entries = data.entries.map(function(entry) {
+			
+			// Get line number if present
+			var line = entry.message.replace(/.* on line ([\d]+).*/gi, '$1');	
+			entry.line = line && line !== entry.message ? line : '';
+
+			// Get error type if present
+			var errorType = entry.message.replace(/^(PHP [\w]+|Fatal error):.*/gi, '$1');
+			entry.errorType = errorType && errorType !== entry.message ? errorType : '';
+			
+			// Get file path if present
+			var filePath = entry.message.replace(/^.*in (\/[\w /_-]+.php).*/gi, '$1');
+			entry.filePath = filePath && filePath != entry.message ? filePath : '';
+
+			return entry;
+		});
+
+		// Sort order if necessary
+		if (this.state.sort === 'oldest') {
 			data.entries.reverse();
 		}
 

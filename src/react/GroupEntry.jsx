@@ -36,11 +36,30 @@ var GroupEntry = React.createClass({
 	// Render component
 	render: function() {
 		var group = this.props.group;
+		var errorDetails = [];
 		var groupDetails = '';
+		
+		if (group.errorType) {
+			errorDetails.push((
+				<div className="error-type">Error type: { group.errorType }</div>
+			));
+		}
+		
+		if (group.line) {
+			errorDetails.push((
+				<div className="line-number">Line: { group.line }</div>
+			));
+		}
+		
+		if (group.filePath) {
+			errorDetails.push((
+				<div className="file-path">File: { group.filePath }</div>
+			));
+		}		
 
 		if (this.state.showDetails) {
 			var groupEntryDetails = [];
-			
+
 			for (var key in group.entries) {
 				var entry = group.entries[key];
 				var entryDate = new Date(entry.date + ' ' + entry.time + ' ' + entry.timezone);
@@ -49,12 +68,12 @@ var GroupEntry = React.createClass({
 					<TimeStamp date={ entryDate } />
 				));
 			}
-			
+
 			groupDetails = (
 				<div className="group-entry-details active">
 					<div className="details">
 						<a href="#" className="hide-group-details" onClick={ this.toggleDetails }>Hide details</a>
-					
+
 						<p>Date and time errors occured:</p>
 						{ groupEntryDetails }
 					</div>
@@ -75,6 +94,9 @@ var GroupEntry = React.createClass({
 				<TimeStamp date={ group.date } />
 				<div className="message">
 					{ group.message }
+					<div className="error-details">
+						{ errorDetails }
+					</div>
 					{ groupDetails }
 				</div>
 			</div>

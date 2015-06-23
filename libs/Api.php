@@ -174,7 +174,7 @@ class Api {
 		$log = Log::get_instance();
 
 		$res->set_json([
-			'cleared'		=> $log->clear(),
+			'cleared'		=> $log->clear() || $log->delete() ? true : false,
 		]);
 
 		return $res;
