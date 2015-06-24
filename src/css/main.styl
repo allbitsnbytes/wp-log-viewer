@@ -2,7 +2,8 @@
 @import '../bower/humane/themes/flatty.css'
 
 
-$text-color		= #222
+$text-color				= #222
+$default-legend-color	= #e1e1e1
 
 
 body
@@ -115,11 +116,11 @@ body
 		border none
 		border-right 1px solid #dadada
 		box-sizing border-box
-		padding 15px 2px 0 0
+		padding 0 2px 0 0
 		
 		.error-details
 			display block
-			font-size 0.94em
+			font-size 0.85em
 			margin 15px 0 0
 			
 			&:empty
@@ -128,7 +129,7 @@ body
 			.error-type,
 			.file-path,
 			.line-number
-				color lighten($text-color, 35%)
+				color lighten($text-color, 50%)
 
 			.file,
 			.line,
@@ -142,14 +143,38 @@ body
 			
 			.type
 				margin-left 5px
+		
+		.php-fatal-error
+			border-color #B52E29 !important
+
+		.php-notice
+			border-color #FEFAB6 !important
+
+		.php-warning
+			border-color #BDD7FF !important
+
+		.error-indicator-legend
+			list-style none
+			padding 0
+			margin 0 0 45px
+
+			li
+				display inline-block
+				font-size 0.8em
+				font-weight bold
+				list-style none
+				border-left 4px solid
+				padding 0 0 0 5px
+				margin 0 30px 0 0
 
 	.log-entries
 		.log-entry
 			span()
-			margin-bottom 8px
+			border-left 4px solid $default-legend-color
+			margin-bottom 15px
 
 			.when
-				col(0.15)
+				col(0.15, offset: 0.02)
 				font-size 0.8em
 
 				.date
@@ -165,11 +190,12 @@ body
 
 	.group-entries
 		.group-entry
-			span()
-			margin-bottom 15px
+			span(1)
+			border-left 4px solid $default-legend-color
+			margin-bottom 30px
 
 			.when
-				col(0.15)
+				col(0.15, offset: 0.02)
 				font-size 0.8em
 
 				.date
@@ -193,7 +219,7 @@ body
 				background #eaeaea
 				border-bottom 1px solid #dadada
 				padding 10px 0
-				margin 12px 0
+				margin 12px 0 0
 
 				.details
 					display block

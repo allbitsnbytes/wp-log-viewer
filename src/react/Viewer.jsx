@@ -9,6 +9,23 @@ var Viewer = React.createClass({
 	// Current active time check interval
 	currentTimerInterval: 15000,
 
+	// Get default properties
+	getDefaultProps: function() {
+		return {
+			user_id: 0,
+			settings: {
+				view: 'group',
+				sort: 'newest'
+			}
+		};
+	},
+
+	// Property types
+	propTypes: {
+		user_id: React.PropTypes.number,
+		settings: React.PropTypes.object
+	},
+
 	// Get initial state
 	getInitialState: function() {
 		return {
@@ -29,6 +46,11 @@ var Viewer = React.createClass({
 
 	// Initialize when component is to be mounted
 	componentDidMount: function() {
+		this.setState({
+			view: this.props.settings.view,
+			sort: this.props.settings.sort
+		});
+		
 		// Initialize component
 		wplv_remote('get-log', 'GET', {}, function(res) {
 			this.setState({
@@ -127,19 +149,19 @@ var Viewer = React.createClass({
 			
 			// Get line number if present
 			var line = entry.message.replace(/.* on line ([\d]+).*/gi, '$1');	
-			entry.line = line && line !== entry.message ? line : '';
+			entry.line = line && line !== entry.message ? line.trim() : '';
 
 			// Get error type if present
-			var errorType = entry.message.replace(/^(PHP [\w]+|Fatal error):.*/gi, '$1');
-			entry.errorType = errorType && errorType !== entry.message ? errorType : '';
+			var errorType = entry.message.replace(/^(PHP [\w]+):.*/gi, '$1');
+			entry.errorType = errorType && errorType !== entry.message ? errorType.trim() : '';
 			
 			// Get file path if present
 			var filePath = entry.message.replace(/^.*in (\/[\w /_-]+.php).*/gi, '$1');
-			entry.filePath = filePath && filePath != entry.message ? filePath : '';
+			entry.filePath = filePath && filePath != entry.message ? filePath.trim() : '';
 			
 			// Reformat message
 			if (entry.errorType) {
-				entry.message = entry.message.replace(/^PHP [\w]+:|Fatal error:(.*)/gi, '$1', '').trim();
+				entry.message = entry.message.replace(/^PHP [\w]+:(.*)/gi, '$1', '').trim();
 			}
 
 			return entry;

@@ -6,28 +6,43 @@ var LogEntry = React.createClass({
 	// Get properties
 	getDefaultProps: function() {
 		return {
-			date: '',
-			message: '',
+			entry: {
+				date: '',
+				errorType: '',
+				line: '',
+				filePath: '',
+				message: '',
+				time: '',
+				timezone: ''		
+			},
 			className: ''
 		};
 	},
 
 	// Property types
 	propTypes: {
-		date: React.PropTypes.object,
-		message: React.PropTypes.string,
-		className: React.PropTypes.string
+		entry: React.PropTypes.object
 	},
 
 	// Render component
 	render: function() {
-		var defaultClass = 'log-entry';
-		var classes = this.props.className === '' ? defaultClass : defaultClass + ' ' + this.props.className; 
+		var entryClasses = ['log-entry'];
+		var entryDate = new Date(this.props.entry.date + ' ' + this.props.entry.time + ' ' + this.props.entry.timezone);
+		
+		if (this.props.className) {
+			entryClasses.push(this.props.className);
+		} 
+		
+		if (this.props.entry.errorType) {
+			entryClasses.push(this.props.entry.errorType.toLowerCase().replace(' ', '-'));
+		}
 
 		return (
-			<div className={ classes }>
-				<TimeStamp date={ this.props.date } />
-				<div className="message">{ this.props.message }</div>
+			<div className={ entryClasses.join(' ') }>
+				<TimeStamp date={ entryDate } />
+				<div className="message">
+					{ this.props.entry.message }
+				</div>
 			</div>
 		);
 	}

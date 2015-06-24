@@ -21,15 +21,14 @@ var LogListView = React.createClass({
 
 		if (entries.length) {		
 			var logEntries = entries.map(function(entry) {
-				var entryDate = new Date(entry.date + ' ' + entry.time + ' ' + entry.timezone);
-
 				return (
-					<LogEntry date={ entryDate } message={ entry.message } />
+					<LogEntry entry={ entry } />
 				);
 			});
 
 			return (
 				<div className="log-entries">
+					<ErrorLegend />
 					{ logEntries }
 				</div>
 			);		

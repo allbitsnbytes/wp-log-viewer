@@ -93,6 +93,7 @@ var GroupEntry = React.createClass({
 
 		return (
 			<div className={ entryClasses.join(' ') }>
+				<div clanssName="error-legend"></div>
 				<TimeStamp date={ group.date } />
 				<div className="message">
 					{ group.message }

@@ -54,6 +54,7 @@ var LogGroupView = React.createClass({
 		if (groupSections.length) {
 			return (
 				<div className="group-entries">
+					<ErrorLegend />
 					{ groupSections }
 				</div>
 			);

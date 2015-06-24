@@ -42,6 +42,6 @@ var wplv_notify = (function() {
 
 
 React.render(
-	<Viewer />,
+	<Viewer user={ WPLOGVIEWER.user_id } settings={ WPLOGVIEWER.settings } />,
 	document.getElementById('wp-log-viewer-container')
 );
