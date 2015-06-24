@@ -152,7 +152,7 @@ var Viewer = React.createClass({
 			entry.line = line && line !== entry.message ? line.trim() : '';
 
 			// Get error type if present
-			var errorType = entry.message.replace(/^(PHP [\w]+):.*/gi, '$1');
+			var errorType = entry.message.replace(/^(PHP [\w ]+):.*/gi, '$1');
 			entry.errorType = errorType && errorType !== entry.message ? errorType.trim() : '';
 			
 			// Get file path if present
@@ -161,7 +161,7 @@ var Viewer = React.createClass({
 			
 			// Reformat message
 			if (entry.errorType) {
-				entry.message = entry.message.replace(/^PHP [\w]+:(.*)/gi, '$1', '').trim();
+				entry.message = entry.message.replace(/^PHP [\w ]+:(.*)/gi, '$1', '').trim();
 			}
 
 			return entry;

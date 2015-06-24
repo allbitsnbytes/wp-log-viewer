@@ -51,13 +51,14 @@ class Plugin {
 	 */
 	public function load_css_and_js() {
 		$auth = Auth::get_instance();
-		$settings = Sessings::get_instance();
+		$settings = Settings::get_instance();
 		$user_id = \get_current_user_id();
 		$localized = [
 			'api' 			=> WPLOGVIEWER_URL . 'api/',
 			'debugEnabled' 	=> WP_DEBUG,
 			'cookie_token'	=> '',
 			'session_key'	=> '',
+			'user_id'		=> $user_id,
 			'settings'		=> $settings->get_settings($user_id),
 		];
 

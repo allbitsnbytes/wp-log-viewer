@@ -21,7 +21,7 @@ var ViewSidebar = React.createClass({
 			// Sort options
 			{
 				name: 'Sort',
-				default: 'newest',
+				default: this.props.viewer.state.sort,
 				trackSelected: true,
 				options: [
 					{ label: 'By Newest',	key: 'newest',	icon: 'sort-down',	action: this.props.viewer.sortNewest },
@@ -32,7 +32,7 @@ var ViewSidebar = React.createClass({
 			// View options
 			{
 				name: 'View',
-				default: 'group',
+				default: this.props.viewer.state.view,
 				trackSelected: true,
 				options: [
 					{ label: 'Group View',	key: 'group',	icon: 'th',			action: this.props.viewer.showGroupView },

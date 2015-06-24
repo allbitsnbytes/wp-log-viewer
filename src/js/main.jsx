@@ -21,18 +21,18 @@ var wplv_notify = (function() {
 		waitForMove: true,
 		baseCls: 'humane-flatty'
 	};
-	
+
 	return {
 		alert: function(msg) {
 			config.addnCls = 'humane-wplv-alert';
 			humane.log(msg, config);
 		},
-			
+
 		error: function(msg) {
 			config.addnCls = 'humane-wplv-error';
 			humane.log(msg, config);
 		},
-		
+
 		success: function(msg) {
 			config.addnCls = 'humane-wplv-success';
 			humane.log(msg, config);

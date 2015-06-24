@@ -41,7 +41,7 @@ var GroupEntry = React.createClass({
 		var groupDetails = '';
 		
 		if (group.errorType) {
-			entryClasses.push(group.errorType.toLowerCase().replace(' ', '-'));
+			entryClasses.push(group.errorType.toLowerCase().replace(/[ ]+/gi, '-'));
 			errorDetails.push((
 				<div className="error-type"><i className="fa fa-angle-right"></i> Type: <span className="type">{ group.errorType }</span></div>
 			));

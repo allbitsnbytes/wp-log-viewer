@@ -34,7 +34,7 @@ var LogEntry = React.createClass({
 		} 
 		
 		if (this.props.entry.errorType) {
-			entryClasses.push(this.props.entry.errorType.toLowerCase().replace(' ', '-'));
+			entryClasses.push(this.props.entry.errorType.toLowerCase().replace(/[ ]+/gi, '-'));
 		}
 
 		return (

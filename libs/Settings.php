@@ -79,7 +79,7 @@ class Settings {
 	 * @return array|false
 	 */
 	public function get_default_settings() {
-		return get_option('_wplv_settings', false);
+		return \get_option('_wplv_settings', false);
 	}
 
 
@@ -92,10 +92,10 @@ class Settings {
 	 * @return boolean
 	 */
 	public function update_default_settings($new_settings) {
-		$settings = get_settings();
+		$settings = $this->get_settings();
 		$settings = $this->merge_settings($settings, $new_settings);
 
-		$updated = update_option('_wplv_settings', $settings);
+		$updated = \update_option('_wplv_settings', $settings);
 
 		return $updated;
 	}
@@ -110,7 +110,7 @@ class Settings {
 	 * @return object|false
 	 */
 	public function get_user_settings($user_id) {
-		$settings = get_user_meta($user_id, '_wplv_settings', true);
+		$settings = \get_user_meta($user_id, '_wplv_settings', true);
 
 		return empty($settings) ? false : $settings;
 	}
@@ -129,7 +129,7 @@ class Settings {
 		$settings = $this->get_settings($user_id);
 		$settings = $this->merge_settings($settings, $new_settings);
 
-		return update_user_meta($user_id, '_wplv_settings', $settings);
+		return \update_user_meta($user_id, '_wplv_settings', $settings);
 	}
 
 
