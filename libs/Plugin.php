@@ -14,6 +14,7 @@ if (!defined('WPLOGVIEWER_BASE')) {
 use Allbitsnbytes\WPLogViewer\Auth;
 use Allbitsnbytes\WPLogViewer\Characteristic\IsSingleton;
 use Allbitsnbytes\WPLogViewer\Helper;
+use Allbitsnbytes\WPLogViewer\Settings;
 
 
 /**
@@ -50,12 +51,14 @@ class Plugin {
 	 */
 	public function load_css_and_js() {
 		$auth = Auth::get_instance();
+		$settings = Sessings::get_instance();
 		$user_id = \get_current_user_id();
 		$localized = [
 			'api' 			=> WPLOGVIEWER_URL . 'api/',
 			'debugEnabled' 	=> WP_DEBUG,
 			'cookie_token'	=> '',
 			'session_key'	=> '',
+			'settings'		=> $settings->get_settings($user_id),
 		];
 
 		// Stylesheet files
