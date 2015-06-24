@@ -7,6 +7,11 @@ All notable changes will be tracked in this change log.  This project uses [Sema
 
 - When clearing log file, if that fails attempt to delete the file.
 
+### UI
+
+- Reformat error message to make it easier to read
+- Display error type, line number and path to file on their own line making the information easier to find
+
 ## [0.11.1] - 2015-06-22
 ### Fix
 

@@ -35,25 +35,27 @@ var GroupEntry = React.createClass({
 
 	// Render component
 	render: function() {
+		var entryClasses = ['group-entry'];
 		var group = this.props.group;
 		var errorDetails = [];
 		var groupDetails = '';
 		
 		if (group.errorType) {
+			entryClasses.push(group.errorType.toLowerCase().replace(' ', '-'));
 			errorDetails.push((
-				<div className="error-type">Error type: { group.errorType }</div>
+				<div className="error-type"><i className="fa fa-angle-right"></i> Type: <span className="type">{ group.errorType }</span></div>
 			));
 		}
-		
+
 		if (group.line) {
 			errorDetails.push((
-				<div className="line-number">Line: { group.line }</div>
+				<div className="line-number"><i className="fa fa-angle-right"></i> Line: <span className="line">{ group.line }</span></div>
 			));
 		}
 		
 		if (group.filePath) {
 			errorDetails.push((
-				<div className="file-path">File: { group.filePath }</div>
+				<div className="file-path"><i className="fa fa-angle-right"></i> File: <span className="file">{ group.filePath }</span></div>
 			));
 		}		
 
@@ -90,7 +92,7 @@ var GroupEntry = React.createClass({
 		}
 
 		return (
-			<div className="group-entry">
+			<div className={ entryClasses.join(' ') }>
 				<TimeStamp date={ group.date } />
 				<div className="message">
 					{ group.message }

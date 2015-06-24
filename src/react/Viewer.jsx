@@ -136,6 +136,11 @@ var Viewer = React.createClass({
 			// Get file path if present
 			var filePath = entry.message.replace(/^.*in (\/[\w /_-]+.php).*/gi, '$1');
 			entry.filePath = filePath && filePath != entry.message ? filePath : '';
+			
+			// Reformat message
+			if (entry.errorType) {
+				entry.message = entry.message.replace(/^PHP [\w]+:|Fatal error:(.*)/gi, '$1', '').trim();
+			}
 
 			return entry;
 		});

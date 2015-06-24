@@ -2,8 +2,12 @@
 @import '../bower/humane/themes/flatty.css'
 
 
+$text-color		= #222
+
+
 body
 	min-height 1200px
+	color $text-color
 	height 100%
 
 .debugger-status.enabled
@@ -115,10 +119,29 @@ body
 		
 		.error-details
 			display block
+			font-size 0.94em
 			margin 15px 0 0
 			
 			&:empty
 				display none
+							
+			.error-type,
+			.file-path,
+			.line-number
+				color lighten($text-color, 35%)
+
+			.file,
+			.line,
+			.type
+				color $text-color
+				font-weight bold
+				margin-left 8px
+			
+			.file
+				margin-left 13px
+			
+			.type
+				margin-left 5px
 
 	.log-entries
 		.log-entry
