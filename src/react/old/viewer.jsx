@@ -44,8 +44,8 @@ var Viewer = React.createClass({
 		};
 	},
 
-	// Initialize when component is to be mounted
-	componentDidMount: function() {
+	// Before mount
+	componentWillMount: function() {
 		this.setState({
 			view: this.props.settings.view,
 			sort: this.props.settings.sort
@@ -72,6 +72,11 @@ var Viewer = React.createClass({
 				this.startUpdateChecker();
 			}
 		}.bind(this));
+	},
+	
+	// Before unmount
+	componentWillUnmount: function() {
+		this.stopUpdateChecker();
 	},
 
 	// Clear log entries

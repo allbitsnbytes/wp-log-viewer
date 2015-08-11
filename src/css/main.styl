@@ -1,256 +1,232 @@
+// Imports
+
+@import 'variables'
 @import 'Jeet'
-@import '../bower/humane/themes/flatty.css'
 
 
-$text-color				= #222
-$default-legend-color	= #e1e1e1
+// Mixins
+
+padmar(p=0, m=0)
+	padding p
+	margin m
 
 
-body
+// Styles
+
+#wplv-container
 	min-height 1200px
 	color $text-color
 	height 100%
 
-.debugger-status.enabled
-	background #C0E69F
+	.error-indicator-legend
+		list-style none
+		padding 0
+		margin 0 0 45px
 
-.debugger-status.disabled
-	background #DA8F92
+		li
+			display inline-block
+			font-size 0.8em
+			font-weight bold
+			list-style none
+			border-left 4px solid
+			padding 0 0 0 5px
+			margin 0 30px 0 0
 
-.debugger-status.not-detected
-	background #FAEE7D
+	.php-fatal-error
+		border-color $fatal-error-color !important
 
-.enable-debugging-btn,
-.disable-debugging-btn
-	display inline-block
-	border-radius 4px
-	color #fff
-	font-size 1.1em
-	text-decoration none
-	padding 0.8em 1em
-	margin-right 8px
-	
-	i
-		margin-right 8px
-	
-	&:hover
-		color #fff
+	.php-notice
+		border-color $notice-error-color !important
 
-.enable-debugging-btn
-	background darken(#C0E69F, 50%)
-	
-.disable-debugging-btn
-	background darken(#DA8F92, 50%)
-
-.humane-wplv-alert, 
-.humane-wplv-error, 
-.humane-wplv-success
-	text-align left
-	box-shadow: 0px 2px 21px 0px rgba(0,0,0,0.53);
-	padding 8px 20px 12px
-
-.humane-wplv-alert
-	color #000
-	background #f4f4f4
-
-.humane-wplv-error
-	color #fff
-	background #B52E29
-
-.humane-wplv-success
-	color #fff
-	background #6A9D35
-
-#viewer-pane
-	span()
-	cf()
-	
-	.loading-status
-		display block
-		width 50px
-		heigh 50px
-		margin 180px auto 0
+	.php-warning
+		border-color $warning-error-color !important
 
 	.view-header
-		span()
-		margin 0 0 15px
+		col(1)
+		margin 15px 0 15px
 
 		h2
-			col(0.76, gutter: 0)
+			col(0.44)
+			display inline-block
+			padmar 0, 0
 
 			.debugger-status
 				display inline-block
-				font-size 12px
-				line-height 12px
+				font-size 11px
+				line-height 11px
 				color #444
 				border-radius 5px
-				padding: 8px 12px
+				padding: 6px 11px
 				margin-left 20px
 
+				&.enabled
+					background #C0E69F
+
+				&.disabled
+					background #DA8F92
+
+				&.not-detected
+					background #FAEE7D
+
+		.error-indicator-legend
+			col(0.54)
+			display inline-block
+			padmar 0.5em 0 0, 0
+
+	.viewer-pane
+		col(0.73)
+		display inline-block
+		border none
+		border-right 1px solid #dadada
+		box-sizing border-box
+	
 		.search-group
-			col(0.18, gutter: 0)
+			display block
+			width 96%
 			border 1px solid #ddd
 			border-radius 6px
-			margin 12px 0 0
-			
+			padmar 0, 10px 0 35px
+
 			.fa
 				margin-left 6px
 
 			.search-field
 				display inline-block
+				width auto
 				color #444
 				background none
 				box-shadow none
 				border none
 				margin-left 8px
-				
+
 				&::-webkit-input-placeholder
 					font-style italic
 					color #bbb
 
-	.group-entries,
-	.log-entries
-		col(0.75)
-		min-height 530px
-		height 100%
-		border none
-		border-right 1px solid #dadada
-		box-sizing border-box
-		padding 0 2px 0 0
-		
-		.error-details
+		.loading-status
 			display block
-			font-size 0.85em
-			margin 15px 0 0
-			
-			&:empty
-				display none
-							
-			.error-type,
-			.file-path,
-			.line-number
-				color lighten($text-color, 50%)
+			width 50px
+			heigh 50px
+			margin 180px auto 0
 
-			.file,
-			.line,
-			.type
-				color $text-color
-				font-weight bold
-				margin-left 8px
-			
-			.file
-				margin-left 13px
-			
-			.type
-				margin-left 5px
-		
-		.php-fatal-error
-			border-color #B52E29 !important
+		.group-entries,
+		.log-entries
+			display block
+			min-height 530px
+			height 100%
+			padding 0 4% 0 0
 
-		.php-notice
-			border-color #FEFAB6 !important
+			.error-details
+				display block
+				font-size 0.85em
+				margin 15px 0 0
 
-		.php-warning
-			border-color #BDD7FF !important
+				&:empty
+					display none
 
-		.error-indicator-legend
-			list-style none
-			padding 0
-			margin 0 0 45px
+				.error-type,
+				.file-path,
+				.line-number
+					color lighten($text-color, 50%)
 
-			li
-				display inline-block
-				font-size 0.8em
-				font-weight bold
-				list-style none
-				border-left 4px solid
-				padding 0 0 0 5px
-				margin 0 30px 0 0
-
-	.log-entries
-		.log-entry
-			span()
-			border-left 4px solid $default-legend-color
-			margin-bottom 15px
-
-			.when
-				col(0.15, offset: 0.02)
-				font-size 0.8em
-
-				.date
-					display block
+				.file,
+				.line,
+				.type
+					color $text-color
 					font-weight bold
+					margin-left 8px
 
-			.message
-				col(0.82)
-				font-size 1em
+				.file
+					margin-left 13px
 
-			&.padded-top
-				margin-top 22px
+				.type
+					margin-left 5px
 
-	.group-entries
-		.group-entry
-			span(1)
-			border-left 4px solid $default-legend-color
-			margin-bottom 30px
-
-			.when
-				col(0.15, offset: 0.02)
-				font-size 0.8em
-
-				.date
-					display block
-					font-weight bold
-
-				.time
-					display block
-
-			.message
-				col(0.82)
-				font-size 1.1em
-
-			.group-actions
-				span()
-				font-size 0.8em
-				margin-top 3px
-
-			.group-entry-details
-				span()
-				background #eaeaea
-				border-bottom 1px solid #dadada
-				padding 10px 0
-				margin 12px 0 0
-
-				.details
-					display block
-					padding 0 15px
+		.log-entries
+			.log-entry
+				span(1)
+				border-left 4px solid $misc-error-color
+				margin-bottom 15px
 
 				.when
-					span()		
-					margin 0 0 4px
+					col(0.15, offset: 0.02)
+					font-size 0.8em
 
 					.date
-						col(0.20)
+						display block
+						font-weight bold
+
+				.message
+					col(0.82)
+					font-size 1em
+
+				&.padded-top
+					margin-top 22px
+
+		.group-entries
+			.group-entry
+				span(1)
+				border-left 4px solid $misc-error-color
+				margin-bottom 30px
+
+				.when
+					col(0.15, offset: 0.02)
+					font-size 0.8em
+
+					.date
+						display block
+						font-weight bold
 
 					.time
-						col(0.70)
+						display block
 
-			.group-entry-details.active
-				padding-bottom 8px
-				margin-bottom 10px
+				.message
+					col(0.82)
+					font-size 1.1em
 
-			.show-group-details,
-			.hide-group-details
-				display block
-				font-size 0.8em
-				text-decoration none
+				.group-actions
+					span()
+					font-size 0.8em
+					margin-top 3px
 
-			.hide-group-details
-				margin-bottom 10px
+				.group-entry-details
+					span()
+					background #eaeaea
+					border-bottom 1px solid #dadada
+					padding 10px 0
+					margin 12px 0 0
+
+					.details
+						display block
+						padding 0 15px
+
+					.when
+						span()		
+						margin 0 0 4px
+
+						.date
+							col(0.20)
+
+						.time
+							col(0.70)
+
+				.group-entry-details.active
+					padding-bottom 8px
+					margin-bottom 10px
+
+				.show-group-details,
+				.hide-group-details
+					display block
+					font-size 0.8em
+					text-decoration none
+
+				.hide-group-details
+					margin-bottom 10px
 
 	.sidebar
+		display inline-block
 		col(0.25)
-		padding 15px 0
+		padding-top 10px
 
 		.refresh-status
 			margin 0 0 25px
@@ -283,7 +259,7 @@ body
 					list-style none
 					padding 1px 0
 					margin 0
-					
+
 					.fa
 						margin-right 6px
 
@@ -321,3 +297,22 @@ body
 		border 1px solid #f0f0f0
 		background #fafafa
 		padding 15px
+
+	.humane-wplv-alert, 
+	.humane-wplv-error, 
+	.humane-wplv-success
+		text-align left
+		box-shadow: 0px 2px 21px 0px rgba(0,0,0,0.53);
+		padding 8px 20px 12px
+
+	.humane-wplv-alert
+		color #000
+		background #f4f4f4
+
+	.humane-wplv-error
+		color #fff
+		background #B52E29
+
+	.humane-wplv-success
+		color #fff
+		background #6A9D35

@@ -1,31 +1,31 @@
 /**
  * Display debugging status
  */
-var DebugStatus = React.createClass({
+wplv.DebugStatus = React.createClass({
 
 	// Get default properties
 	getDefaultProps: function() {
 		return {
-			enabled: false,
-			detected: true,
-			simulating: false
+			debugging: {
+				enabled: false,
+				detected: true,
+				simulating: false
+			}
 		};
 	},
 
 	// Property types
 	propTypes: {
-		enabled: React.PropTypes.bool,
-		detected: React.PropTypes.bool,
-		simulating: React.PropTypes.bool
+		debugging: React.PropTypes.object
 	},
 
 	// Render component
 	render: function() {
 		var status = 'not-detected';
-		var simulating = this.props.simulating ? ' **' : '';
+		var simulating = this.props.debugging.simulating ? ' **' : '';
 		
-		if (this.props.detected || this.props.simulating) {
-			status = this.props.enabled ? 'enabled' : 'disabled';
+		if (this.props.debugging.detected || this.props.debugging.simulating) {
+			status = this.props.debugging.enabled ? 'enabled' : 'disabled';
 		} 
 		
 		var className = 'debugger-status '+status;

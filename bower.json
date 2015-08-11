@@ -22,6 +22,7 @@
     "humane": "~3.2.2",
     "react": "~0.13.3",
     "reqwest": "~1.1.5",
-    "blueimp-md5": "~1.1.0"
+    "blueimp-md5": "~1.1.0",
+    "font-awesome": "~4.4.0"
   }
 }

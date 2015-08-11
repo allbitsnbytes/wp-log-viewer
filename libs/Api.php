@@ -22,7 +22,7 @@ use Allbitsnbytes\WPLogViewer\Settings;
  * @since 0.1.0
  */
 class Api {
-	
+
 	/**
 	 * Get log file details
 	 *
@@ -44,7 +44,7 @@ class Api {
 			'modified'		=> $log->last_modified(),
 			'filesize'		=> $log->get_file_size(),
 		]);
-	
+
 		return $res;
 	}
 	
@@ -81,11 +81,11 @@ class Api {
 	 */
 	public static function check_if_log_exists($req, $res) {
 		$log = Log::get_instance();
-		
+
 		$res->set_json([
 			'exists'		=> $log->file_exists(),
 		]);
-		
+
 		return $res;
 	}
 	
@@ -101,7 +101,7 @@ class Api {
 	 */
 	public static function check_if_debug_enabled($req, $res) {
 		$log = Log::get_instance();
-		
+
 		$res->set_json([
 			'debugEnabled'	=> $log->debug_enabled(),
 			'debugDetected'	=> $log->debug_status_detected(),
@@ -131,7 +131,7 @@ class Api {
 			'modified'		=> $log->last_modified(),
 			'filesize'		=> $log->get_file_size(),
 		]);
-		
+
 		return $res;
 	}
 	
@@ -157,7 +157,7 @@ class Api {
 		$res->set_json([
 			'changed'		=> $changed,
 		]);
-		
+
 		return $res;
 	}
 
@@ -270,12 +270,12 @@ class Api {
 	 */
 	public static function update_user_settings($req, $res) {
 		$updated = false;
-		
+
 		if (isset($req->params['user_id']) && isset($req->params['settings'])) {
 			$handler = Settings::get_instance();
 			$updated = $handler->update_user_settings($req->params['user_id'], $req->params['setttings']);
 		}
-		
+
 		$res->set_json([
 			'updated'		=> $updated,
 		]);
@@ -296,11 +296,11 @@ class Api {
 	public static function get_default_settings($req, $res) {
 		$handler = Settings::get_instance();
 		$settings = $handler->get_default_settings();
-		
+
 		$res->set_json([
 			'settings'		=> $settings,
 		]);
-		
+
 		return $res;
 	}
 
@@ -316,12 +316,12 @@ class Api {
 	 */
 	public static function update_default_settings($req, $res) {
 		$updated = false;
-		
+
 		if (isset($req->params['settings'])) {
 			$handler = Settings::get_instance();
 			$updated = $handler->update_default_settings($req->params['settings']);
 		}
-		
+
 		$res->set_json([
 			'updated'		=> $updated,
 		]);

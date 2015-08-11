@@ -63,7 +63,6 @@ class Plugin {
 		];
 
 		// Stylesheet files
-		wp_enqueue_style('wplogviewer-fontawesome', '//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css');
 		wp_enqueue_style('wplogviewer-css', WPLOGVIEWER_URL . 'assets/css/main.min.css');
 
 		// Javascript files
@@ -103,7 +102,7 @@ class Plugin {
 	 * @since 0.1.0
 	 */
 	public function display_viewer_page() {
-		echo '<div id="wp-log-viewer-container" class="wrap"></div>';
+		echo '<div id="wplv-container" class="wrap"></div>';
 	}
 
 

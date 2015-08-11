@@ -1,7 +1,7 @@
 /**
  * Display error legend
  */
-var ErrorLegend = React.createClass({
+wplv.ErrorLegend = React.createClass({
 
 	// Render component
 	render: function() {

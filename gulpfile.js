@@ -7,20 +7,27 @@ var Jeet		= require('Jeet');
 // Paths
 var paths = {
 	src: {
-		css: 'src/css/**/*.styl',
+		css: [
+			'src/bower/font-awesome/css/font-awesome.css',
+			'src/bower/humane/themes/flatty.css',
+			'src/css/main.styl'
+		],
 		img: 'src/img/**/*',
+		fonts: 'src/bower/font-awesome/fonts/**/*',
 		js: [
 			'src/bower/react/react.min.js',
 			'src/bower/reqwest/reqwest.min.js',
 			'src/bower/blueimp-md5/js/md5.min.js',
 			'src/bower/humane/humane.min.js',
-			'src/react/**/*.jsx',
+			'src/react/app.jsx',
+			'src/react/components/**/*.jsx',
 			'src/js/main.jsx'
 		]
 	},
-	
+
 	build: {
 		css: 'assets/css',
+		fonts: 'assets/fonts',
 		img: 'assets/img',
 		js: 'assets/js'
 	}
@@ -35,18 +42,18 @@ var paths = {
 function isJSX(file) {
 	var ext = '.jsx';
 	var startIndex = file.path.length - ext.length;
-	
+
 	return file.path.indexOf(ext, startIndex) !== -1 ? true : false;
 }
 
 
 // Default Task
-Gulp.task('default', ['css', 'images', 'js']);
+Gulp.task('default', ['css', 'fonts', 'images', 'js']);
 
 
 // Watch 
 Gulp.task('watch', function() {
-	Gulp.watch(paths.src.css, ['css']);
+	Gulp.watch('src/css/**/*', ['css']);
 	Gulp.watch(paths.src.img, ['images']);
 	Gulp.watch(paths.src.js, ['js']);
 });
@@ -57,12 +64,20 @@ Gulp.task('css', function() {
 	return Gulp.src(paths.src.css)
 		.pipe($.plumber())
 		.pipe($.stylus({
-			use: [Jeet()]
+			use: [Jeet()],
+			'include css': true
 		}))
-		.pipe($.minifyCss())
 		.pipe($.autoprefixer())
-		.pipe($.rename('main.min.css'))
+		.pipe($.csso())
+		.pipe($.concat('main.min.css'))
 		.pipe(Gulp.dest(paths.build.css));
+});
+
+
+// Copy fonts
+Gulp.task('fonts', function() {
+	return Gulp.src(paths.src.fonts)
+		.pipe(Gulp.dest(paths.build.fonts));
 });
 
 
