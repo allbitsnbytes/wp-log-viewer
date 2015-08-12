@@ -41,17 +41,23 @@ wplv.notify = (function() {
 	return {
 		alert: function(msg) {
 			config.addnCls = 'humane-wplv-alert';
-			humane.log(msg, config);
+			humane.remove(function() {
+				humane.log(msg, config);
+			});
 		},
 
 		error: function(msg) {
 			config.addnCls = 'humane-wplv-error';
-			humane.log(msg, config);
+			humane.remove(function() {
+				humane.log(msg, config);
+			});
 		},
 
 		success: function(msg) {
 			config.addnCls = 'humane-wplv-success';
-			humane.log(msg, config);
+			humane.remove(function() {
+				humane.log(msg, config);
+			});
 		}
 	};
 })();

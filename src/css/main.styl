@@ -9,19 +9,26 @@
 padmar(p=0, m=0)
 	padding p
 	margin m
+	
+min-height(h)
+	min-height h
+	height h
+	height auto
 
 
 // Styles
 
 #wplv-container
-	min-height 1200px
+	min-height 800px
 	color $text-color
 	height 100%
 
+	a
+		text-decoration none
+
 	.error-indicator-legend
 		list-style none
-		padding 0
-		margin 0 0 45px
+		padmar 0, 0 0 45px
 
 		li
 			display inline-block
@@ -29,8 +36,7 @@ padmar(p=0, m=0)
 			font-weight bold
 			list-style none
 			border-left 4px solid
-			padding 0 0 0 5px
-			margin 0 30px 0 0
+			padmar 0 0 0 5px, 0 30px 0 0
 
 	.php-fatal-error
 		border-color $fatal-error-color !important
@@ -45,63 +51,117 @@ padmar(p=0, m=0)
 		col(1)
 		margin 15px 0 15px
 
-		h2
-			col(0.44)
-			display inline-block
-			padmar 0, 0
+		.container
+			col(0.73)
 
-			.debugger-status
+			h2
 				display inline-block
-				font-size 11px
-				line-height 11px
-				color #444
-				border-radius 5px
-				padding: 6px 11px
-				margin-left 20px
+				float left
+				padmar 0, 0
 
-				&.enabled
-					background #C0E69F
+				.debugger-status
+					display inline-block
+					font-size 11px
+					line-height 11px
+					color $black
+					border-radius 5px
+					padmar 6px 11px, 0 0 0 20px
 
-				&.disabled
-					background #DA8F92
+					&.enabled
+						background $debug-enabled-color
 
-				&.not-detected
-					background #FAEE7D
+					&.disabled
+						color $white
+						background $debug-disabled-color
 
-		.error-indicator-legend
-			col(0.54)
-			display inline-block
-			padmar 0.5em 0 0, 0
+					&.not-detected
+						background $debug-detected-color
+
+					&.simulating
+						color $white
+						background $debug-simulating-color
+
+					.status
+						margin-left 4px
+
+			.error-indicator-legend
+				display inline-block
+				float right
+				text-align right
+				padmar 0.5em 4% 0, 0
+
+				li
+					padmar 0 0 0 5px, 0 0 0 30px
+
+					&:first-child
+						margin-left 0
 
 	.viewer-pane
 		col(0.73)
 		display inline-block
+		min-height 800px	
 		border none
-		border-right 1px solid #dadada
+		border-right 1px solid $light-grey
 		box-sizing border-box
-	
+		
+		.content
+			display block
+			width 96%
+			padding-top 10px
+
 		.search-group
 			display block
 			width 96%
-			border 1px solid #ddd
-			border-radius 6px
-			padmar 0, 10px 0 35px
+			padmar 0, 10px 0 30px
 
-			.fa
-				margin-left 6px
+			.search-component
+				display block
+				background-color $input-bg-color
+				border 1px solid $input-border-color
+				border-radius 6px
+				padmar 4px, 0
 
-			.search-field
+				.fa
+					margin-left 6px
+
+				.search-field
+					position relative
+					display inline-block
+					right 0
+					left 8px
+					font-size 1.15em
+					width inherit
+					color $input-color
+					background none
+					box-shadow none
+					border none
+
+					&::-webkit-input-placeholder
+						font-style italic
+						color $input-placeholder-color
+
+			.search-query
+				display block
+				font-size 0.9em
+				font-style italic
+				margin-top 8px
+
+		.entries-list-header
+			col(1)
+			width 96%
+			margin-bottom 10px
+
+			h3
+				col(0.48)
 				display inline-block
-				width auto
-				color #444
-				background none
-				box-shadow none
-				border none
-				margin-left 8px
 
-				&::-webkit-input-placeholder
-					font-style italic
-					color #bbb
+			.entries-count
+				col(0.5)
+				display inline-block
+				font-weight bold
+				font-size 0.9em
+				text-align right
+				padding-top 1.9em
 
 		.loading-status
 			display block
@@ -192,7 +252,7 @@ padmar(p=0, m=0)
 				.group-entry-details
 					span()
 					background #eaeaea
-					border-bottom 1px solid #dadada
+					border-bottom 1px solid $light-grey
 					padding 10px 0
 					margin 12px 0 0
 
@@ -234,7 +294,7 @@ padmar(p=0, m=0)
 			.refresh-btn
 				display inline-block
 				font-size 0.9em
-				color #fff
+				color $white
 				background #555
 				border 1px solid #444
 				border-left 1px solid #666
@@ -276,7 +336,8 @@ padmar(p=0, m=0)
 							color #444
 
 					&.active a
-						background-color #e2e2e2
+						background-color lighten($light-grey, 40%)
+						border 1px solid darken($light-grey, 10%)
 
 		.last-modified
 			font-size 0.85em
@@ -289,30 +350,68 @@ padmar(p=0, m=0)
 			font-size 0.85em
 			margin-top 15px
 
+	.inline-buttons
+		display block
+		padmar 0, 0
+
+		li
+			display inline-block
+			padmar 0, 0 0 0 8px
+
+			&:first-child
+				margin-left 0
+
+	.start-simulation-btn,
+	.stop-simulation-btn
+		display inline-block
+		border-radius 4px
+		color $white
+		font-size 1.1em
+		text-decoration none
+		padmar 0.5em 2.4em 0.5em 1em, 0
+
+		i
+			margin-right 5px
+
+		&:hover
+			color $white
+
+	.start-simulation-btn
+		background $dark-grey
+
+	.stop-simulation-btn
+		background $red
+		
+	.debugging-unknown
+		font-size 1.2em
+
 	.highlight
 		color #ff0000
 		background transparent
 
 	.code-snippet
-		border 1px solid #f0f0f0
-		background #fafafa
+		color $white
+		line-height 1.5em
+		border 2px solid darken($dark-grey, 20%)
+		background $dark-grey
 		padding 15px
 
-	.humane-wplv-alert, 
-	.humane-wplv-error, 
-	.humane-wplv-success
-		text-align left
-		box-shadow: 0px 2px 21px 0px rgba(0,0,0,0.53);
-		padding 8px 20px 12px
 
-	.humane-wplv-alert
-		color #000
-		background #f4f4f4
+.humane-wplv-alert, 
+.humane-wplv-error, 
+.humane-wplv-success
+	text-align left
+	box-shadow: 0px 2px 21px 0px rgba(0,0,0,0.53);
+	padding 8px 20px 12px
 
-	.humane-wplv-error
-		color #fff
-		background #B52E29
+.humane-wplv-alert
+	color $black
+	background $humane-alert
 
-	.humane-wplv-success
-		color #fff
-		background #6A9D35
+.humane-wplv-error
+	color $white
+	background $humane-error
+
+.humane-wplv-success
+	color $white
+	background $humane-success

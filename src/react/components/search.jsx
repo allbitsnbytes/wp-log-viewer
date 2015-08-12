@@ -4,7 +4,7 @@
 wplv.Search = React.createClass({
 
 	// Minimum search string length
-	minimumLength: 2,
+	minimumLength: 3,
 
 	// Get initial state
 	getInitialState: function() {
@@ -39,8 +39,8 @@ wplv.Search = React.createClass({
 		if (this.props.app.ready) {
 			var query = React.findDOMNode(this.refs.q).value;
 			React.findDOMNode(this.refs.q).value = query = query.replace(/[^a-z0-9 ]+/gi, '');
-			
-			if (typeof query === 'string' && query.length > this.minimumLength && this.props.app.searchEntries) {
+
+			if (typeof query === 'string' && query.length >= this.minimumLength && this.props.app.searchEntries) {
 				this.setState({
 					query: query
 				});
@@ -58,10 +58,22 @@ wplv.Search = React.createClass({
 
 	// Render component
 	render: function() {
+		var searchQuery = '';
+
+		if (this.state.query.length >= this.minimumLength) {
+			searchQuery = (
+				<div className="search-query">
+					Searching for <strong>{ this.state.query }</strong>
+				</div>
+			);
+		}
+
 		return (
 			<div className="search-group">
-				<i className="fa fa-search"></i>
-				<input type="text" name="q" ref="q" className="search-field" placeholder="Search ..." onChange={ this.handleSearch } />
+				<div className="search-component">
+					<i className="fa fa-search"></i>
+					<input type="text" name="q" ref="q" className="search-field" placeholder="Search for ..." onChange={ this.handleSearch } />
+				</div>
 			</div>
 		);
 	}

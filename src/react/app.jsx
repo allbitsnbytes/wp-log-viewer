@@ -79,7 +79,10 @@ wplv.App = React.createClass({
 			if (this.state.debugging.enabled && (result.found || this.state.debugging.simulating)) {
 				this._startUpdateChecker();
 			}
-		}.bind(this));
+		}.bind(this),
+		function(result) {
+			wplv.notify.error('Plugin could not be loaded.  Please try again.');
+		});
 	},
 
 	// Before unmount
@@ -107,7 +110,7 @@ wplv.App = React.createClass({
 	// Clear entries
 	clearLog: function() {
 		wplv.remote.clearEntries(function(result) {
-			if (result.cleared) {
+			if (result.cleared == true) {
 				var log = this.state.log;
 				
 				log.entries = [];
@@ -121,7 +124,10 @@ wplv.App = React.createClass({
 			} else {
 				wplv.notify.error('Failed to clear log file.  You might not have write permission');
 			}
-		}.bind(this));
+		}.bind(this),
+		function(result) {
+			wplv.notify.error('Failed to clear log file.  You might not have write permission');
+		});
 	},
 
 	// Sort newest
@@ -190,9 +196,7 @@ wplv.App = React.createClass({
 	},
 
 	// Pretend debugging is enabled
-	pretendDebugEnabled: function(e) {
-		e.preventDefault();
-
+	startSimulation: function() {
 		document.cookie = '_wplv-sim=1';
 		document.cookie = '_wplv-dbg=1';
 
@@ -209,22 +213,25 @@ wplv.App = React.createClass({
 	},
 
 	// Preted debugging is disabled
-	pretendDebugDisabled: function(e) {
-		e.preventDefault();
-
+	stopSimulation: function() {
 		document.cookie = '_wplv-sim=0';
 		document.cookie = '_wplv-dbg=0';
 
 		var debugging = this.state.debugging;
 
-		debugging.enabled = true;
-		debugging.simulating = true;
+		debugging.enabled = false;
+		debugging.simulating = false;
 
 		this.setState({
 			debugging: debugging
 		});
 
-		this._startUpdateChecker();
+		this._stopUpdateChecker();
+	},
+	
+	// Check if simulating debug status
+	isSimulating: function() {
+		return this.state.debugging.simulating;
 	},
 
 	// Process and format entries for display
@@ -263,6 +270,22 @@ wplv.App = React.createClass({
 
 		return entries;
 	},
+	
+	showDebugHelp: function() {
+		return (
+			<div>
+				<p>To turn on debugging, add the following to your wp-config.php file.</p>
+
+				<p className="code-snippet">
+					define('WP_DEBUG', true);<br />
+					define('WP_DEBUG_LOG', true);<br />
+					define('WP_DEBUG_DISPLAY', false);
+				</p>
+
+				<p>For more information visit <a href="https://codex.wordpress.org/Debugging_in_WordPress" target="_blank">Debugging In Wordpress</a></p>
+			</div>
+		);
+	},
 
 	// Get latest entries
 	_getLatestEntries: function(showStatus) {
@@ -290,7 +313,11 @@ wplv.App = React.createClass({
 					wplv.notify.alert('No new entries found.');
 				}
 			}
-		}.bind(this));
+		}.bind(this),
+		function(result) {
+			this._stopUpdateChecker();
+			wplv.notify.error('Checking for updates failed.');
+		});
 	},
 
 	// Check if simulation is enabled
@@ -315,47 +342,131 @@ wplv.App = React.createClass({
 
 	// Render component
 	render: function() {
-		var entries = [];
-		var query = this.state.query;
-		var view = '';
+		var content = '';
+		var debugStatus = '';
+		var sidebar = '';
 
-		if (query !== '') {
-			this.state.log.entries.forEach(function(entry) {
-				var match = new RegExp(query, 'gi');
+		if (this.ready) {
+			if (this.state.debugging.detected || this.state.debugging.simulating) {
+				if (this.state.log.found) {
+					var entries = [];
+					var query = this.state.query;
+					var view = '';
 
-				if (entry && entry.message && match.test(entry.message + ' ' + entry.errorType)) {
-					entries.push(entry);
+					debugStatus = (
+						<wplv.DebugStatus debugging={ this.state.debugging } />
+					);
+
+					if (query !== '') {
+						this.state.log.entries.forEach(function(entry) {
+							var match = new RegExp(query, 'gi');
+
+							if (entry && entry.message && match.test(entry.message + ' ' + entry.errorType)) {
+								entries.push(entry);
+							}
+						}.bind(this));
+					} else {
+						entries = this.state.log.entries;
+					}
+
+					if (this.state.log.view === 'group') {
+						view = ( <wplv.GroupViewer entries={ entries } /> );
+					} else {
+						view = ( <wplv.ListViewer entries={ entries } /> );
+					}
+
+					content = (
+						<div className="viewer-pane">
+							<wplv.Search app={ this } />
+
+							<div className="entries-list-header">
+								<h3>Log Entries</h3>
+								<span className="entries-count">{ entries.length === 1 ? entries.length + ' entry' : entries.length + ' entries' }</span>
+							</div>
+
+							{ view }
+						</div>
+					);
+					
+					sidebar = (
+						<wplv.Sidebar app={ this } />
+					);
+				} else {
+					if (this.state.debugging.enabled) {
+						if (this.state.debugging.simulating) {
+							content = (
+								<div className="viewer-pane">
+									<div className="content">
+										<p>The <strong>debug.log file does not exist</strong> or was not found.</p>
+										
+										<ul className="inline-buttons">
+											<li><a href="#" onClick={ function(e) { e.preventDefault(); this.stopSimulation(); }.bind(this) } className="stop-simulation-btn"><i className="fa fa-arrow-circle-right"></i> Stop simulation</a></li>
+										</ul>
+									</div>
+								</div>
+							);
+						} else {
+							content = (
+								<div className="viewer-pane">
+									<div className="content">
+										<p>Debugging is enabled. However, the <strong>debug.log file does not exist</strong>.</p>
+									</div>
+								</div>
+							);
+						}
+					} else {
+						content = (
+							<div className="viewer-pane">
+								<div className="content">
+									<p><strong>Debugging is currently <span className="highlight">disabled</span>.</strong></p>
+
+									{ this.showDebugHelp() }
+								</div>
+							</div>
+						);
+					}
 				}
-			}.bind(this));
-		} else {
-			entries = this.state.log.entries;
-		}
-
-		if (true) {
-			if (this.state.log.view === 'group') {
-				view = ( <wplv.GroupViewer entries={ entries } /> );
 			} else {
-				view = ( <wplv.ListViewer entries={ entries } /> );
+				content = (
+					<div className="viewer-pane">
+						<div className="content">
+							<p className="debugging-unknown">Sorry, we <strong>could not detect if debugging is enabled or disabled</strong>.</p>
+							<br />
+
+							<h3>Simulate Debugging?</h3>
+
+							<p>If you know that debugging is enabled, click below to continue.</p>
+
+							<ul className="inline-buttons">
+								<li><a href="#" onClick={ function(e) { e.preventDefault(); this.startSimulation(); }.bind(this) } className="start-simulation-btn"><i className="fa fa-arrow-circle-right"></i> Start simulation</a></li>
+							</ul>
+
+							<br />
+							<p><small>** Please note that the status of WP_DEBUG is not actually being changed.  This is just a simulation.</small></p>
+							<br />
+
+							<h3>How to Enable Debugging?</h3>
+
+							{ this.showDebugHelp() }
+						</div>
+					</div>
+				);
 			}
 		}
 
 		return (
 			<div className="container">
 				<header className="view-header">
-					<h2>Log Viewer <wplv.DebugStatus debugging={ this.state.debugging } /></h2>
-					<wplv.ErrorLegend />
+					<div className="container">
+						<h2>Log Viewer { debugStatus }</h2>
+						<wplv.ErrorLegend />
+					</div>
 				</header>
 
 				<section className="row">
-					<div className="viewer-pane">
-						<wplv.Search app={ this } />
+					{ content }
 
-						<h3>Log Entries</h3>
-
-						{ view }
-					</div>
-
-					<wplv.Sidebar app={ this } />
+					{ sidebar }
 				</section>		
 			</div>
 		);

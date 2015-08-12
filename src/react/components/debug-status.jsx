@@ -22,17 +22,18 @@ wplv.DebugStatus = React.createClass({
 	// Render component
 	render: function() {
 		var status = 'not-detected';
-		var simulating = this.props.debugging.simulating ? ' **' : '';
 		
-		if (this.props.debugging.detected || this.props.debugging.simulating) {
+		if (this.props.debugging.detected) {
 			status = this.props.debugging.enabled ? 'enabled' : 'disabled';
-		} 
+		} else if (this.props.debugging.simulating) {
+			status = 'simulating';
+		}
 		
 		var className = 'debugger-status '+status;
 
 		return (
 			<span className={ className }>
-				debug: <strong>{ simulating }{ status }</strong>
+				debug:  <strong className="status">{ status }</strong>
 			</span>
 		);
 	}

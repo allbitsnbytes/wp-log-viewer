@@ -61,6 +61,19 @@ wplv.Sidebar = React.createClass({
 		if (this.props.app.ready) {
 			var lastModifiedDate = this.props.app.getLastModified();
 			var defaultMenuOptions = this.getMenuOptions();
+			var simulateMenuOption = '';
+
+			if (this.props.app.isSimulating()) {
+				defaultMenuOptions.push({
+					name: 'Simulating',
+					default: '',
+					trackSelected: false,
+					options: [
+						{ label: 'Disable',	key: 'disable-debugging',	icon: 'power-off',	action: this.props.app.stopSimulating }
+					]
+				});
+			}
+
 			var menuOptions = defaultMenuOptions.map(function(menuGroup) {
 				return (
 					<wplv.NavActionGroup group={ menuGroup } />
@@ -71,6 +84,8 @@ wplv.Sidebar = React.createClass({
 				<aside className="sidebar">
 
 					{ menuOptions }
+					
+					{ simulateMenuOption }
 
 					<div className="last-modified">
 						<strong>Last modified</strong><br />
