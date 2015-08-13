@@ -32,34 +32,39 @@ class Plugin {
 	 * @since 0.1.0
 	 */
 	public function init() {
-		if (isset($_REQUEST['page']) && $_REQUEST['page'] == 'wp-log-viewer') {
-			add_action('admin_enqueue_scripts', [$this, 'load_css_and_js']);
-		} else if ((!defined('DOING_AJAX') || (defined('DOING_AJAX') && !DOING_AJAX)) && isset($_COOKIE['wplv_logged_in'])) {
+		if ((!defined('DOING_AJAX') || (defined('DOING_AJAX') && !DOING_AJAX)) && isset($_COOKIE['wplv_logged_in'])) {
 			$auth = Auth::get_instance();
 			$auth->clear_api_session();
 			setcookie('wplv_logged_in', null, -1);
 		}
 
+		// Register actions
 		add_action('admin_menu', [$this, 'add_navigation']);
+		add_action('admin_enqueue_scripts', [$this, 'load_plugin_css_and_js']);
+		add_action('wp_dashboard_setup', [$this, 'register_dashboard_widgets']);
+		add_action('admin_bar_menu', [$this, 'add_admin_bar_menu'], 900);
 	}
 
 
 	/**
-	 * Enqueue css and js files
+	 * Enqueue css and js files when on plugin page
 	 *
 	 * @since 0.1.0
 	 */
-	public function load_css_and_js() {
+	public function load_plugin_css_and_js() {
 		$auth = Auth::get_instance();
 		$settings = Settings::get_instance();
 		$user_id = \get_current_user_id();
+		$screen = get_current_screen();
 		$localized = [
-			'api' 			=> WPLOGVIEWER_URL . 'api/',
-			'debugEnabled' 	=> WP_DEBUG,
-			'cookie_token'	=> '',
-			'session_key'	=> '',
-			'user_id'		=> $user_id,
-			'settings'		=> $settings->get_settings($user_id),
+			'api' 				=> WPLOGVIEWER_URL . 'api/',
+			'debug_enabled' 	=> WP_DEBUG,
+			'current_page'		=> is_object($screen) ? $screen->id : '',
+			'plugin_url'		=> admin_url('tools.php?page=wp-log-viewer'),
+			'cookie_token'		=> '',
+			'session_key'		=> '',
+			'user_id'			=> $user_id,
+			'settings'			=> $settings->get_settings($user_id),
 		];
 
 		// Stylesheet files
@@ -103,6 +108,43 @@ class Plugin {
 	 */
 	public function display_viewer_page() {
 		echo '<div id="wplv-container" class="wrap"></div>';
+	}
+
+
+	/**
+	 * Register dashboard widgets
+	 *
+	 * @since 0.12.0
+	 */
+	public function register_dashboard_widgets() {
+		if (\current_user_can('manage_options')) {
+			\wp_add_dashboard_widget('wplv-widget', 'WP Log Viewer', [$this, 'display_dashboard_widget']);
+		}
+	}
+
+
+	/**
+	 * Add dashboard widget
+	 *
+	 * @since 0.12.0
+	 */
+	public function display_dashboard_widget() {
+		echo '<div id="wplv-dashboard-widget-container"></div>';
+	}
+
+
+	/**
+	 * Add admin bar menu
+	 *
+	 * @since 0.12.0
+	 */
+	public function add_admin_bar_menu($admin_bar) {
+		$admin_bar->add_node([
+			'id'	=> 'wplv-menu',
+			'title'	=> 'Debug Log',
+			'href'	=> admin_url('tools.php?page=wp-log-viewer'),
+			'meta'	=> ['class' => 'wplv-admin-bar-node']
+		]);
 	}
 
 

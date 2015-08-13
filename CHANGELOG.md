@@ -6,6 +6,8 @@ All notable changes will be tracked in this change log.  This project uses [Sema
 ### Feature
 
 - Added debug simulation mode so when debug status can't be determined, user can still browse debug log if present
+- Added dashboard widget
+- Added admin bar menu with summary
 
 ### Fix
 
@@ -20,6 +22,7 @@ All notable changes will be tracked in this change log.  This project uses [Sema
 - Added count for number of entries
 - Added color coding for error types fatal, warning and notice for each entry
 - Added color coding legend
+- Admin bar widget synchs realtime as log data updates when log viewer is open
 
 ## [0.11.1] - 2015-06-22
 ### Feature

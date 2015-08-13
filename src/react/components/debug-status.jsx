@@ -33,7 +33,7 @@ wplv.DebugStatus = React.createClass({
 
 		return (
 			<span className={ className }>
-				debug:  <strong className="status">{ status }</strong>
+				{ status }
 			</span>
 		);
 	}

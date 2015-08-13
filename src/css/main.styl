@@ -16,15 +16,33 @@ min-height(h)
 	height auto
 
 
-// Styles
+// Global Styles
+
+#wp-admin-bar-wplv-menu,
+#wplv-container,
+#wplv-dashboard-widget-container
+	a
+		text-decoration none
+
+	.debug-status-enabled
+		color $debug-enabled-color
+
+	.debug-status-disabled
+		color $debug-disabled-color
+
+	.debug-status-not-detected
+		color $debug-detected-color
+
+	.debug-status-simulating
+		color $debug-simulating-color
+
+
+// Plugin Styles
 
 #wplv-container
 	min-height 800px
 	color $text-color
 	height 100%
-
-	a
-		text-decoration none
 
 	.error-indicator-legend
 		list-style none
@@ -61,11 +79,12 @@ min-height(h)
 
 				.debugger-status
 					display inline-block
-					font-size 11px
+					font-size 10px
+					font-weight bold
 					line-height 11px
 					color $black
 					border-radius 5px
-					padmar 6px 11px, 0 0 0 20px
+					padmar 5px 8px, 0 0 0 10px
 
 					&.enabled
 						background $debug-enabled-color
@@ -80,9 +99,6 @@ min-height(h)
 					&.simulating
 						color $white
 						background $debug-simulating-color
-
-					.status
-						margin-left 4px
 
 			.error-indicator-legend
 				display inline-block
@@ -415,3 +431,101 @@ min-height(h)
 .humane-wplv-success
 	color $white
 	background $humane-success
+
+
+// Dashboard Widget Styles
+
+#wplv-dashboard-widget-container
+	.action-button
+		display inline-block
+		border-radius 4px
+		color $white
+		background $black
+		font-size 1em
+		text-decoration none
+		padmar 0.5em 2.4em 0.5em 1em, 20px 0 0
+
+		i
+			margin-right 5px
+
+		&:hover
+			color $light-grey
+
+	.error-types-list
+		list-style none
+		padmar 0, 0
+
+		li
+			list-style none
+			border 0
+			border-left 2px
+			padmar 5px 0, 0
+
+			.label
+				col(0.4)
+				dislplay inline-block
+				font-weight bold
+
+			.count
+				col(0.58)
+				dislplay inline-block
+				font-weight bold
+
+			.fa
+				display inline-block
+				margin-right 6px
+
+	.php-fatal-error
+		.fa
+			color $fatal-error-color !important
+
+	.php-notice
+		.fa
+			color $notice-error-color !important
+
+	.php-warning
+		.fa
+			color $warning-error-color !important
+
+	.php-misc
+		.fa
+			color $misc-error-color !important
+
+
+// Admin Bar Menu Styles
+
+#wp-admin-bar-wplv-menu
+	padding 0 10px !important
+
+	.summary
+		display inline
+		font-weight bold
+		padmar 0, 0 0 0 10px
+
+	.debug-status
+		display inline-block
+		font-size 0.8em
+
+		&.enabled
+			color $debug-enabled-color
+
+		&.disabled
+			color $debug-disabled-color
+
+		&.simulating
+			color lighten($blue, 50%)
+
+	.error-count
+		display inline-block
+		font-size 0.7em
+		line-height 1em
+		border-radius 5px
+		padmar 4px, 0 0 0 8px
+
+		&.no-errors
+			color $white
+			background-color $green
+
+		&.has-errors
+			color $white
+			background-color $red		

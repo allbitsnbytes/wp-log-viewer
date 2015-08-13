@@ -20,6 +20,7 @@ var paths = {
 			'src/bower/blueimp-md5/js/md5.min.js',
 			'src/bower/humane/humane.min.js',
 			'src/react/app.jsx',
+			'src/react/admin-bar-nav.jsx',
 			'src/react/components/**/*.jsx',
 			'src/js/main.jsx'
 		]

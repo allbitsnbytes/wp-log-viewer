@@ -69,7 +69,7 @@ wplv.Sidebar = React.createClass({
 					default: '',
 					trackSelected: false,
 					options: [
-						{ label: 'Disable',	key: 'disable-debugging',	icon: 'power-off',	action: this.props.app.stopSimulating }
+						{ label: 'Disable',	key: 'disable-debugging',	icon: 'power-off',	action: this.props.app.stopSimulation }
 					]
 				});
 			}

@@ -39,6 +39,8 @@ wplv.App = React.createClass({
 	// Default properties
 	getDefaultProps: function() {
 		return {
+			debugging: false,
+			pluginUrl: '',
 			settings: {
 				view: 'group',
 				sort: 'newest'
@@ -49,6 +51,8 @@ wplv.App = React.createClass({
 
 	// Property types
 	propTypes: {
+		debugging: React.PropTypes.bool,
+		pluginUrl: React.PropTypes.string,
 		settings: React.PropTypes.object,
 		user: React.PropTypes.string
 	},
@@ -61,14 +65,14 @@ wplv.App = React.createClass({
 
 			this.ready = true;
 
-			debugging.enabled = result.debugDetected ? result.debugEnabled : this.state.debugging.enabled,
-			debugging.detected = result.debugDetected
+			debugging.enabled = result.debugDetected ? result.debugEnabled : this.props.debugging;
+			debugging.detected = result.debugDetected;
 
-			log.entries = this._prepareEntries(result.entries),
-			log.found = result.found,
-			log.modified = result.modified,
-			log.filesize = result.filesize,
-			log.timezone = result.timezone
+			log.entries = this._prepareEntries(result.entries);
+			log.found = result.found;
+			log.modified = result.modified;
+			log.filesize = result.filesize;
+			log.timezone = result.timezone;
 
 			this.setState({
 				debugging: debugging, 
@@ -121,6 +125,9 @@ wplv.App = React.createClass({
 				});
 
 				wplv.notify.success('Log file <strong>successfully cleared</strong>');
+				
+				// Broadcast change
+				this._broadcastChangeEvent();
 			} else {
 				wplv.notify.error('Failed to clear log file.  You might not have write permission');
 			}
@@ -210,6 +217,9 @@ wplv.App = React.createClass({
 		});
 
 		this._startUpdateChecker();
+		
+		// Broadcast change
+		this._broadcastChangeEvent();
 	},
 
 	// Preted debugging is disabled
@@ -227,6 +237,9 @@ wplv.App = React.createClass({
 		});
 
 		this._stopUpdateChecker();
+		
+		// Broadcast change
+		this._broadcastChangeEvent();
 	},
 	
 	// Check if simulating debug status
@@ -307,6 +320,9 @@ wplv.App = React.createClass({
 					log: log
 				});
 
+				// Broadcast change
+				this._broadcastChangeEvent();
+
 				wplv.notify.success('Viewer updated with new entries');
 			} else {
 				if (showStatus) {
@@ -318,6 +334,43 @@ wplv.App = React.createClass({
 			this._stopUpdateChecker();
 			wplv.notify.error('Checking for updates failed.');
 		});
+	},
+
+	// Filter out duplicate entries 
+	_filterDuplicateEntries: function(entries) {
+		if (!entries || !(entries instanceof Array)) {
+			entries = [];
+		}
+
+		var filtered = [];
+		var found = {};
+
+		// Filter duplicate entries
+		entries.forEach(function(entry) {
+			var key = md5(entry.message);
+
+			if (found[key] === undefined) {
+				filtered.push(entry);
+				found[key] = true;
+			}
+		}.bind(this));
+
+		return filtered;
+	},
+
+	// Broadcast change event to all listeners
+	_broadcastChangeEvent: function() {
+		// Prepare change event
+		var event = new CustomEvent('wplv-log-changed', { 
+			detail: {
+				debugging: this.state.debugging.enabled,
+				simulating: this.state.debugging.simulating,
+				entries: this.state.log.entries
+			}
+		});
+
+		// Broadcast change
+		document.dispatchEvent(event);
 	},
 
 	// Check if simulation is enabled
@@ -349,6 +402,7 @@ wplv.App = React.createClass({
 		if (this.ready) {
 			if (this.state.debugging.detected || this.state.debugging.simulating) {
 				if (this.state.log.found) {
+					var count = 0;
 					var entries = [];
 					var query = this.state.query;
 					var view = '';
@@ -370,8 +424,10 @@ wplv.App = React.createClass({
 					}
 
 					if (this.state.log.view === 'group') {
+						count = this._filterDuplicateEntries(entries).length;
 						view = ( <wplv.GroupViewer entries={ entries } /> );
 					} else {
+						count = entries.length;
 						view = ( <wplv.ListViewer entries={ entries } /> );
 					}
 
@@ -381,7 +437,7 @@ wplv.App = React.createClass({
 
 							<div className="entries-list-header">
 								<h3>Log Entries</h3>
-								<span className="entries-count">{ entries.length === 1 ? entries.length + ' entry' : entries.length + ' entries' }</span>
+								<span className="entries-count">{ count === 1 ? count + ' entry' : count + ' entries' }</span>
 							</div>
 
 							{ view }
@@ -397,7 +453,7 @@ wplv.App = React.createClass({
 							content = (
 								<div className="viewer-pane">
 									<div className="content">
-										<p>The <strong>debug.log file does not exist</strong> or was not found.</p>
+										<p>Currently <strong className="debug-status-simulating">simulating</strong>.  The <strong>debug.log file does not exist or was not found.</strong></p>
 										
 										<ul className="inline-buttons">
 											<li><a href="#" onClick={ function(e) { e.preventDefault(); this.stopSimulation(); }.bind(this) } className="stop-simulation-btn"><i className="fa fa-arrow-circle-right"></i> Stop simulation</a></li>
@@ -409,7 +465,7 @@ wplv.App = React.createClass({
 							content = (
 								<div className="viewer-pane">
 									<div className="content">
-										<p>Debugging is enabled. However, the <strong>debug.log file does not exist</strong>.</p>
+										<p>Debugging is <strong className="debug-status-enabled">enabled</strong>.  However, the <strong>debug.log file does not exist or was not found.</strong></p>
 									</div>
 								</div>
 							);
@@ -418,7 +474,7 @@ wplv.App = React.createClass({
 						content = (
 							<div className="viewer-pane">
 								<div className="content">
-									<p><strong>Debugging is currently <span className="highlight">disabled</span>.</strong></p>
+									<p><strong>Debugging is currently <span className="debug-status-disabled">disabled</span>.</strong></p>
 
 									{ this.showDebugHelp() }
 								</div>
