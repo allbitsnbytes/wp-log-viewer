@@ -229,5 +229,15 @@ class Log {
 		
 		return @ftruncate($fp, 0);
 	}
-	
+
+	/**
+	 * Delete debug.log file
+	 *
+	 * @since 0.1.0
+	 *
+	 * @return boolean True if file was deleted
+	 */
+	public function delete() {
+		return unlink($this->log_file) === TRUE ? true : false;
+	}
 }
