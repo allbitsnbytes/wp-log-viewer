@@ -2,10 +2,10 @@
 
 All notable changes will be tracked in this change log.  This project uses [Semantic Versioning](http://semver.org/)
 
-## Unreleased
+## [0.12.0] - 2015-08-14
 ### Feature
 
-- Added debug simulation mode so when debug status can't be determined, user can still browse debug log if present
+- Added debug simulation mode so when debug status can not be determined, user can still browse debug log if present
 - Added dashboard widget
 - Added admin bar menu with summary
 
