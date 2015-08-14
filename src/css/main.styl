@@ -1,0 +1,534 @@
+// Imports
+
+@import 'variables'
+@import 'Jeet'
+
+
+// Mixins
+
+padmar(p=0, m=0)
+	padding p
+	margin m
+	
+min-height(h)
+	min-height h
+	height h
+	height auto
+
+
+// Global Styles
+
+#wp-admin-bar-wplv-menu,
+#wplv-container,
+#wplv-dashboard-widget-container
+	a
+		text-decoration none
+
+	.force-wrap
+		word-wrap break-word
+
+	.debug-status-enabled
+		color $debug-enabled-color
+
+	.debug-status-disabled
+		color $debug-disabled-color
+
+	.debug-status-not-detected
+		color $debug-detected-color
+
+	.debug-status-simulating
+		color $debug-simulating-color
+
+
+// Plugin Styles
+
+#wplv-container
+	min-height 800px
+	color $text-color
+	height 100%
+
+	.error-indicator-legend
+		list-style none
+		padmar 0, 0 0 45px
+
+		li
+			display inline-block
+			font-size 0.8em
+			font-weight bold
+			list-style none
+			border-left 4px solid
+			padmar 0 0 0 5px, 0 30px 0 0
+
+	.php-fatal-error
+		border-color $fatal-error-color !important
+
+	.php-notice
+		border-color $notice-error-color !important
+
+	.php-warning
+		border-color $warning-error-color !important
+
+	.view-header
+		col(1)
+		margin 15px 0 15px
+
+		.container
+			col(0.73)
+
+			h2
+				display inline-block
+				float left
+				padmar 0, 0
+
+				.debugger-status
+					display inline-block
+					font-size 10px
+					font-weight bold
+					line-height 11px
+					color $black
+					border-radius 5px
+					padmar 5px 8px, 0 0 0 10px
+
+					&.enabled
+						background $debug-enabled-color
+
+					&.disabled
+						color $white
+						background $debug-disabled-color
+
+					&.not-detected
+						background $debug-detected-color
+
+					&.simulating
+						color $white
+						background $debug-simulating-color
+
+			.error-indicator-legend
+				display inline-block
+				float right
+				text-align right
+				padmar 0.5em 4% 0, 0
+
+				li
+					padmar 0 0 0 5px, 0 0 0 30px
+
+					&:first-child
+						margin-left 0
+
+	.viewer-pane
+		col(0.73)
+		display inline-block
+		min-height 800px	
+		border none
+		border-right 1px solid $light-grey
+		box-sizing border-box
+		
+		.content
+			display block
+			width 96%
+			padding-top 10px
+
+		.search-group
+			display block
+			width 96%
+			padmar 0, 10px 0 30px
+
+			.search-component
+				display block
+				background-color $input-bg-color
+				border 1px solid $input-border-color
+				border-radius 6px
+				padmar 4px, 0
+
+				.fa
+					margin-left 6px
+
+				.search-field
+					position relative
+					display inline-block
+					right 0
+					left 8px
+					font-size 1.15em
+					width inherit
+					color $input-color
+					background none
+					box-shadow none
+					border none
+
+					&::-webkit-input-placeholder
+						font-style italic
+						color $input-placeholder-color
+
+			.search-query
+				display block
+				font-size 0.9em
+				font-style italic
+				margin-top 8px
+
+		.entries-list-header
+			col(1)
+			width 96%
+			margin-bottom 10px
+
+			h3
+				col(0.48)
+				display inline-block
+
+			.entries-count
+				col(0.5)
+				display inline-block
+				font-weight bold
+				font-size 0.9em
+				text-align right
+				padding-top 1.9em
+
+		.loading-status
+			display block
+			width 50px
+			heigh 50px
+			margin 180px auto 0
+
+		.group-entries,
+		.log-entries
+			display block
+			min-height 530px
+			height 100%
+			padding 0 4% 0 0
+
+			.error-details
+				display block
+				font-size 0.85em
+				margin 15px 0 0
+
+				&:empty
+					display none
+
+				.error-type,
+				.file-path,
+				.line-number
+					color lighten($text-color, 50%)
+
+				.file,
+				.line,
+				.type
+					color $text-color
+					font-weight bold
+					margin-left 8px
+
+				.file
+					margin-left 13px
+
+				.type
+					margin-left 5px
+
+		.log-entries
+			.log-entry
+				span(1)
+				border-left 4px solid $misc-error-color
+				margin-bottom 15px
+
+				.when
+					col(0.15, offset: 0.02)
+					font-size 0.8em
+
+					.date
+						display block
+						font-weight bold
+
+				.message
+					col(0.82)
+					font-size 1em
+
+				&.padded-top
+					margin-top 22px
+
+		.group-entries
+			.group-entry
+				span(1)
+				border-left 4px solid $misc-error-color
+				margin-bottom 30px
+
+				.when
+					col(0.15, offset: 0.02)
+					font-size 0.8em
+
+					.date
+						display block
+						font-weight bold
+
+					.time
+						display block
+
+				.message
+					col(0.82)
+					font-size 1.1em
+
+				.group-actions
+					span()
+					font-size 0.8em
+					margin-top 3px
+
+				.group-entry-details
+					span()
+					background #eaeaea
+					border-bottom 1px solid $light-grey
+					padding 10px 0
+					margin 12px 0 0
+
+					.details
+						display block
+						padding 0 15px
+
+					.when
+						span()		
+						margin 0 0 4px
+
+						.date
+							col(0.20)
+
+						.time
+							col(0.70)
+
+				.group-entry-details.active
+					padding-bottom 8px
+					margin-bottom 10px
+
+				.show-group-details,
+				.hide-group-details
+					display block
+					font-size 0.8em
+					text-decoration none
+
+				.hide-group-details
+					margin-bottom 10px
+
+	.sidebar
+		display inline-block
+		col(0.25)
+		padding-top 10px
+
+		.refresh-status
+			margin 0 0 25px
+
+			.refresh-btn
+				display inline-block
+				font-size 0.9em
+				color $white
+				background #555
+				border 1px solid #444
+				border-left 1px solid #666
+				border-top 1px solid #666
+				padding 6px 20px
+				border-radius 4px
+				text-decoration none
+
+		.menu-group
+			margin 0 0 25px
+
+			h3
+				font-size 1.2em
+				margin 0 0 6px
+
+			ul
+				display block
+				list-style none
+				padding 0
+
+				li
+					list-style none
+					padding 1px 0
+					margin 0
+
+					.fa
+						margin-right 6px
+
+					a
+						display inline-block
+						color #333
+						font-size 0.9em
+						border-radius 4px
+						text-decoration none
+						padding 4px 10px
+						margin-bottom 1px
+
+						&:hover
+							color #444
+
+					&.active a
+						background-color lighten($light-grey, 40%)
+						border 1px solid darken($light-grey, 10%)
+
+		.last-modified
+			font-size 0.85em
+			padding-top 5px
+
+			.when
+				display block;
+
+		.log-filesize
+			font-size 0.85em
+			margin-top 15px
+
+	.inline-buttons
+		display block
+		padmar 0, 0
+
+		li
+			display inline-block
+			padmar 0, 0 0 0 8px
+
+			&:first-child
+				margin-left 0
+
+	.start-simulation-btn,
+	.stop-simulation-btn
+		display inline-block
+		border-radius 4px
+		color $white
+		font-size 1.1em
+		text-decoration none
+		padmar 0.5em 2.4em 0.5em 1em, 0
+
+		i
+			margin-right 5px
+
+		&:hover
+			color $white
+
+	.start-simulation-btn
+		background $dark-grey
+
+	.stop-simulation-btn
+		background $red
+		
+	.debugging-unknown
+		font-size 1.2em
+
+	.highlight
+		color #ff0000
+		background transparent
+
+	.code-snippet
+		color $white
+		line-height 1.5em
+		border 2px solid darken($dark-grey, 20%)
+		background $dark-grey
+		padding 15px
+
+
+.humane-wplv-alert, 
+.humane-wplv-error, 
+.humane-wplv-success
+	text-align left
+	box-shadow: 0px 2px 21px 0px rgba(0,0,0,0.53);
+	padding 8px 20px 12px
+
+.humane-wplv-alert
+	color $black
+	background $humane-alert
+
+.humane-wplv-error
+	color $white
+	background $humane-error
+
+.humane-wplv-success
+	color $white
+	background $humane-success
+
+
+// Dashboard Widget Styles
+
+#wplv-dashboard-widget-container
+	.action-button
+		display inline-block
+		border-radius 4px
+		color $white
+		background $black
+		font-size 1em
+		text-decoration none
+		padmar 0.5em 2.4em 0.5em 1em, 20px 0 0
+
+		i
+			margin-right 5px
+
+		&:hover
+			color $light-grey
+
+	.error-types-list
+		list-style none
+		padmar 0, 0
+
+		li
+			list-style none
+			border 0
+			border-left 2px
+			padmar 5px 0, 0
+
+			.label
+				col(0.4)
+				dislplay inline-block
+				font-weight bold
+
+			.count
+				col(0.58)
+				dislplay inline-block
+				font-weight bold
+
+			.fa
+				display inline-block
+				margin-right 6px
+
+	.php-fatal-error
+		.fa
+			color $fatal-error-color !important
+
+	.php-notice
+		.fa
+			color $notice-error-color !important
+
+	.php-warning
+		.fa
+			color $warning-error-color !important
+
+	.php-misc
+		.fa
+			color $misc-error-color !important
+
+
+// Admin Bar Menu Styles
+
+#wp-admin-bar-wplv-menu
+	padding 0 10px !important
+
+	.summary
+		display inline
+		font-weight bold
+		padmar 0, 0 0 0 10px
+
+	.debug-status
+		display inline-block
+		font-size 0.8em
+
+		&.enabled
+			color $debug-enabled-color
+
+		&.disabled
+			color $debug-disabled-color
+
+		&.simulating
+			color lighten($blue, 50%)
+
+	.error-count
+		display inline-block
+		font-size 0.7em
+		line-height 1em
+		border-radius 5px
+		padmar 4px, 0 0 0 8px
+
+		&.no-errors
+			color $white
+			background-color $green
+
+		&.has-errors
+			color $white
+			background-color $red		
