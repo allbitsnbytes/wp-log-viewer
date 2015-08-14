@@ -40,7 +40,7 @@ wplv.AdminBarNav = React.createClass({
 			this.ready = true;
 
 			debugging.enabled = result.debugDetected ? result.debugEnabled : this.props.debugging;
-			debugging.simulating = false;
+			debugging.simulating = this._isSimulationEnabled();
 			debugging.detected = result.debugDetected;
 
 			this.setState({
@@ -71,6 +71,11 @@ wplv.AdminBarNav = React.createClass({
 	// Update error count
 	updateCount: function(count) {
 		this.setState({count: count});
+	},
+	
+	// Check if simulation is enabled
+	_isSimulationEnabled: function() {
+		return document.cookie.indexOf('_wplv-sim=1') > 0 ? true : false;
 	},
 
 	// Filter out duplicate entries 

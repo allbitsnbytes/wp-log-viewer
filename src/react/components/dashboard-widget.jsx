@@ -18,6 +18,7 @@ wplv.DashboardWidget = React.createClass({
 			debugging: {
 				detected: false,
 				enabled: false,
+				simulating: false
 			},
 			log: {
 				filsesize: 0,
@@ -52,6 +53,7 @@ wplv.DashboardWidget = React.createClass({
 			this.ready = true;
 
 			debugging.enabled = result.debugDetected ? result.debugEnabled : this.props.debugging;
+			debugging.simulating = this._isSimulationEnabled();
 			debugging.detected = result.debugDetected;
 
 			log.found = result.found;
@@ -87,6 +89,11 @@ wplv.DashboardWidget = React.createClass({
 		}.bind(this));
 		
 		return filtered;
+	},
+	
+	// Check if simulation is enabled
+	_isSimulationEnabled: function() {
+		return document.cookie.indexOf('_wplv-sim=1') > 0 ? true : false;
 	},
 
 	// Prepare count
