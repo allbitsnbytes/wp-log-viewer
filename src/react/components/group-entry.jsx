@@ -107,7 +107,9 @@ wplv.GroupEntry = React.createClass({
 				<div clanssName="error-legend"></div>
 				<wplv.TimeStamp date={ group.date } />
 				<div className="message">
-					{ group.message }
+					<div className="force-wrap">
+						{ group.message }
+					</div>
 					<div className="error-details">
 						{ errorDetails }
 					</div>
