@@ -1,6 +1,6 @@
 {
   "name": "wp-log-viewer",
-  "version": "0.12.0",
+  "version": "0.12.1",
   "description": "Worpdress debug log viewer",
   "author": {
     "name": "Maxwell Berkel",
