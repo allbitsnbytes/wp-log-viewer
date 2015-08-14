@@ -12,7 +12,8 @@ wplv.AdminBarNav = React.createClass({
 			count: 0,
 			debugging: {
 				enabled: false,
-				simulating: false
+				simulating: false,
+				detected: false
 			}
 		};
 	},
@@ -40,6 +41,7 @@ wplv.AdminBarNav = React.createClass({
 
 			debugging.enabled = result.debugDetected ? result.debugEnabled : this.props.debugging;
 			debugging.simulating = false;
+			debugging.detected = result.debugDetected;
 
 			this.setState({
 				count: this._filterDuplicateEntries(result.entries).length,
@@ -97,7 +99,7 @@ wplv.AdminBarNav = React.createClass({
 	render: function() {
 		var summary = '';
 
-		if (this.ready) {
+		if (this.ready && (this.state.debugging.simulating || this.state.debugging.detected)) {
 			var errorClass = this.state.count > 0 ? 'error-count has-errors' : 'error-count no-errors';
 			var status = this.state.debugging.enabled ? 'enabled' : 'disabled';
 			var statusClass = 'debug-status';
