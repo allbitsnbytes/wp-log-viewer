@@ -40,7 +40,7 @@ wplv.LogEntry = React.createClass({
 		return (
 			<div className={ entryClasses.join(' ') }>
 				<wplv.TimeStamp date={ entryDate } />
-				<div className="message">
+				<div className="message force-wrap">
 					{ this.props.entry.message }
 				</div>
 			</div>

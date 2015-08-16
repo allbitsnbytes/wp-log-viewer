@@ -2,6 +2,12 @@
 
 All notable changes will be tracked in this change log.  This project uses [Semantic Versioning](http://semver.org/)
 
+## [0.12.1] - 2015-08-14
+### Fix
+
+- Improved debugging status detection
+- Improved simulation mode detection in app, admin bar and dashboard components
+
 ## [0.12.0] - 2015-08-14
 ### Feature
 

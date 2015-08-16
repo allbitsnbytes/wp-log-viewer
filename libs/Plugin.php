@@ -188,11 +188,15 @@ class Plugin {
 				@fclose($fp);
 
 				// Define additional constants if missing
-				if (!defined('WP_DEBUG')) {
+				if (defined('WP_DEBUG')) {
+					if (WP_DEBUG === true || WP_DEBUG === 'true' || WP_DEBUG === false || WP_DEBUG === 'false') {
+						define('WP_DEBUG_DETECTED', true);
+					} else {
+						define('WP_DEBUG_DETECTED', false);
+					}
+				} else {
 					define('WP_DEBUG', false);
 					define('WP_DEBUG_DETECTED', false);
-				} else {
-					define('WP_DEBUG_DETECTED', true);
 				}
 
 				if (defined('DB_NAME') && defined('DB_USER') && defined('DB_PASSWORD') && defined('DB_HOST')) {								

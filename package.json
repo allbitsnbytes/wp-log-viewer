@@ -1,6 +1,6 @@
 {
   "name": "wp-log-viewer",
-  "version": "0.12.0",
+  "version": "0.12.1",
   "description": "Worpdress debug log viewer",
   "author": {
     "name": "Maxwell Berkel",
@@ -21,11 +21,9 @@
     }
   ],
   "scripts": {
-    "build-assets": "gulp assets",
-    "cleanup": "rm -rf node_modules test src .bowerrc .jshintignore .jshintrc bower.json gulpfile.js phpspec.yml",
+    "cleanup": "rm -rf node_modules test src .bowerrc .DS_Store .gitignore .jshintignore .jshintrc bower.json CHANGELOG.md composer.json composer.lock gulpfile.js LICENSE.md phpspec.yml README.md",
     "prepare-master": "git checkout master && git fetch origin dev && git reset --hard origin/dev",
-    "release": "git checkout master && npm run update-deps && npm run build-assets && npm run cleanup && git add -A && git commit -m 'Cleaned up for release' && echo '*** Ready for release ***'",
-    "update-deps": "bower install"
+    "release": "bower install && gulp && npm run cleanup && echo '*** Ready for release ***'"
   },
   "engines": {
     "node": ">= 0.10.x"

@@ -66,6 +66,7 @@ wplv.App = React.createClass({
 			this.ready = true;
 
 			debugging.enabled = result.debugDetected ? result.debugEnabled : this.props.debugging;
+			debugging.simulating = this._isSimulationEnabled();
 			debugging.detected = result.debugDetected;
 
 			log.entries = this._prepareEntries(result.entries);
