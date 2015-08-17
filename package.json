@@ -21,8 +21,9 @@
     }
   ],
   "scripts": {
-    "cleanup": "rm -rf node_modules test src .bowerrc .DS_Store .gitignore .jshintignore .jshintrc bower.json CHANGELOG.md composer.json composer.lock gulpfile.js LICENSE.md phpspec.yml README.md",
-    "publish": "mkdir ready && cp -r * ready cd ready && bower install && gulp && npm run cleanup && cd .. && echo '*** Ready to publish ***'"
+    "cleanup": "echo 'Clean up files ...' && rm -rf node_modules test src .bowerrc .DS_Store .gitignore .jshintignore .jshintrc bower.json CHANGELOG.md composer.json composer.lock gulpfile.js LICENSE.md phpspec.yml README.md",
+    "prepare-files": "echo 'Preparing files ...' && mkdir ready && rsync -av --exclude=ready * ready && cd ready && echo 'Updating dependencies ...' && bower install && echo 'Building assets ...' && gulp",
+    "publish": "npm run prepare-files && cd .. && echo '*** Ready to publish ***'"
   },
   "engines": {
     "node": ">= 0.10.x"
