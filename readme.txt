@@ -3,7 +3,7 @@
 Contributors: maxwellberkel
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl.html
-Tags: debug, log viewer, debugging
+Tags: debug, log viewer, debugging, error_log, debug.log
 Requires at least: 3.9
 Tested up to: 4.3
 Stable tag: 0.12.1
@@ -79,7 +79,7 @@ e.g.
 
 No.  The log viewer will automatically refresh and display new entries every 15 seconds by default.  This feature is implemented using AJAX to avoid reloading the entire page.
 
-= What is the simulation feature? =
+= What is simulation mode? =
 
 If the plugin cannot determine whether WP_DEBUG is enabed but you know that it is enabled, start the simulation mode.  In simulation mode the log viewer will work like normal under the assumption that WP_DEBUG is enabled.
 

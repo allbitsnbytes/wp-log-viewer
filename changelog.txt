@@ -4,11 +4,15 @@ All notable changes will be tracked in this change log.
 
 = 0.12.1 =
 
+Release date:  2015-08-14
+
 * Fix:
 	* Improved debugging status detection
 	* Improved simulation mode detection in app, admin bar and dashboard components
 
 = 0.12.0 =
+
+Release date: 2015-08-14
 
 * Feature:
 	* Added debug simulation mode so when debug status can not be determined, user can still browse debug log if present
@@ -30,6 +34,8 @@ All notable changes will be tracked in this change log.
 
 = 0.11.1 =
 
+Release date: 2015-06-22
+
 * Feature:
 	* Added group view which groups similar errors making it easier to browse log entries
 
@@ -38,6 +44,8 @@ All notable changes will be tracked in this change log.
 	* Added support for 401 errors what debug log update checker is running.  A 401 error will not stop the auto checker.
 
 = 0.11.0 =
+
+Release date: 2015-06-01
 
 * Feature:
 	* Added realtime search
