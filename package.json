@@ -14,12 +14,10 @@
   "bugs": {
     "url": "https://github.com/allbitsnbytes/wp-log-viewer/issues"
   },
-  "license": [
-    {
-      "type": "MIT",
-      "url": "https://github.com/allbitsnbytes/wp-log-viewer/blob/LICENSE"
-    }
-  ],
+  "license": {
+    "type": "GPLv3",
+    "url": "http://www.gnu.org/licenses/gpl.html"
+  },
   "scripts": {
     "cleanup": "echo 'Clean up files ...' && rm -rf node_modules test src .bowerrc .DS_Store .gitignore .jshintignore .jshintrc bower.json CHANGELOG.md composer.json composer.lock gulpfile.js LICENSE.md phpspec.yml README.md",
     "prepare-files": "echo 'Preparing files ...' && mkdir ready && rsync -av --exclude=ready * ready && cd ready && echo 'Updating dependencies ...' && bower install && echo 'Building assets ...' && gulp",
