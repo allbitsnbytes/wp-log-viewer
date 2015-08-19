@@ -15,10 +15,10 @@ var paths = {
 		img: 'src/img/**/*',
 		fonts: 'src/bower/font-awesome/fonts/**/*',
 		js: [
-			'src/bower/react/react.min.js',
-			'src/bower/reqwest/reqwest.min.js',
-			'src/bower/blueimp-md5/js/md5.min.js',
-			'src/bower/humane/humane.min.js',
+			'src/bower/react/react.js',
+			'src/bower/reqwest/reqwest.js',
+			'src/bower/blueimp-md5/js/md5.js',
+			'src/bower/humane/humane.js',
 			'src/react/app.jsx',
 			'src/react/admin-bar-nav.jsx',
 			'src/react/components/**/*.jsx',
@@ -96,5 +96,6 @@ Gulp.task('js', function() {
 		.pipe($.plumber())
 		.pipe($.if(isJSX, $.react()))
 		.pipe($.concat('main.min.js'))
+		.pipe($.uglify())
 		.pipe(Gulp.dest(paths.build.js));
 });
