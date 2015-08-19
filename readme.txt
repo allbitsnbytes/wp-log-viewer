@@ -86,3 +86,6 @@ If the plugin cannot determine whether WP_DEBUG is enabed but you know that it i
 This feature is handy for those with complex wp-config.php files.
 
 
+== Changelog ==
+
+View the [change log](https://github.com/allbitsnbytes/wp-log-viewer/blob/master/CHANGELOG.md) to keep track of changes.
