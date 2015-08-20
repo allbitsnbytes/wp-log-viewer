@@ -2,6 +2,7 @@
 var $			= require('gulp-load-plugins')();
 var Gulp		= require('gulp');
 var Jeet		= require('Jeet');
+var Rupture		= require('rupture');
 
 
 // Paths
@@ -52,7 +53,7 @@ function isJSX(file) {
 Gulp.task('default', ['css', 'fonts', 'images', 'js']);
 
 
-// Watch 
+// Watch
 Gulp.task('watch', function() {
 	Gulp.watch('src/css/**/*', ['css']);
 	Gulp.watch(paths.src.img, ['images']);
@@ -65,7 +66,7 @@ Gulp.task('css', function() {
 	return Gulp.src(paths.src.css)
 		.pipe($.plumber())
 		.pipe($.stylus({
-			use: [Jeet()],
+			use: [Jeet(), Rupture()],
 			'include css': true
 		}))
 		.pipe($.autoprefixer())
