@@ -9,7 +9,7 @@
  * Plugin Name: WP Log Viewer
  * Plugin URI:  https://github.com/allbitsnbytes/wp-log-viewer
  * Description: Wordpress debug log viewer plugin
- * Version:     0.12.1 
+ * Version:     0.12.2
  * Author:      Maxwell Berkel
  * Author URI:  http://allbitsnbytes.com
  * Text Domain: wplv
@@ -18,12 +18,12 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 2 of the License, or
  * any later version.
- *  
+ *
  * WP Log Viewer is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
- *  
+ *
  * You should have received a copy of the GNU General Public License
  * along with WP Log Viewer. If not, see https://github.com/allbitsnbytes/wp-log-viewer/blob/LICENSE.
  **/
