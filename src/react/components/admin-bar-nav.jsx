@@ -5,7 +5,7 @@ wplv.AdminBarNav = React.createClass({
 
 	// Component ready
 	ready: false,
-	
+
 	// Initial state
 	getInitialState: function() {
 		return {
@@ -45,7 +45,7 @@ wplv.AdminBarNav = React.createClass({
 
 			this.setState({
 				count: this._filterDuplicateEntries(result.entries).length,
-				debugging: debugging 
+				debugging: debugging
 			});
 		}.bind(this));
 
@@ -72,13 +72,13 @@ wplv.AdminBarNav = React.createClass({
 	updateCount: function(count) {
 		this.setState({count: count});
 	},
-	
+
 	// Check if simulation is enabled
 	_isSimulationEnabled: function() {
 		return document.cookie.indexOf('_wplv-sim=1') > 0 ? true : false;
 	},
 
-	// Filter out duplicate entries 
+	// Filter out duplicate entries
 	_filterDuplicateEntries: function(entries) {
 		if (!entries || !(entries instanceof Array)) {
 			entries = [];
@@ -96,7 +96,7 @@ wplv.AdminBarNav = React.createClass({
 				found[key] = true;
 			}
 		}.bind(this));
-		
+
 		return filtered;
 	},
 
@@ -104,7 +104,7 @@ wplv.AdminBarNav = React.createClass({
 	render: function() {
 		var summary = '';
 
-		if (this.ready && (this.state.debugging.simulating || this.state.debugging.detected)) {
+		if (this.ready && (this.state.debugging.enabled || this.state.debugging.simulating || this.state.debugging.detected)) {
 			var errorClass = this.state.count > 0 ? 'error-count has-errors' : 'error-count no-errors';
 			var status = this.state.debugging.enabled ? 'enabled' : 'disabled';
 			var statusClass = 'debug-status';

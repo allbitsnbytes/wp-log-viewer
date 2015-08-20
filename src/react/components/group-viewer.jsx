@@ -39,7 +39,7 @@ wplv.GroupViewer = React.createClass({
 
 		for (var key in groups) {
 			groupContent.push((
-				<wplv.GroupEntry group={ groups[key] } />
+				<wplv.GroupEntry key={ key } group={ groups[key] } />
 			));
 		}
 

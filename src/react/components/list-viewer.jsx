@@ -23,10 +23,10 @@ wplv.ListViewer = React.createClass({
 	},
 
 	// Render component
-	render: function() { 
-		var listContent = this.props.entries.map(function(entry) {
+	render: function() {
+		var listContent = this.props.entries.map(function(entry, index) {
 			return (
-				<wplv.LogEntry entry={ entry } />
+				<wplv.LogEntry key={ index } entry={ entry } />
 			);
 		});
 
