@@ -62,20 +62,22 @@ wplv.notify = (function() {
 	};
 })();
 
+var defaultDebugging = WPLOGVIEWER.debug_enabled == 1 || WPLOGVIEWER.debug_enabled == true ? true : false;
+var pluginUrl = WPLOGVIEWER.plugin_url;
 
 if (WPLOGVIEWER.current_page === 'tools_page_wp-log-viewer') {
 	React.render(
-		<wplv.App user={ WPLOGVIEWER.user_id } settings={ WPLOGVIEWER.settings } debugging={ WPLOGVIEWER.debug_enabled } pluginUrl={ WPLOGVIEWER.plugin_url } />,
+		<wplv.App user={ WPLOGVIEWER.user_id } settings={ WPLOGVIEWER.settings } debugging={ defaultDebugging } pluginUrl={ pluginUrl } />,
 		document.getElementById('wplv-container')
 	);
 } else if (WPLOGVIEWER.current_page === 'dashboard') {
 	React.render(
-		<wplv.DashboardWidget debugging={ WPLOGVIEWER.debug_enabled } pluginUrl={ WPLOGVIEWER.plugin_url } />,
+		<wplv.DashboardWidget debugging={ defaultDebugging } pluginUrl={ pluginUrl } />,
 		document.getElementById('wplv-dashboard-widget-container')
 	);
 }
 
 React.render(
-	<wplv.AdminBarNav debugging={ WPLOGVIEWER.debug_enabled } pluginUrl={ WPLOGVIEWER.plugin_url } />,
+	<wplv.AdminBarNav debugging={ defaultDebugging } pluginUrl={ pluginUrl } />,
 	document.getElementById('wp-admin-bar-wplv-menu')
 );

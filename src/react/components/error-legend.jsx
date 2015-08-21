@@ -10,7 +10,9 @@ wplv.ErrorLegend = React.createClass({
 				<li className="php-fatal-error">Fatal Error</li>
 				<li className="php-warning">PHP Warning</li>
 				<li className="php-notice">PHP Notice</li>
+				<li className="php-deprecated">PHP Deprecated</li>
+				<li className="wordpress-database-error">Database error</li>
 			</ul>
-		);	
+		);
 	}
 });

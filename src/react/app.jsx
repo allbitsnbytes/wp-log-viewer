@@ -25,7 +25,7 @@ wplv.App = React.createClass({
 			},
 			log: {
 				entries: [],
-				filesize: 0,			
+				filesize: 0,
 				found: false,
 				modified: '',
 				sort: this.props.settings.sort,
@@ -44,7 +44,7 @@ wplv.App = React.createClass({
 			settings: {
 				view: 'group',
 				sort: 'newest'
-			},	
+			},
 			user: ''
 		};
 	},
@@ -57,11 +57,11 @@ wplv.App = React.createClass({
 		user: React.PropTypes.string
 	},
 
-	// Before mount 
+	// Before mount
 	componentWillMount: function() {
 		wplv.remote.getAllEntries({}, function(result) {
 			var debugging = this.state.debugging;
-			var log = this.state.log
+			var log = this.state.log;
 
 			this.ready = true;
 
@@ -76,7 +76,7 @@ wplv.App = React.createClass({
 			log.timezone = result.timezone;
 
 			this.setState({
-				debugging: debugging, 
+				debugging: debugging,
 				log: log
 			});
 
@@ -99,7 +99,7 @@ wplv.App = React.createClass({
 	checkLatest: function() {
 		this._getLatestEntries();
 	},
-	
+
 	// Refresh the viewer
 	refreshViewer: function() {
 		this._getLatestEntries(true);
@@ -117,7 +117,7 @@ wplv.App = React.createClass({
 		wplv.remote.clearEntries(function(result) {
 			if (result.cleared == true) {
 				var log = this.state.log;
-				
+
 				log.entries = [];
 				log.filesize = 0;
 
@@ -126,7 +126,7 @@ wplv.App = React.createClass({
 				});
 
 				wplv.notify.success('Log file <strong>successfully cleared</strong>');
-				
+
 				// Broadcast change
 				this._broadcastChangeEvent();
 			} else {
@@ -218,7 +218,7 @@ wplv.App = React.createClass({
 		});
 
 		this._startUpdateChecker();
-		
+
 		// Broadcast change
 		this._broadcastChangeEvent();
 	},
@@ -238,11 +238,11 @@ wplv.App = React.createClass({
 		});
 
 		this._stopUpdateChecker();
-		
+
 		// Broadcast change
 		this._broadcastChangeEvent();
 	},
-	
+
 	// Check if simulating debug status
 	isSimulating: function() {
 		return this.state.debugging.simulating;
@@ -258,12 +258,18 @@ wplv.App = React.createClass({
 		entries = entries.map(function(entry) {
 
 			// Get line number if present
-			var line = entry.message.replace(/.* on line ([\d]+).*/gi, '$1');	
+			var line = entry.message.replace(/.* on line ([\d]+).*/gi, '$1');
 			entry.line = line && line !== entry.message ? line.trim() : '';
 
-			// Get error type if present
+			// Get PHP error type if present
 			var errorType = entry.message.replace(/^(PHP [\w ]+):.*/gi, '$1');
 			entry.errorType = errorType && errorType !== entry.message ? errorType.trim() : '';
+
+			if (entry.errorType === '') {
+				// Check for Wordpress Database error type if present
+				var errorType = entry.message.replace(/^(Wordpress database error ).*/gi, '$1');
+				entry.errorType = errorType && errorType !== entry.message ? errorType.trim() : '';
+			}
 
 			// Get file path if present
 			var filePath = entry.message.replace(/^.*in (\/[\w /_-]+.php).*/gi, '$1');
@@ -271,7 +277,7 @@ wplv.App = React.createClass({
 
 			// Reformat message
 			if (entry.errorType) {
-				entry.message = entry.message.replace(/^PHP [\w ]+:(.*)/gi, '$1', '').trim();
+				entry.message = entry.message.replace(/^(PHP [\w ]+:|Wordpress database error)(.*)/gi, '$2', '').trim();
 			}
 
 			return entry;
@@ -284,7 +290,7 @@ wplv.App = React.createClass({
 
 		return entries;
 	},
-	
+
 	showDebugHelp: function() {
 		return (
 			<div>
@@ -337,7 +343,7 @@ wplv.App = React.createClass({
 		});
 	},
 
-	// Filter out duplicate entries 
+	// Filter out duplicate entries
 	_filterDuplicateEntries: function(entries) {
 		if (!entries || !(entries instanceof Array)) {
 			entries = [];
@@ -362,7 +368,7 @@ wplv.App = React.createClass({
 	// Broadcast change event to all listeners
 	_broadcastChangeEvent: function() {
 		// Prepare change event
-		var event = new CustomEvent('wplv-log-changed', { 
+		var event = new CustomEvent('wplv-log-changed', {
 			detail: {
 				debugging: this.state.debugging.enabled,
 				simulating: this.state.debugging.simulating,
@@ -401,7 +407,7 @@ wplv.App = React.createClass({
 		var sidebar = '';
 
 		if (this.ready) {
-			if (this.state.debugging.detected || this.state.debugging.simulating) {
+			if (this.state.debugging.enabled || this.state.debugging.detected || this.state.debugging.simulating) {
 				if (this.state.log.found) {
 					var count = 0;
 					var entries = [];
@@ -432,19 +438,20 @@ wplv.App = React.createClass({
 						view = ( <wplv.ListViewer entries={ entries } /> );
 					}
 
+					var errorClass = entries.length > 0 ? 'error-count has-errors' : 'error-count no-errors';
+					var errorLabel = entries.length == 1 ? ' entry' : ' entries';
+
 					content = (
 						<div className="viewer-pane">
-							<wplv.Search app={ this } />
-
 							<div className="entries-list-header">
 								<h3>Log Entries</h3>
-								<span className="entries-count">{ count === 1 ? count + ' entry' : count + ' entries' }</span>
+								<span className="entries-count"><span className={ errorClass }>{ count }</span> { errorLabel }</span>
 							</div>
 
 							{ view }
 						</div>
 					);
-					
+
 					sidebar = (
 						<wplv.Sidebar app={ this } />
 					);
@@ -455,7 +462,7 @@ wplv.App = React.createClass({
 								<div className="viewer-pane">
 									<div className="content">
 										<p>Currently <strong className="debug-status-simulating">simulating</strong>.  The <strong>debug.log file does not exist or was not found.</strong></p>
-										
+
 										<ul className="inline-buttons">
 											<li><a href="#" onClick={ function(e) { e.preventDefault(); this.stopSimulation(); }.bind(this) } className="stop-simulation-btn"><i className="fa fa-arrow-circle-right"></i> Stop simulation</a></li>
 										</ul>
@@ -513,18 +520,21 @@ wplv.App = React.createClass({
 
 		return (
 			<div className="container">
-				<header className="view-header">
-					<div className="container">
-						<h2>Log Viewer { debugStatus }</h2>
-						<wplv.ErrorLegend />
-					</div>
-				</header>
-
 				<section className="row">
-					{ content }
+					<div className="content-pane">
+						<header className="view-header">
+							<h2>Log Viewer { debugStatus }</h2>
+
+							<wplv.ErrorLegend />
+						</header>
+
+						<wplv.Search app={ this } />
+
+						{ content }
+					</div>
 
 					{ sidebar }
-				</section>		
+				</section>
 			</div>
 		);
 	},

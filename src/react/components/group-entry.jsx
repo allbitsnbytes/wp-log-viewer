@@ -9,14 +9,14 @@ wplv.GroupEntry = React.createClass({
 			showDetails: false
 		};
 	},
-	
+
 	// Get properties
 	getDefaultProps: function() {
 		return {
 			group: {
 				date: '',
 				message: '',
-				entries: []	
+				entries: []
 			}
 		};
 	},
@@ -40,7 +40,7 @@ wplv.GroupEntry = React.createClass({
 		var errorDetails = [];
 		var groupDetails = '';
 		var groupLabel = '';
-		
+
 		if (group.errorType) {
 			entryClasses.push(group.errorType.toLowerCase().replace(/[ ]+/gi, '-'));
 			errorDetails.push((
@@ -53,12 +53,12 @@ wplv.GroupEntry = React.createClass({
 				<div className="line-number"><i className="fa fa-angle-right"></i> Line: <span className="line">{ group.line }</span></div>
 			));
 		}
-		
+
 		if (group.filePath) {
 			errorDetails.push((
 				<div className="file-path"><i className="fa fa-angle-right"></i> File: <span className="file">{ group.filePath }</span></div>
 			));
-		}		
+		}
 
 		if (this.state.showDetails) {
 			var groupEntryDetails = [];
@@ -68,10 +68,10 @@ wplv.GroupEntry = React.createClass({
 				var entryDate = new Date(entry.date + ' ' + entry.time + ' ' + entry.timezone);
 
 				groupEntryDetails.push((
-					<wplv.TimeStamp date={ entryDate } />
+					<wplv.TimeStamp key={ groupEntryDetails.length } date={ entryDate } />
 				));
 			}
-			
+
 			if (groupEntryDetails.length > 1) {
 				groupLabel = (
 					<p>Date and time these errors occured:</p>

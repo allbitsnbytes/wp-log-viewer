@@ -2,6 +2,7 @@
 
 @import 'variables'
 @import 'Jeet'
+@import 'rupture'
 
 
 // Mixins
@@ -9,7 +10,7 @@
 padmar(p=0, m=0)
 	padding p
 	margin m
-	
+
 min-height(h)
 	min-height h
 	height h
@@ -23,6 +24,21 @@ min-height(h)
 #wplv-dashboard-widget-container
 	a
 		text-decoration none
+
+	.error-count
+		display inline-block
+		font-size 1em
+		line-height 1em
+		border-radius 5px
+		padmar 4px, 0 0 0 8px
+
+		&.no-errors
+			color $white
+			background-color $green
+
+		&.has-errors
+			color $white
+			background-color $red
 
 	.force-wrap
 		word-wrap break-word
@@ -59,6 +75,12 @@ min-height(h)
 			border-left 4px solid
 			padmar 0 0 0 5px, 0 30px 0 0
 
+	.wordpress-database-error
+		border-color $database-error-color !important
+
+	.php-deprecated
+		border-color $deprecated-error-color !important
+
 	.php-fatal-error
 		border-color $fatal-error-color !important
 
@@ -68,17 +90,23 @@ min-height(h)
 	.php-warning
 		border-color $warning-error-color !important
 
-	.view-header
-		col(1)
-		margin 15px 0 15px
+	.content-pane
+		col(0.73)
+		display inline-block
+		min-height 800px
+		border none
+		border-right 1px solid $light-grey
+		box-sizing border-box
 
-		.container
-			col(0.73)
+		.view-header
+			cf()
+			display block
+			width 96%
+			padding 15px 0 15px
 
 			h2
+				col(0.34)
 				display inline-block
-				float left
-				padmar 0, 0
 
 				.debugger-status
 					display inline-block
@@ -90,6 +118,7 @@ min-height(h)
 					padmar 5px 8px, 0 0 0 10px
 
 					&.enabled
+						color $white
 						background $debug-enabled-color
 
 					&.disabled
@@ -104,29 +133,27 @@ min-height(h)
 						background $debug-simulating-color
 
 			.error-indicator-legend
+				col(0.64)
 				display inline-block
-				float right
 				text-align right
-				padmar 0.5em 4% 0, 0
+				padding-top 15px
+				margin-bottom 0
 
 				li
-					padmar 0 0 0 5px, 0 0 0 30px
+					padmar 0 0 0 5px, 0 0 0 25px
 
 					&:first-child
 						margin-left 0
 
-	.viewer-pane
-		col(0.73)
-		display inline-block
-		min-height 800px	
-		border none
-		border-right 1px solid $light-grey
-		box-sizing border-box
-		
-		.content
-			display block
-			width 96%
-			padding-top 10px
+			+below(1270px)
+				h2
+					display block
+					col(1)
+
+				.error-indicator-legend
+					display block
+					col(1)
+					text-align left
 
 		.search-group
 			display block
@@ -165,147 +192,155 @@ min-height(h)
 				font-style italic
 				margin-top 8px
 
-		.entries-list-header
-			col(1)
-			width 96%
-			margin-bottom 10px
-
-			h3
-				col(0.48)
-				display inline-block
-
-			.entries-count
-				col(0.5)
-				display inline-block
-				font-weight bold
-				font-size 0.9em
-				text-align right
-				padding-top 1.9em
-
-		.loading-status
+		.viewer-pane
 			display block
-			width 50px
-			heigh 50px
-			margin 180px auto 0
 
-		.group-entries,
-		.log-entries
-			display block
-			min-height 530px
-			height 100%
-			padding 0 4% 0 0
-
-			.error-details
+			.content
 				display block
-				font-size 0.85em
-				margin 15px 0 0
+				width 96%
+				padding-top 10px
 
-				&:empty
-					display none
+			.entries-list-header
+				col(1)
+				width 96%
+				margin-bottom 10px
 
-				.error-type,
-				.file-path,
-				.line-number
-					color lighten($text-color, 50%)
+				h3
+					col(0.48)
+					display inline-block
 
-				.file,
-				.line,
-				.type
-					color $text-color
+				.entries-count
+					col(0.5)
+					display inline-block
 					font-weight bold
-					margin-left 8px
+					font-size 0.9em
+					text-align right
+					padding-top 1.9em
 
-				.file
-					margin-left 13px
+			.loading-status
+				display block
+				width 50px
+				heigh 50px
+				margin 180px auto 0
 
-				.type
-					margin-left 5px
+			.group-entries,
+			.log-entries
+				display block
+				min-height 530px
+				height 100%
+				padding 0 4% 0 0
 
-		.log-entries
-			.log-entry
-				span(1)
-				border-left 4px solid $misc-error-color
-				margin-bottom 15px
+				.error-details
+					display block
+					font-size 0.85em
+					margin 15px 0 0
 
-				.when
-					col(0.15, offset: 0.02)
-					font-size 0.8em
+					&:empty
+						display none
 
-					.date
-						display block
+					.error-type,
+					.file-path,
+					.line-number
+						color lighten($text-color, 50%)
+
+					.file,
+					.line,
+					.type
+						color $text-color
 						font-weight bold
+						margin-left 8px
 
-				.message
-					col(0.82)
-					font-size 1em
+					.file
+						margin-left 13px
 
-				&.padded-top
-					margin-top 22px
+					.type
+						margin-left 5px
 
-		.group-entries
-			.group-entry
-				span(1)
-				border-left 4px solid $misc-error-color
-				margin-bottom 30px
-
-				.when
-					col(0.15, offset: 0.02)
-					font-size 0.8em
-
-					.date
-						display block
-						font-weight bold
-
-					.time
-						display block
-
-				.message
-					col(0.82)
-					font-size 1.1em
-
-				.group-actions
-					span()
-					font-size 0.8em
-					margin-top 3px
-
-				.group-entry-details
-					span()
-					background #eaeaea
-					border-bottom 1px solid $light-grey
-					padding 10px 0
-					margin 12px 0 0
-
-					.details
-						display block
-						padding 0 15px
+			.log-entries
+				.log-entry
+					span(1)
+					border-left 4px solid $misc-error-color
+					margin-bottom 15px
 
 					.when
-						span()		
-						margin 0 0 4px
+						col(0.15, offset: 0.02)
+						font-size 0.8em
 
 						.date
-							col(0.20)
+							display block
+							font-weight bold
+
+					.message
+						col(0.82)
+						font-size 1em
+
+					&.padded-top
+						margin-top 22px
+
+			.group-entries
+				.group-entry
+					span(1)
+					border-left 4px solid $misc-error-color
+					margin-bottom 30px
+
+					.when
+						col(0.15, offset: 0.02)
+						font-size 0.8em
+
+						.date
+							display block
+							font-weight bold
 
 						.time
-							col(0.70)
+							display block
 
-				.group-entry-details.active
-					padding-bottom 8px
-					margin-bottom 10px
+					.message
+						col(0.82)
+						font-size 1.1em
 
-				.show-group-details,
-				.hide-group-details
-					display block
-					font-size 0.8em
-					text-decoration none
+					.group-actions
+						span()
+						font-size 0.8em
+						margin-top 3px
 
-				.hide-group-details
-					margin-bottom 10px
+					.group-entry-details
+						span()
+						background #eaeaea
+						border-bottom 1px solid $light-grey
+						padding 10px 0
+						margin 12px 0 0
+
+						.details
+							display block
+							padding 0 15px
+
+						.when
+							span()
+							margin 0 0 4px
+
+							.date
+								col(0.20)
+
+							.time
+								col(0.70)
+
+					.group-entry-details.active
+						padding-bottom 8px
+						margin-bottom 10px
+
+					.show-group-details,
+					.hide-group-details
+						display block
+						font-size 0.8em
+						text-decoration none
+
+					.hide-group-details
+						margin-bottom 10px
 
 	.sidebar
 		display inline-block
 		col(0.25)
-		padding-top 10px
+		padding-top 30px
 
 		.refresh-status
 			margin 0 0 25px
@@ -400,7 +435,7 @@ min-height(h)
 
 	.stop-simulation-btn
 		background $red
-		
+
 	.debugging-unknown
 		font-size 1.2em
 
@@ -416,8 +451,8 @@ min-height(h)
 		padding 15px
 
 
-.humane-wplv-alert, 
-.humane-wplv-error, 
+.humane-wplv-alert,
+.humane-wplv-error,
 .humane-wplv-success
 	text-align left
 	box-shadow: 0px 2px 21px 0px rgba(0,0,0,0.53);
@@ -439,14 +474,9 @@ min-height(h)
 // Dashboard Widget Styles
 
 #wplv-dashboard-widget-container
-	.action-button
+	.button
 		display inline-block
-		border-radius 4px
-		color $white
-		background $black
-		font-size 1em
-		text-decoration none
-		padmar 0.5em 2.4em 0.5em 1em, 20px 0 0
+		margin-top 18px
 
 		i
 			margin-right 5px
@@ -478,6 +508,14 @@ min-height(h)
 				display inline-block
 				margin-right 6px
 
+	.wordpress-database-error
+		.fa
+			color $database-error-color !important
+
+	.php-deprecated
+		.fa
+			color $deprecated-error-color !important
+
 	.php-fatal-error
 		.fa
 			color $fatal-error-color !important
@@ -500,6 +538,9 @@ min-height(h)
 #wp-admin-bar-wplv-menu
 	padding 0 10px !important
 
+	.error-count
+		font-size 0.7em
+
 	.summary
 		display inline
 		font-weight bold
@@ -517,18 +558,3 @@ min-height(h)
 
 		&.simulating
 			color lighten($blue, 50%)
-
-	.error-count
-		display inline-block
-		font-size 0.7em
-		line-height 1em
-		border-radius 5px
-		padmar 4px, 0 0 0 8px
-
-		&.no-errors
-			color $white
-			background-color $green
-
-		&.has-errors
-			color $white
-			background-color $red		

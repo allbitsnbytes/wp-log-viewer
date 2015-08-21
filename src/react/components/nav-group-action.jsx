@@ -2,7 +2,7 @@
  * Display a navigation group
  */
 wplv.NavActionGroup = React.createClass({
-	
+
 	// Get initial state
 	getInitialState: function() {
 		return {
@@ -42,11 +42,11 @@ wplv.NavActionGroup = React.createClass({
 	// Render component
 	render: function() {
 		var group = this.props.group;
-		var options = group.options.map(function(option) {
+		var options = group.options.map(function(option, index) {
 			var selected = (option.key && option.key == this.state.selected) ? true : false;
-			
+
 			return (
-				<wplv.NavAction notify={ this.updateSelected } selected={ selected } nav={ option } />
+				<wplv.NavAction key={ index } notify={ this.updateSelected } selected={ selected } nav={ option } />
 			);
 		}.bind(this));
 

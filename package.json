@@ -1,6 +1,6 @@
 {
   "name": "wp-log-viewer",
-  "version": "0.12.1",
+  "version": "0.12.2",
   "description": "Worpdress debug log viewer",
   "author": {
     "name": "Maxwell Berkel",
@@ -47,7 +47,8 @@
     "gulp-stylus": "^2.0.1",
     "gulp-uglify": "^1.2.0",
     "jeet": "^6.1.2",
-    "react-intl": "^1.2.0"
+    "react-intl": "^1.2.0",
+    "rupture": "^0.6.1"
   },
   "devDependencies": {
     "mocha-jshint": "^2.2.3"

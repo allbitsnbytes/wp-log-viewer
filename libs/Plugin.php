@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Allbitsnbytes\WPLogViewer;
 
@@ -78,7 +78,7 @@ class Plugin {
 
 		// If session is not valid, create one
 		if ($wp_session_info['valid'] === true) {
-			$localized['cookie_token']	= $wp_session_info['cookie_token']; 
+			$localized['cookie_token']	= $wp_session_info['cookie_token'];
 			$localized['session_key']	= $wp_session_info['session_key'];
 
 			if ($auth->create_api_session($user_id)) {
@@ -199,7 +199,7 @@ class Plugin {
 					define('WP_DEBUG_DETECTED', false);
 				}
 
-				if (defined('DB_NAME') && defined('DB_USER') && defined('DB_PASSWORD') && defined('DB_HOST')) {								
+				if (defined('DB_NAME') && defined('DB_USER') && defined('DB_PASSWORD') && defined('DB_HOST')) {
 					$includes = [
 						'load.php',
 						'cache.php',
@@ -231,7 +231,7 @@ class Plugin {
 
 					$loaded = true;
 				}
-			}			
+			}
 		}
 
 		return $loaded;

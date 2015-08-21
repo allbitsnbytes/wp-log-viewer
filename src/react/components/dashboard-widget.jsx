@@ -10,6 +10,8 @@ wplv.DashboardWidget = React.createClass({
 	getInitialState: function() {
 		return {
 			counts: {
+				database: 0,
+				deprecated: 0,
 				fatal: 0,
 				notice: 0,
 				warning: 0,
@@ -63,13 +65,13 @@ wplv.DashboardWidget = React.createClass({
 
 			this.setState({
 				counts: counts,
-				debugging: debugging, 
+				debugging: debugging,
 				log: log
 			});
 		}.bind(this));
 	},
 
-	// Filter out duplicate entries 
+	// Filter out duplicate entries
 	_filterDuplicateEntries: function(entries) {
 		if (!entries || !(entries instanceof Array)) {
 			entries = [];
@@ -87,10 +89,10 @@ wplv.DashboardWidget = React.createClass({
 				found[key] = true;
 			}
 		}.bind(this));
-		
+
 		return filtered;
 	},
-	
+
 	// Check if simulation is enabled
 	_isSimulationEnabled: function() {
 		return document.cookie.indexOf('_wplv-sim=1') > 0 ? true : false;
@@ -111,6 +113,12 @@ wplv.DashboardWidget = React.createClass({
 			var errorType = entry.message.replace(/^(PHP [\w ]+):.*/gi, '$1');
 			entry.errorType = errorType && errorType !== entry.message ? errorType.trim() : '';
 
+			if (entry.errorType === '') {
+				// Check for Wordpress Database error type if present
+				var errorType = entry.message.replace(/^(Wordpress database error ).*/gi, '$1');
+				entry.errorType = errorType && errorType !== entry.message ? errorType.trim() : '';
+			}
+
 			switch (entry.errorType) {
 				case 'PHP Fatal error':
 					counts.fatal++;
@@ -122,6 +130,14 @@ wplv.DashboardWidget = React.createClass({
 
 				case 'PHP Warning':
 					counts.warning++;
+					break;
+
+				case 'PHP Deprecated':
+					counts.deprecated++;
+					break;
+
+				case 'Wordpress database error':
+					counts.database++;
 					break;
 
 				default:
@@ -137,7 +153,7 @@ wplv.DashboardWidget = React.createClass({
 		var content = '';
 
 		if (this.ready) {
-			if (this.state.debugging.detected || this.state.debugging.simulating) {
+			if (this.state.debugging.enabled || this.state.debugging.detected || this.state.debugging.simulating) {
 				if (this.state.log.found) {
 					content = (
 						<ul className="error-types-list">
@@ -152,6 +168,14 @@ wplv.DashboardWidget = React.createClass({
 							<li className="php-warning">
 								<div className="label"><i className="fa fa-arrow-circle-o-right" /> Warning</div>
 								<div className="count">{ this.state.counts.warning }</div>
+							</li>
+							<li className="wordpress-database-error">
+								<div className="label"><i className="fa fa-arrow-circle-o-right" /> Database</div>
+								<div className="count">{ this.state.counts.database }</div>
+							</li>
+							<li className="php-deprecated">
+								<div className="label"><i className="fa fa-arrow-circle-o-right" /> Deprecated</div>
+								<div className="count">{ this.state.counts.deprecated }</div>
 							</li>
 							<li className="php-misc">
 								<div className="label"><i className="fa fa-arrow-circle-o-right" /> Misc</div>
@@ -187,7 +211,7 @@ wplv.DashboardWidget = React.createClass({
 			<div className="container">
 				{ content }
 
-				<a href={ this.props.pluginUrl } className="action-button"><i className="fa fa-arrow-circle-right" /> Go to <strong>Log Viewer</strong></a>
+				<a href={ this.props.pluginUrl } className="button button-primary"><i className="fa fa-arrow-circle-right" /> Go to <strong>Log Viewer</strong></a>
 			</div>
 		)
 	}

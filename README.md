@@ -1,6 +1,6 @@
 # Wordpress Log Viewer
 
-Wordpress plugin to make reviewing, analyzing and managing the debug.log file easier.
+Easily search, sort and group log entries.  Click the log file with one click.  See new errors automatically without refreshing.
 
 
 ## Features
@@ -12,6 +12,8 @@ Some features of this plugin.
 - Group and list views
 - Sort entries by date
 - Auto refresh
+- Realtime search
+- Error color legend
 - Debugging status, size and last modified
 - Dashboard widget
 
@@ -23,7 +25,7 @@ The admin bar widget gives you glanceable information such as debug log mode and
 This is one of my favourite features.
 
 
-### Clear Log 
+### Clear Log
 
 Easily clear your debug.log file with one click.
 
@@ -34,7 +36,7 @@ Log entries are group making it much easier to see each unique error.  You can c
 
 
 ### List View
-	
+
 All log entries are listed by date and time and can be sorted by newest or latest.
 
 
@@ -46,12 +48,22 @@ Log entries can be sorted by date by newest or latest in either list or group vi
 ### Automatic Refresh
 
 Log automatically refreshes to display new errors.  No need to manually refresh the screen.  However, there is a link to manually refresh if desired.
-	
+
+
+### Realtime Search
+
+Quickly search and find specific errors.
+
+
+### Error Color Legend
+
+Errors are color coded to make it easier to identify certain errors such as fatal, notices, warnings, deprecated and database.
+
 
 ### Debug Status
 
-Debugging status is located at the top of the viewer and admin bar to make it easy to see if debugging is enabled or disabled.  
-	
+Debugging status is located at the top of the viewer and admin bar to make it easy to see if debugging is enabled or disabled.
+
 You can also see log size and last modified timestamp.  This information automatically updates when changed.
 
 

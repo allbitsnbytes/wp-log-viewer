@@ -2,6 +2,15 @@
 
 All notable changes will be tracked in this change log.  This project uses [Semantic Versioning](http://semver.org/)
 
+## [0.12.2] - 2015-08-20
+### Fix
+
+- Fixed a error that was causing the right debug status to not be displayed sometimes
+
+### UI
+
+- Added color indicator for PHP Deprecated and Wordpress database errors
+
 ## [0.12.1] - 2015-08-14
 ### Fix
 
