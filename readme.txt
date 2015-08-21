@@ -138,7 +138,7 @@ Release date: 2015-08-20
 	* Added color indicator for PHP Deprecated and Wordpress database errors
 
 = 0.12.1 =
-Release date:  2015-08-14
+Release date: 2015-08-14
 * Fix:
 	* Improved debugging status detection
 	* Improved simulation mode detection in app, admin bar and dashboard components
