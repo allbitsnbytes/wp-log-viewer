@@ -131,6 +131,7 @@ All notable changes will be tracked in this change log.
 
 = 0.12.2 =
 Release date: 2015-08-20
+
 * Fix:
 	* Fixed a error that was causing the right debug status to not be displayed sometimes
 
@@ -139,12 +140,14 @@ Release date: 2015-08-20
 
 = 0.12.1 =
 Release date: 2015-08-14
+
 * Fix:
 	* Improved debugging status detection
 	* Improved simulation mode detection in app, admin bar and dashboard components
 
 = 0.12.0 =
 Release date: 2015-08-14
+
 * Feature:
 	* Added debug simulation mode so when debug status can not be determined, user can still browse debug log if present
 	* Added dashboard widget
@@ -165,6 +168,7 @@ Release date: 2015-08-14
 
 = 0.11.1 =
 Release date: 2015-06-22
+
 * Feature:
 	* Added group view which groups similar errors making it easier to browse log entries
 
@@ -174,6 +178,7 @@ Release date: 2015-06-22
 
 = 0.11.0 =
 Release date: 2015-06-01
+
 * Feature:
 	* Added realtime search
 
