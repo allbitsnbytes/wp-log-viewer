@@ -74,9 +74,9 @@ wplv.Sidebar = React.createClass({
 				});
 			}
 
-			var menuOptions = defaultMenuOptions.map(function(menuGroup) {
+			var menuOptions = defaultMenuOptions.map(function(menuGroup, index) {
 				return (
-					<wplv.NavActionGroup group={ menuGroup } />
+					<wplv.NavActionGroup key={ index } group={ menuGroup } />
 				);
 			});
 
@@ -84,7 +84,7 @@ wplv.Sidebar = React.createClass({
 				<aside className="sidebar">
 
 					{ menuOptions }
-					
+
 					{ simulateMenuOption }
 
 					<div className="last-modified">
@@ -100,7 +100,7 @@ wplv.Sidebar = React.createClass({
 			);
 		}
 
-		return ( 
+		return (
 			<aside className="sidebar"></aside>
 		);
 	}

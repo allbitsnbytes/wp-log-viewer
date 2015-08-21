@@ -1,6 +1,6 @@
 {
   "name": "wp-log-viewer",
-  "version": "0.12.1",
+  "version": "0.12.2",
   "description": "Worpdress debug log viewer",
   "author": {
     "name": "Maxwell Berkel",
@@ -14,16 +14,14 @@
   "bugs": {
     "url": "https://github.com/allbitsnbytes/wp-log-viewer/issues"
   },
-  "license": [
-    {
-      "type": "MIT",
-      "url": "https://github.com/allbitsnbytes/wp-log-viewer/blob/LICENSE"
-    }
-  ],
+  "license": {
+    "type": "GPLv3",
+    "url": "http://www.gnu.org/licenses/gpl.html"
+  },
   "scripts": {
-    "cleanup": "rm -rf node_modules test src .bowerrc .DS_Store .gitignore .jshintignore .jshintrc bower.json CHANGELOG.md composer.json composer.lock gulpfile.js LICENSE.md phpspec.yml README.md",
-    "prepare-master": "git checkout master && git fetch origin dev && git reset --hard origin/dev",
-    "release": "bower install && gulp && npm run cleanup && echo '*** Ready for release ***'"
+    "cleanup": "echo 'Clean up files ...' && rm -rf node_modules test src .bowerrc .DS_Store .gitignore .jshintignore .jshintrc bower.json CHANGELOG.md composer.json composer.lock gulpfile.js LICENSE.md phpspec.yml README.md",
+    "prepare-files": "echo 'Preparing files ...' && mkdir ready && rsync -av --exclude=ready * ready && cd ready && echo 'Updating dependencies ...' && bower install && echo 'Building assets ...' && gulp",
+    "publish": "npm run prepare-files && cd .. && echo '*** Ready to publish ***'"
   },
   "engines": {
     "node": ">= 0.10.x"
@@ -49,7 +47,8 @@
     "gulp-stylus": "^2.0.1",
     "gulp-uglify": "^1.2.0",
     "jeet": "^6.1.2",
-    "react-intl": "^1.2.0"
+    "react-intl": "^1.2.0",
+    "rupture": "^0.6.1"
   },
   "devDependencies": {
     "mocha-jshint": "^2.2.3"

@@ -2,6 +2,7 @@
 var $			= require('gulp-load-plugins')();
 var Gulp		= require('gulp');
 var Jeet		= require('Jeet');
+var Rupture		= require('rupture');
 
 
 // Paths
@@ -15,10 +16,10 @@ var paths = {
 		img: 'src/img/**/*',
 		fonts: 'src/bower/font-awesome/fonts/**/*',
 		js: [
-			'src/bower/react/react.min.js',
-			'src/bower/reqwest/reqwest.min.js',
-			'src/bower/blueimp-md5/js/md5.min.js',
-			'src/bower/humane/humane.min.js',
+			'src/bower/react/react.js',
+			'src/bower/reqwest/reqwest.js',
+			'src/bower/blueimp-md5/js/md5.js',
+			'src/bower/humane/humane.js',
 			'src/react/app.jsx',
 			'src/react/admin-bar-nav.jsx',
 			'src/react/components/**/*.jsx',
@@ -52,7 +53,7 @@ function isJSX(file) {
 Gulp.task('default', ['css', 'fonts', 'images', 'js']);
 
 
-// Watch 
+// Watch
 Gulp.task('watch', function() {
 	Gulp.watch('src/css/**/*', ['css']);
 	Gulp.watch(paths.src.img, ['images']);
@@ -65,7 +66,7 @@ Gulp.task('css', function() {
 	return Gulp.src(paths.src.css)
 		.pipe($.plumber())
 		.pipe($.stylus({
-			use: [Jeet()],
+			use: [Jeet(), Rupture()],
 			'include css': true
 		}))
 		.pipe($.autoprefixer())
@@ -96,5 +97,6 @@ Gulp.task('js', function() {
 		.pipe($.plumber())
 		.pipe($.if(isJSX, $.react()))
 		.pipe($.concat('main.min.js'))
+		.pipe($.uglify())
 		.pipe(Gulp.dest(paths.build.js));
 });
