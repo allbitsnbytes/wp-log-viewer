@@ -2,10 +2,10 @@
 Contributors: maxwellberkel
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl.html
-Tags: wordpress, debugging, log viewer, debug, log, error_log, debug.log
+Tags: wordpress, debugging, log viewer, debug, log, error_log, debug.log, admin
 Requires at least: 3.9
 Tested up to: 4.3
-Stable tag: 0.12.2
+Stable tag: 0.12.3
 
 Easily search, sort and group log entries.  Click the log file with one click.  See new errors automatically without refreshing.
 
@@ -129,8 +129,15 @@ When using the realtime search, the search query must be atleast 3 characters or
 
 All notable changes will be tracked in this change log.
 
+= 0.12.3 =
+Release date: 2015-08-24
+
+* Fix:
+	* Fixed a bug that cause plugin to not load  based on certain server configurations
+
 = 0.12.2 =
 Release date: 2015-08-20
+
 * Fix:
 	* Fixed a error that was causing the right debug status to not be displayed sometimes
 
@@ -138,13 +145,15 @@ Release date: 2015-08-20
 	* Added color indicator for PHP Deprecated and Wordpress database errors
 
 = 0.12.1 =
-Release date:  2015-08-14
+Release date: 2015-08-14
+
 * Fix:
 	* Improved debugging status detection
 	* Improved simulation mode detection in app, admin bar and dashboard components
 
 = 0.12.0 =
 Release date: 2015-08-14
+
 * Feature:
 	* Added debug simulation mode so when debug status can not be determined, user can still browse debug log if present
 	* Added dashboard widget
@@ -165,6 +174,7 @@ Release date: 2015-08-14
 
 = 0.11.1 =
 Release date: 2015-06-22
+
 * Feature:
 	* Added group view which groups similar errors making it easier to browse log entries
 
@@ -174,6 +184,7 @@ Release date: 2015-06-22
 
 = 0.11.0 =
 Release date: 2015-06-01
+
 * Feature:
 	* Added realtime search
 

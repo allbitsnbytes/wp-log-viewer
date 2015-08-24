@@ -1,5 +1,5 @@
-<?php 
-	
+<?php
+
 namespace Allbitsnbytes\WPLogViewer;
 
 if (!defined('WPLOGVIEWER_BASE')) {
@@ -24,9 +24,9 @@ use Allbitsnbytes\WPLogViewer\Http\Response;
  * @since 0.1.0
  */
 class Router {
-	
+
 	use IsSingleton;
-	
+
 	/**
 	 * @var array Registered handlers
 	 *
@@ -82,8 +82,8 @@ class Router {
 	private function get_action() {
 		return isset($_REQUEST['do']) ? filter_var($_REQUEST['do'], FILTER_SANITIZE_STRING) : '';
 	}
-	
-	
+
+
 	/**
 	 * Get parameters sent in the request
 	 *
@@ -93,13 +93,13 @@ class Router {
 	 */
 	private function get_params() {
 		$params = $_REQUEST;
-		
+
 		unset($params['do']);
-		
+
 		return $params;
 	}
 
-	
+
 	/**
 	 * Register an action and handler
 	 *
@@ -113,13 +113,13 @@ class Router {
 		if (!isset($this->handlers[$action]) || !is_array($this->handlers[$action])) {
 			$this->handlers[$action] = [];
 		}
-		
+
 		if (is_array($handler) && isset($handler['method']) && isset($handler['call']) && isset($handler['auth']) && is_callable($handler['call'])) {
 			$this->handlers[$action][] = $handler;
 		}
 	}
-	
-	
+
+
 	/**
 	 * Register a GET handler
 	 *
@@ -137,8 +137,8 @@ class Router {
 			'auth'		=> $auth_code,
 		]);
 	}
-	
-	
+
+
 	/**
 	 * Register a POST handler
 	 *
@@ -207,7 +207,7 @@ class Router {
 
 		if ($handled === 0) {
 			$response->set_code(404);
-		} 
+		}
 
 		$response->send();
 	}
