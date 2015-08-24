@@ -1,5 +1,5 @@
-<?php 
-	
+<?php
+
 namespace Allbitsnbytes\WPLogViewer;
 
 if (!defined('WPLOGVIEWER_BASE')) {
@@ -21,9 +21,9 @@ use Allbitsnbytes\WPLogViewer\Helper;
  * @since 0.1.0
  */
 class Auth {
-	
+
 	use IsSingleton;
-	
+
 	/**
 	 * Database session prefix
 	 *
@@ -32,7 +32,7 @@ class Auth {
 	 * @var string
 	 */
 	const DB_SESS_PREFIX = '_wplv_sess_';
-	
+
 	/**
 	 * Database session user prefix
 	 *
@@ -41,7 +41,7 @@ class Auth {
 	 * @var string
 	 */
 	const DB_SESS_USER_PREFIX = '_wplv_usr_';
-	
+
 	/**
 	 * Prefix to use for session cookie
 	 *
@@ -50,7 +50,7 @@ class Auth {
 	 * @var string
 	 */
 	const COOKIE_PREFIX = 'wordpress_logged_in_';
-	
+
 	/**
 	 * Length of generated keys
 	 *
@@ -59,7 +59,7 @@ class Auth {
 	 * @var int
 	 */
 	const KEY_LENGTH = 40;
-	
+
 	/**
 	 * Cookie token length
 	 *
@@ -68,10 +68,10 @@ class Auth {
 	 * @var int
 	 */
 	const COOKIE_TOKEN_LENGTH = 25;
-	
+
 	/**
 	 * Authenticate code
-	 * 
+	 *
 	 * Authentication will check for cookie token and session key, then use session key to check for api key
 	 *
 	 * @since 0.1.0
@@ -79,10 +79,10 @@ class Auth {
 	 * @var int
 	 */
 	const AUTHENTICATED = 2;
-	
+
 	/**
 	 * Skip authentication code
-	 * 
+	 *
 	 * Allow request through
 	 *
 	 * @since 0.1.0
@@ -90,7 +90,7 @@ class Auth {
 	 * @var int
 	 */
 	const SKIP = 1;
-	
+
 	/**
 	 * Check if user credentials are valid
 	 *
@@ -102,10 +102,10 @@ class Auth {
 	 */
 	public function is_valid_login($username, $password) {
 		global $wpdb;
-		
+
 		// TODO
 	}
-	
+
 
 	/**
 	 * Create a session for an authenticated user
@@ -117,11 +117,11 @@ class Auth {
 	 */
 	public function create_user_session($username) {
 		global $wpdb;
-		
+
 		// TODO
 	}
-	
-	
+
+
 	/**
 	 * Remove session for an authenticated user
 	 *
@@ -132,11 +132,11 @@ class Auth {
 	 */
 	public function clear_user_session($username) {
 		global $wpdb;
-		
+
 		// TODO
 	}
-	
-	
+
+
 	/**
 	 * Check if a authenticated session is in use
 	 *
@@ -153,7 +153,7 @@ class Auth {
 			$sql = 'select option_id from ' . $wpdb->options . ' where option_name=%s';
 			$id = $wpdb->get_var($wpdb->prepare($sql, self::DB_SESS_PREFIX . $cookie_token));
 
-			return intval($id) > 0 ? true : false; 
+			return intval($id) > 0 ? true : false;
 		}
 
 		return false;
@@ -170,6 +170,8 @@ class Auth {
 	 */
 	public function create_api_session($user_id) {
 		global $wpdb;
+
+		$this->clear_api_session();
 
 		$api_key = $this->get_api_key($user_id);
 		$created = false;
@@ -237,7 +239,7 @@ class Auth {
 	 */
 	public function get_api_session($user_id) {
 		global $wpdb;
-		
+
 		$info = [
 			'api_key'		=> $this->get_api_key($user_id),
 			'session_key'	=> $this->get_session_key(),
@@ -255,7 +257,7 @@ class Auth {
 
 	/**
 	 * Get session key from cookie
-	 * 
+	 *
 	 * If no session key is found an empty string will be returned
 	 *
 	 * @since 0.1.0
@@ -267,8 +269,8 @@ class Auth {
 
 		return isset($_COOKIE[self::COOKIE_PREFIX . $cookie_token]) ? $_COOKIE[self::COOKIE_PREFIX . $cookie_token] : '';
 	}
-	
-	
+
+
 	/**
 	 * Get cookie key token
 	 *
@@ -284,7 +286,7 @@ class Auth {
 				return substr($key, strlen(self::COOKIE_PREFIX));
 			}
 		}
-		
+
 		return '';
 	}
 
@@ -292,7 +294,7 @@ class Auth {
 	/**
 	 * Get user api key
 	 *
-	 * If user doesn't have an api key, generate a new one 
+	 * If user doesn't have an api key, generate a new one
 	 *
 	 * @since 0.1.0
 	 *
@@ -302,7 +304,7 @@ class Auth {
 	public function get_api_key($user_id) {
 		global $wpdb;
 
-		if (is_int($user_id) && $user_id > 0) {		
+		if (is_int($user_id) && $user_id > 0) {
 			$sql = 'select meta_value from ' . $wpdb->usermeta . ' where meta_key="wplv_api_key" and user_id=%d';
 			$api_key = $wpdb->get_var($wpdb->prepare($sql, $user_id));
 
