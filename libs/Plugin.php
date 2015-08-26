@@ -150,7 +150,11 @@ class Plugin {
 	 */
 	public static function initWP() {
 		$loaded = false;
-		$wp_load_path = defined('WPLV_WP_CORE_PATH') && !empty(WPLV_WP_CORE_PATH) ? WPLV_WP_CORE_PATH . '/wp-load.php' : $_SERVER['DOCUMENT_ROOT'] . '/wp-load.php';
+		$wp_load_path = $_SERVER['DOCUMENT_ROOT'] . '/wp-load.php';
+
+		if (defined('WPLV_WP_CORE_PATH') && WPLV_WP_CORE_PATH != '') {
+			$wp_load_path = WPLV_WP_CORE_PATH . '/wp-load.php';
+		}
 
 		// Check if wp-load.php file exists
 		if (file_exists($wp_load_path)) {
