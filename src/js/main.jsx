@@ -10,7 +10,8 @@ wplv.remote = (function() {
 			data: data,
 			headers: {
 				'wplv-cookie': WPLOGVIEWER.cookie_token,
-				'wplv-session': WPLOGVIEWER.session_key
+				'wplv-session': WPLOGVIEWER.session_key,
+				'wplv-path': WPLOGVIEWER.path
 			}
 		}).then(success)
 		.fail(failed);
@@ -62,22 +63,21 @@ wplv.notify = (function() {
 	};
 })();
 
-var defaultDebugging = WPLOGVIEWER.debug_enabled == 1 || WPLOGVIEWER.debug_enabled == true ? true : false;
-var pluginUrl = WPLOGVIEWER.plugin_url;
+var wplvDDStatus = WPLOGVIEWER.debug_enabled == 1 || WPLOGVIEWER.debug_enabled == true ? true : false;
 
 if (WPLOGVIEWER.current_page === 'tools_page_wp-log-viewer') {
 	React.render(
-		<wplv.App user={ WPLOGVIEWER.user_id } settings={ WPLOGVIEWER.settings } debugging={ defaultDebugging } pluginUrl={ pluginUrl } />,
+		<wplv.App user={ WPLOGVIEWER.user_id } settings={ WPLOGVIEWER.settings } debugging={ wplvDDStatus } pluginUrl={ WPLOGVIEWER.plugin_url } />,
 		document.getElementById('wplv-container')
 	);
 } else if (WPLOGVIEWER.current_page === 'dashboard') {
 	React.render(
-		<wplv.DashboardWidget debugging={ defaultDebugging } pluginUrl={ pluginUrl } />,
+		<wplv.DashboardWidget debugging={ wplvDDStatus } pluginUrl={ WPLOGVIEWER.plugin_url } />,
 		document.getElementById('wplv-dashboard-widget-container')
 	);
 }
 
 React.render(
-	<wplv.AdminBarNav debugging={ defaultDebugging } pluginUrl={ pluginUrl } />,
+	<wplv.AdminBarNav debugging={ wplvDDStatus } pluginUrl={ WPLOGVIEWER.plugin_url } />,
 	document.getElementById('wp-admin-bar-wplv-menu')
 );

@@ -28,7 +28,7 @@ class Router {
 	use IsSingleton;
 
 	/**
-	 * @var array Registered handlers
+	 * Registered handlers
 	 *
 	 * @since 0.1.0
 	 *
@@ -37,28 +37,13 @@ class Router {
 	private $handlers = [];
 
 	/**
-	 * Get all request headers
+	 * Request headers
 	 *
 	 * @since 0.1.0
 	 *
-	 * @return array The request headers
+	 * @var array
 	 */
-	private function get_request_headers() {
-		if (function_exists('getallheaders')) {
-			return getallheaders();
-		}
-
-		$headers = [];
-
-		foreach ($_SERVER as $key => $value) {
-			if ((substr($key, 0, 5) == 'HTTP_')) {
-				$headers[str_replace(' ', '-', strtolower(str_replace('_', ' ', substr($key, 5))))] = $value;
-			}
-		}
-
-		return $headers;
-	}
-
+	private $headers = [];
 
 	/**
 	 * Get request method
@@ -97,6 +82,30 @@ class Router {
 		unset($params['do']);
 
 		return $params;
+	}
+
+
+	/**
+	 * Get all request headers
+	 *
+	 * @since 0.1.0
+	 *
+	 * @return array The request headers
+	 */
+	public function get_request_headers() {
+		if (count($this->headers) == 0) {
+			if (function_exists('getallheaders')) {
+				$this->headers = getallheaders();
+			}
+
+			foreach ($_SERVER as $key => $value) {
+				if ((substr($key, 0, 5) == 'HTTP_')) {
+					$this->headers[str_replace(' ', '-', strtolower(str_replace('_', ' ', substr($key, 5))))] = $value;
+				}
+			}
+		}
+
+		return $this->headers;
 	}
 
 
@@ -195,7 +204,7 @@ class Router {
 
 						// If response instance was not returned, let's invalite this request
 						if (!isset($response) || !is_object($response)) {
-							$response = new Response(400);
+							$response = new Response(405);
 							$response->send();
 						}
 
