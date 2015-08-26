@@ -5,7 +5,7 @@ License URI: http://www.gnu.org/licenses/gpl.html
 Tags: wordpress, debugging, log viewer, debug, log, error_log, debug.log, admin
 Requires at least: 3.9
 Tested up to: 4.3
-Stable tag: 0.12.3
+Stable tag: 0.12.4
 
 Easily search, sort and group log entries.  Click the log file with one click.  See new errors automatically without refreshing.
 
@@ -128,6 +128,12 @@ When using the realtime search, the search query must be atleast 3 characters or
 == Changelog ==
 
 All notable changes will be tracked in this change log.
+
+= 0.12.4
+Release date: 2015-08-25
+
+* Fix:
+	* Improved loading of needed wp core files from api file
 
 = 0.12.3 =
 Release date: 2015-08-24
