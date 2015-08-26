@@ -2,6 +2,11 @@
 
 All notable changes will be tracked in this change log.  This project uses [Semantic Versioning](http://semver.org/)
 
+## [0.12.4] - 2015-08-26
+### Fix
+
+- Improved loading of needed wp core files from api file
+
 ## [0.12.3] - 2015-08-24
 ### Fix
 

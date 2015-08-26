@@ -14,7 +14,7 @@ if (!defined('WPLOGVIEWER_BASE')) {
  * Register autoloader for this project
  *
  * @since 0.1.0
- *      
+ *
  * @param string $class The fully-qualified class name.
  * @return void
  */
