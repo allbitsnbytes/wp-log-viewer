@@ -2,7 +2,7 @@
 Contributors: maxwellberkel
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl.html
-Tags: wordpress, debugging, log viewer, debug, log, error_log, debug.log, admin
+Tags: admin, admin bar, dashboard, debug, debugging, error_log, errors, log, log viewer, plugin, wordpress
 Requires at least: 3.9
 Tested up to: 4.3
 Stable tag: 0.12.5
