@@ -1,5 +1,5 @@
-<?php 
-	
+<?php
+
 namespace Allbitsnbytes\WPLogViewer;
 
 if (!defined('WPLOGVIEWER_BASE')) {
@@ -24,11 +24,11 @@ use Allbitsnbytes\WPLogViewer\Http\Response;
  * @since 0.1.0
  */
 class Router {
-	
+
 	use IsSingleton;
-	
+
 	/**
-	 * @var array Registered handlers
+	 * Registered handlers
 	 *
 	 * @since 0.1.0
 	 *
@@ -37,28 +37,13 @@ class Router {
 	private $handlers = [];
 
 	/**
-	 * Get all request headers
+	 * Request headers
 	 *
 	 * @since 0.1.0
 	 *
-	 * @return array The request headers
+	 * @var array
 	 */
-	private function get_request_headers() {
-		if (function_exists('getallheaders')) {
-			return getallheaders();
-		}
-
-		$headers = [];
-
-		foreach ($_SERVER as $key => $value) {
-			if ((substr($key, 0, 5) == 'HTTP_')) {
-				$headers[str_replace(' ', '-', strtolower(str_replace('_', ' ', substr($key, 5))))] = $value;
-			}
-		}
-
-		return $headers;
-	}
-
+	private $headers = [];
 
 	/**
 	 * Get request method
@@ -82,8 +67,8 @@ class Router {
 	private function get_action() {
 		return isset($_REQUEST['do']) ? filter_var($_REQUEST['do'], FILTER_SANITIZE_STRING) : '';
 	}
-	
-	
+
+
 	/**
 	 * Get parameters sent in the request
 	 *
@@ -93,13 +78,37 @@ class Router {
 	 */
 	private function get_params() {
 		$params = $_REQUEST;
-		
+
 		unset($params['do']);
-		
+
 		return $params;
 	}
 
-	
+
+	/**
+	 * Get all request headers
+	 *
+	 * @since 0.1.0
+	 *
+	 * @return array The request headers
+	 */
+	public function get_request_headers() {
+		if (count($this->headers) == 0) {
+			if (function_exists('getallheaders')) {
+				$this->headers = getallheaders();
+			}
+
+			foreach ($_SERVER as $key => $value) {
+				if ((substr($key, 0, 5) == 'HTTP_')) {
+					$this->headers[str_replace(' ', '-', strtolower(str_replace('_', ' ', substr($key, 5))))] = $value;
+				}
+			}
+		}
+
+		return $this->headers;
+	}
+
+
 	/**
 	 * Register an action and handler
 	 *
@@ -113,13 +122,13 @@ class Router {
 		if (!isset($this->handlers[$action]) || !is_array($this->handlers[$action])) {
 			$this->handlers[$action] = [];
 		}
-		
+
 		if (is_array($handler) && isset($handler['method']) && isset($handler['call']) && isset($handler['auth']) && is_callable($handler['call'])) {
 			$this->handlers[$action][] = $handler;
 		}
 	}
-	
-	
+
+
 	/**
 	 * Register a GET handler
 	 *
@@ -137,8 +146,8 @@ class Router {
 			'auth'		=> $auth_code,
 		]);
 	}
-	
-	
+
+
 	/**
 	 * Register a POST handler
 	 *
@@ -195,7 +204,7 @@ class Router {
 
 						// If response instance was not returned, let's invalite this request
 						if (!isset($response) || !is_object($response)) {
-							$response = new Response(400);
+							$response = new Response(405);
 							$response->send();
 						}
 
@@ -207,7 +216,7 @@ class Router {
 
 		if ($handled === 0) {
 			$response->set_code(404);
-		} 
+		}
 
 		$response->send();
 	}

@@ -4,7 +4,6 @@ assets
 bin
 libs
 node_modules
-ready
 spec
 src/bower
 vendor

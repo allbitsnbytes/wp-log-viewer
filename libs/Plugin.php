@@ -32,12 +32,6 @@ class Plugin {
 	 * @since 0.1.0
 	 */
 	public function init() {
-		if ((!defined('DOING_AJAX') || (defined('DOING_AJAX') && !DOING_AJAX)) && isset($_COOKIE['wplv_logged_in'])) {
-			$auth = Auth::get_instance();
-			$auth->clear_api_session();
-			setcookie('wplv_logged_in', null, -1);
-		}
-
 		// Register actions
 		add_action('admin_menu', [$this, 'add_navigation']);
 		add_action('admin_enqueue_scripts', [$this, 'load_plugin_css_and_js']);
@@ -65,6 +59,7 @@ class Plugin {
 			'session_key'		=> '',
 			'user_id'			=> $user_id,
 			'settings'			=> $settings->get_settings($user_id),
+			'path'				=> ABSPATH,
 		];
 
 		// Stylesheet files
@@ -80,11 +75,9 @@ class Plugin {
 		if ($wp_session_info['valid'] === true) {
 			$localized['cookie_token']	= $wp_session_info['cookie_token'];
 			$localized['session_key']	= $wp_session_info['session_key'];
+			$localized['path'] = relative_path(untrailingslashit($_SERVER['DOCUMENT_ROOT']), untrailingslashit(ABSPATH));
 
-			if ($auth->create_api_session($user_id)) {
-				$expires = time() + (200 * WEEK_IN_SECONDS);
-				setcookie('wplv_logged_in', $wp_session_info['cookie_token'], $expires, '/', $_SERVER['SERVER_NAME'], false, true);
-			}
+			$auth->create_api_session($user_id);
 		}
 
 		wp_localize_script('wplogviewer-js', 'WPLOGVIEWER', $localized);
@@ -156,85 +149,51 @@ class Plugin {
 	 * @return boolean Whether WP functionality was loaded or not
 	 */
 	public static function initWP() {
-		define('ABSPATH', $_SERVER['DOCUMENT_ROOT'].'/');
-		define('WPINC', '/wp-includes');
-
 		$loaded = false;
-		$config_path = ABSPATH . '/wp-config.php';
-		$table_prefix = 'wp_';
+		$wp_load_path = defined('WPLV_WP_CORE_PATH') && !empty(WPLV_WP_CORE_PATH) ? WPLV_WP_CORE_PATH . '/wp-load.php' : $_SERVER['DOCUMENT_ROOT'] . '/wp-load.php';
 
-		// Check if required files found
-		if (file_exists($config_path) && file_exists(ABSPATH . '/wp-includes')) {
-			$fp = @fopen($config_path, 'r');
+		// Check if wp-load.php file exists
+		if (file_exists($wp_load_path)) {
 
-			if ($fp) {
-				$sep = '$|$';
+			// Defined to stop wordpress from fully loading
+			define('SHORTINIT', true);
 
-				// loop, parse and define wp-config constants
-    			while (($line = @fgets($fp)) !== false) {
-					$parsed_line = preg_replace("/^define\([ '\"]+(\w+)[ '\"]+, (.*)\);/i", "$1".$sep."$2", $line);
+			require_once($wp_load_path);
 
-					if ($line !== $parsed_line) {
-						$info = explode($sep, $parsed_line);
+			global $wpdb;
 
-						if (is_array($info) && count($info) == 2 && !defined($info[0])) {
-							define($info[0], trim(trim(str_replace(["'", '"'], '', $info[1]))));
-						}
-					} else if (strpos($line, '$table_prefix') !== false) {
-						$table_prefix = trim(preg_replace("/^[\$ ]+table_prefix[ =\"']+([a-zA-Z0-9_-]+)[\"';]+/i", "$1", $line));
-					}
-    			}
-
-				@fclose($fp);
-
-				// Define additional constants if missing
-				if (defined('WP_DEBUG')) {
-					if (WP_DEBUG === true || WP_DEBUG === 'true' || WP_DEBUG === false || WP_DEBUG === 'false') {
-						define('WP_DEBUG_DETECTED', true);
-					} else {
-						define('WP_DEBUG_DETECTED', false);
-					}
-				} else {
-					define('WP_DEBUG', false);
-					define('WP_DEBUG_DETECTED', false);
-				}
-
-				if (defined('DB_NAME') && defined('DB_USER') && defined('DB_PASSWORD') && defined('DB_HOST')) {
-					$includes = [
-						'load.php',
-						'cache.php',
-						'capabilities.php',
-						'class-wp-error.php',
-						'default-constants.php',
-						'formatting.php',
-						'functions.php',
-						'l10n.php',
-						'pluggable.php',
-						'plugin.php',
-						'pomo/translations.php',
-						'user.php',
-						'wp-db.php',
-					];
-
-					// Require dependencies
-					foreach ($includes as $include) {
-						require_once ABSPATH . WPINC . '/' . $include;
-					}
-
-					// Setup wpdb global variable
-					global $wpdb;
-
-					if (!is_object($wpdb)) {
-						$wpdb = new \wpdb(DB_USER, DB_PASSWORD, DB_NAME, DB_HOST);
-						$wpdb->set_prefix($table_prefix);
-					}
-
-					$loaded = true;
-				}
+			if (is_object($wpdb)) {
+				$loaded = true;
+			} else if (!is_object($wpdb) && defined('DB_USER') && defined('DB_PASSWORD') && defined('DB_NAME') && defined('DB_HOST')) {
+				$wpdb = new \wpdb(DB_USER, DB_PASSWORD, DB_NAME, DB_HOST);
+				$wpdb->set_prefix($table_prefix);
+				$loaded = true;
 			}
 		}
 
 		return $loaded;
 	}
+}
 
+
+/**
+ * Compute relative path between 2 paths
+ *
+ * @since 0.12.4
+ *
+ * @param string $from Path to compute from
+ * @param string $to Path to compute to
+ * @param string $ps Directory seperator
+ * @return string
+ */
+function relative_path($from, $to, $ps = DIRECTORY_SEPARATOR) {
+  	$arFrom = explode($ps, rtrim($from, $ps));
+  	$arTo = explode($ps, rtrim($to, $ps));
+
+	while(count($arFrom) && count($arTo) && ($arFrom[0] == $arTo[0])) {
+    	array_shift($arFrom);
+    	array_shift($arTo);
+  	}
+
+  	return str_pad("", count($arFrom) * 3, '..' . $ps) . implode($ps, $arTo);
 }
