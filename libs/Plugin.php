@@ -153,7 +153,7 @@ class Plugin {
 		$wp_load_path = $_SERVER['DOCUMENT_ROOT'] . '/wp-load.php';
 
 		if (defined('WPLV_WP_CORE_PATH') && WPLV_WP_CORE_PATH != '') {
-			$wp_load_path = WPLV_WP_CORE_PATH . '/wp-load.php';
+			$wp_load_path = str_replace('//', '/', $_SERVER['DOCUMENT_ROOT'] . '/' . WPLV_WP_CORE_PATH . '/wp-load.php');
 		}
 
 		// Check if wp-load.php file exists

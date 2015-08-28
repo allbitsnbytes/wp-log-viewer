@@ -2,6 +2,11 @@
 
 All notable changes will be tracked in this change log.  This project uses [Semantic Versioning](http://semver.org/)
 
+## [0.12.5] - 2015-08-28
+### Fix
+
+- Fixed an issue where wp installs in sud directories sometimes caused the plugin not to load
+
 ## [0.12.4] - 2015-08-26
 ### Fix
 
