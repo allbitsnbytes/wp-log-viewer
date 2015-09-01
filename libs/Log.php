@@ -1,5 +1,5 @@
-<?php 
-	
+<?php
+
 namespace Allbitsnbytes\WPLogViewer;
 
 if (!defined('WPLOGVIEWER_BASE')) {
@@ -23,7 +23,7 @@ use Allbitsnbytes\WPLogViewer\Helper;
 class Log {
 
 	use IsSingleton;
-	
+
 	/**
 	 * Path to debug.log file
 	 *
@@ -32,8 +32,8 @@ class Log {
 	 * @var string
 	 */
 	private $log_file = '';
-	
-	
+
+
 	/**
 	 * Initialize Log
 	 *
@@ -43,7 +43,7 @@ class Log {
 		$base = str_replace('plugins/wp-log-viewer/', '', WPLOGVIEWER_BASE);
 		$this->log_file = $base . 'debug.log';
 	}
-	
+
 
 	/**
 	 * Check if debug.log file exists
@@ -65,10 +65,10 @@ class Log {
 	 * @return boolean True if debugging is enabled
 	 */
 	public function debug_enabled() {
-		 return defined('WP_DEBUG') && (WP_DEBUG === true || WP_DEBUG === 'true') ? true : false;	
+		 return defined('WP_DEBUG') && (WP_DEBUG === true || WP_DEBUG === 'true') ? true : false;
 	}
-	
-	
+
+
 	/**
 	 * Check if debug status was detected or not
 	 *
@@ -144,11 +144,11 @@ class Log {
 		if (file_exists($this->log_file)) {
 			return filesize($this->log_file) < intval($size) ? true : false;
 		}
-		
-		return false; 
+
+		return false;
 	}
-	
-	
+
+
 	/**
 	 * Get the file size for the log file
 	 *
@@ -160,7 +160,7 @@ class Log {
 		if (file_exists($this->log_file)) {
 			return filesize($this->log_file);
 		}
-		
+
 		return false;
 	}
 
@@ -175,25 +175,25 @@ class Log {
 	public function get_entries() {
 		$sep = '$!$';
 		$entries = [];
-		
+
 		if ($this->file_exists()) {
 			$fp = @fopen($this->log_file, 'r');
-						
+
 			if ($fp) {
     			while (($line = @fgets($fp)) !== false) {
-					$line = preg_replace("/^\[([0-9a-zA-Z-]+) ([0-9:]+) ([a-zA-Z_]+)\] (.*)$/i", "$1".$sep."$2".$sep."$3".$sep."$4", $line);
+					$line = preg_replace("/^\[([0-9a-zA-Z-]+) ([0-9:]+) ([a-zA-Z_\/]+)\] (.*)$/i", "$1".$sep."$2".$sep."$3".$sep."$4", $line);
 					$parts = explode($sep, $line);
-					
+
 					if (count($parts) >= 4) {
 	        			$entries[] = [
-							'date' => date('Y/m/d', strtotime($parts[0])), 
+							'date' => date('Y/m/d', strtotime($parts[0])),
 							'time' => $parts[1],
 							'timezone' => $parts[2],
 							'message' => stripslashes($parts[3]),
 						];
 					}
     			}
-    			
+
 				@fclose($fp);
 			}
 		}
@@ -212,7 +212,7 @@ class Log {
 	 */
 	public function get_recent_entries($timestamp) {
 		// TODO
-		
+
 		return [];
 	}
 
@@ -226,7 +226,7 @@ class Log {
 	 */
 	public function clear() {
 		$fp = @fopen($this->log_file, 'r+');
-		
+
 		return @ftruncate($fp, 0);
 	}
 

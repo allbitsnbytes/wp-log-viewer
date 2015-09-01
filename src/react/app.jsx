@@ -516,6 +516,14 @@ wplv.App = React.createClass({
 					</div>
 				);
 			}
+		} else {
+			content = (
+				<div className="viewer-pane">
+					<div className="loading-viewer">
+						<i className="fa fa-spin fa-refresh" /> Loading entries ...
+					</div>
+				</div>
+			);
 		}
 
 		return (
