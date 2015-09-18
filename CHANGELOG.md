@@ -2,6 +2,11 @@
 
 All notable changes will be tracked in this change log.  This project uses [Semantic Versioning](http://semver.org/)
 
+## Unreleased
+### Fix
+
+- Fixed issue to improve support for installes with custom plugin directory name
+
 ## [0.12.5] - 2015-08-28
 ### Fix
 

@@ -40,8 +40,10 @@ class Log {
 	 * @since 0.1.0
 	 */
 	public function init() {
-		$base = str_replace('plugins/wp-log-viewer/', '', WPLOGVIEWER_BASE);
-		$this->log_file = $base . 'debug.log';
+		// $base = str_replace('plugins/wp-log-viewer/', '', WPLOGVIEWER_BASE);
+		$base = preg_replace('/([a-zA-Z0-9_\-\/]+)\/[a-zA-Z0-9_-]+\/wp-log-viewer\//', '$1', WPLOGVIEWER_BASE);
+
+		$this->log_file = $base . '/debug.log';
 	}
 
 
