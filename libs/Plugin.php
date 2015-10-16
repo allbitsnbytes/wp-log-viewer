@@ -12,8 +12,8 @@ if (!defined('WPLOGVIEWER_BASE')) {
  * Dependencies
  */
 // use Allbitsnbytes\WPLogViewer\Auth;
+use Allbitsnbytes\WPLogViewer\Ajax;
 use Allbitsnbytes\WPLogViewer\Characteristic\IsSingleton;
-use Allbitsnbytes\WPLogViewer\Helper;
 use Allbitsnbytes\WPLogViewer\Settings;
 
 
@@ -37,6 +37,10 @@ class Plugin {
 		add_action('admin_enqueue_scripts', [$this, 'load_plugin_css_and_js']);
 		add_action('wp_dashboard_setup', [$this, 'register_dashboard_widgets']);
 		add_action('admin_bar_menu', [$this, 'add_admin_bar_menu'], 900);
+
+
+		// Initialize ajax handler
+		Ajax::get_instance();
 	}
 
 
