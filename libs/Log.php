@@ -40,9 +40,9 @@ class Log {
 	 */
 	public function init() {
 		// $base = str_replace('plugins/wp-log-viewer/', '', WPLOGVIEWER_BASE);
-		$base = preg_replace('/([a-zA-Z0-9_\-\/]+)\/[a-zA-Z0-9_-]+\/wp-log-viewer\//', '$1', WPLOGVIEWER_BASE);
+		//$base = preg_replace('/([a-zA-Z0-9_\-\/]+)\/[a-zA-Z0-9_-]+\/wp-log-viewer\//', '$1', WPLOGVIEWER_BASE);
 
-		$this->log_file = $base . '/debug.log';
+		$this->log_file = WP_CONTENT_DIR . '/debug.log';
 	}
 
 

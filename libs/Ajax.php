@@ -49,7 +49,7 @@ class Ajax {
 
 
 	/**
-	 *
+	 * Get log file details
 	 *
 	 * @since 0.13.0
 	 */
@@ -68,7 +68,7 @@ class Ajax {
 	}
 
 	/**
-	 *
+	 * Check if log file has been modified
 	 *
 	 * @since 0.13.0
 	 */
@@ -83,7 +83,7 @@ class Ajax {
 
 
 	/**
-	 *
+	 * Check if log file exists
 	 *
 	 * @since 0.13.0
 	 */
@@ -97,7 +97,7 @@ class Ajax {
 
 
 	/**
-	 *
+	 * Check if debugging is enabled
 	 *
 	 * @since 0.13.0
 	 */
@@ -112,7 +112,7 @@ class Ajax {
 
 
 	/**
-	 *
+	 * Get log entries
 	 *
 	 * @since 0.13.0
 	 */
@@ -131,27 +131,33 @@ class Ajax {
 
 
 	/**
-	 *
+	 * Get log entries if log file has been modified
 	 *
 	 * @since 0.13.0
 	 */
 	function get_log_entries_if_modified() {
 		$log = Log::get_instance();
-		$changed = false;
 
 		if (isset($_REQUEST['modified']) && $log->is_modified($_REQUEST['modified'])) {
-			$res = self::get_log_entries($req, $res);
-			$changed = true;
+			$truncated = $log->is_smaller();
+
+			wp_send_json([
+				'truncated'		=> $truncated,
+				'entries'		=> $log->get_entries(),
+				'modified'		=> $log->last_modified(),
+				'filesize'		=> $log->get_file_size(),
+				'changed'		=> false,
+			]);
 		}
 
 		wp_send_json([
-			'changed'		=> $changed,
+			'changed'		=> false,
 		]);
 	}
 
 
 	/**
-	 *
+	 * Clear log file
 	 *
 	 * @since 0.13.0
 	 */
@@ -165,7 +171,7 @@ class Ajax {
 
 
 	/**
-	 *
+	 * Get default settings
 	 *
 	 * @since 0.13.0
 	 */
@@ -176,13 +182,11 @@ class Ajax {
 		wp_send_json([
 			'settings'		=> $settings,
 		]);
-
-		return $res;
 	}
 
 
 	/**
-	 *
+	 * Update default settings
 	 *
 	 * @since 0.13.0
 	 */
@@ -201,7 +205,7 @@ class Ajax {
 
 
 	/**
-	 *
+	 * Get user settings
 	 *
 	 * @since 0.13.0
 	 */
@@ -220,7 +224,7 @@ class Ajax {
 
 
 	/**
-	 *
+	 * Update user settings
 	 *
 	 * @since 0.13.0
 	 */
