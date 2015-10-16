@@ -4,8 +4,8 @@ License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl.html
 Tags: admin, admin bar, dashboard, debug, debugging, error_log, errors, log, log viewer, plugin, wordpress
 Requires at least: 3.9
-Tested up to: 4.3
-Stable tag: 0.12.5
+Tested up to: 4.3.1
+Stable tag: 0.13.0
 
 Easily search, sort and group log entries.  Click the log file with one click.  See new errors automatically without refreshing.
 
@@ -128,6 +128,12 @@ When using the realtime search, the search query must be atleast 3 characters or
 == Changelog ==
 
 All notable changes will be tracked in this change log.
+
+= 0.13.0 =
+Release date: 2015-10-16
+
+* Fix:
+	* Disabled remote api and replaced it with Wordpress Ajax handling.  This should solve problems experienced with Multi-Tenant and extreme custom installs
 
 = 0.12.5 =
 Release date: 2015-08-28

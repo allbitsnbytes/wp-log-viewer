@@ -2,10 +2,10 @@
 
 All notable changes will be tracked in this change log.  This project uses [Semantic Versioning](http://semver.org/)
 
-## Unreleased
+## [0.13.0] - 2015-10-16
 ### Fix
 
-- Fixed issue to improve support for installes with custom plugin directory name
+- Disabled remote api and replaced it with Wordpress Ajax handling.  This should solve problems experienced with Multi-Tenant and extreme custom installs
 
 ## [0.12.5] - 2015-08-28
 ### Fix
