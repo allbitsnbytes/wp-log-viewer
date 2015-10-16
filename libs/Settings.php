@@ -1,5 +1,5 @@
 <?php
-	
+
 namespace Allbitsnbytes\WPLogViewer;
 
 if (!defined('WPLOGVIEWER_BASE')) {
@@ -12,7 +12,6 @@ if (!defined('WPLOGVIEWER_BASE')) {
  * Dependencies
  */
 use Allbitsnbytes\WPLogViewer\Characteristic\IsSingleton;
-use Allbitsnbytes\WPLogViewer\Helper;
 
 
 /**
