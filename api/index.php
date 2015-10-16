@@ -1,4 +1,16 @@
 <?php
+
+/**
+ * API DISABLED - USING WP AJAX FOR NOW
+ */
+header('HTTP/1.0 403 Forbidden');
+die;
+
+
+
+
+
+
 /**
  * Define Constants
  */
