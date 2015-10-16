@@ -11,7 +11,7 @@ if (!defined('WPLOGVIEWER_BASE')) {
 /**
  * Dependencies
  */
-use Allbitsnbytes\WPLogViewer\Helper;
+use Allbitsnbytes\WPLogViewer\Characteristic\IsSingleton;
 use Allbitsnbytes\WPLogViewer\Log;
 use Allbitsnbytes\WPLogViewer\Settings;
 
