@@ -76,7 +76,7 @@ class Ajax {
 		$log = Log::get_instance();
 
 		wp_send_json([
-			'modified'		=> isset($req->params['modified']) && $log->is_modified($req->params['modified']) ? true : false,
+			'modified'		=> isset($_REQUEST['modified']) && $log->is_modified($_REQUEST['modified']) ? true : false,
 			'truncated'		=> $log->is_smaller(),
 		]);
 	}
@@ -139,7 +139,7 @@ class Ajax {
 		$log = Log::get_instance();
 		$changed = false;
 
-		if (isset($req->params['modified']) && $log->is_modified($req->params['modified'])) {
+		if (isset($_REQUEST['modified']) && $log->is_modified($_REQUEST['modified'])) {
 			$res = self::get_log_entries($req, $res);
 			$changed = true;
 		}
@@ -189,9 +189,9 @@ class Ajax {
 	function update_default_settings() {
 		$updated = false;
 
-		if (isset($req->params['settings'])) {
+		if (isset($_REQUEST['settings'])) {
 			$handler = Settings::get_instance();
-			$updated = $handler->update_default_settings($req->params['settings']);
+			$updated = $handler->update_default_settings($_REQUEST['settings']);
 		}
 
 		wp_send_json([
@@ -208,9 +208,9 @@ class Ajax {
 	function get_user_settings() {
 		$settings = [];
 
-		if (isset($req->params['user_id'])) {
+		if (isset($_REQUEST['user_id'])) {
 			$handler = Settings::get_instance();
-			$settings = $handler->get_user_settings($req->params['user_id']);
+			$settings = $handler->get_user_settings($_REQUEST['user_id']);
 		}
 
 		wp_send_json([
@@ -227,9 +227,9 @@ class Ajax {
 	function update_user_settings() {
 		$updated = false;
 
-		if (isset($req->params['user_id']) && isset($req->params['settings'])) {
+		if (isset($_REQUEST['user_id']) && isset($_REQUEST['settings'])) {
 			$handler = Settings::get_instance();
-			$updated = $handler->update_user_settings($req->params['user_id'], $req->params['setttings']);
+			$updated = $handler->update_user_settings($_REQUEST['user_id'], $_REQUEST['setttings']);
 		}
 
 		wp_send_json([

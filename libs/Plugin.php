@@ -58,7 +58,7 @@ class Plugin {
 			'settings'			=> $settings->get_settings($user_id),
 			// 'cookie_token'		=> '',
 			// 'session_key'		=> '',
-			// 'user_id'			=> $user_id,
+			'user_id'			=> $user_id,
 			// 'path'				=> ABSPATH,
 		];
 
