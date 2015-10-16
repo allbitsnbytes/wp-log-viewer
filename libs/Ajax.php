@@ -146,7 +146,7 @@ class Ajax {
 				'entries'		=> $log->get_entries(),
 				'modified'		=> $log->last_modified(),
 				'filesize'		=> $log->get_file_size(),
-				'changed'		=> false,
+				'changed'		=> true,
 			]);
 		}
 
