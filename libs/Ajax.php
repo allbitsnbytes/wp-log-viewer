@@ -19,7 +19,7 @@ use Allbitsnbytes\WPLogViewer\Settings;
 /**
  * Handle ajax requests
  *
- * @since 0.1.0
+ * @since 0.13.0
  */
 class Ajax {
 
@@ -29,7 +29,7 @@ class Ajax {
 	/**
 	 * Initialize Log
 	 *
-	 * @since 0.1.0
+	 * @since 0.13.0
 	 */
 	public function init() {
 
