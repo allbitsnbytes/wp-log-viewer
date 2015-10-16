@@ -2,32 +2,32 @@ wplv.remote = (function() {
 	var callRemote = function(action, method, data, success, failed) {
 		var data = typeof data === 'object' ? data : {};
 
-		data.do = action;
+		data.action = action;
 
 		reqwest({
 			url: WPLOGVIEWER.api,
 			method: method,
-			data: data,
-			headers: {
-				'wplv-cookie': WPLOGVIEWER.cookie_token,
-				'wplv-session': WPLOGVIEWER.session_key,
-				'wplv-path': WPLOGVIEWER.path
-			}
+			data: data
+			//headers: {
+			//	'wplv-cookie': WPLOGVIEWER.cookie_token,
+			//	'wplv-session': WPLOGVIEWER.session_key,
+			//	'wplv-path': WPLOGVIEWER.path
+			//}
 		}).then(success)
 		.fail(failed);
 	}
 
 	return {
 		getAllEntries: function(data, success, fail) {
-			return callRemote('get-log', 'GET', data, success, fail);
+			return callRemote('get-log', 'POST', data, success, fail);
 		},
 
 		getLatestEntries: function(data, success, fail) {
-			return callRemote('get-entries-if-modified', 'GET', data, success, fail);
+			return callRemote('get-entries-if-modified', 'POST', data, success, fail);
 		},
 
 		clearEntries: function(success, fail) {
-			return callRemote('clear-log', 'GET', {}, success, fail);
+			return callRemote('clear-log', 'POST', {}, success, fail);
 		}
 	};
 })();
