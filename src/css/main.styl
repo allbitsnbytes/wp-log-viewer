@@ -1,23 +1,17 @@
-// Imports
+/*
+ * Dependencies
+ */
 
-@import 'variables'
+@import '_variables'
+@import '_mixins'
+@import '_modules'
 @import 'Jeet'
 @import 'rupture'
 
 
-// Mixins
-
-padmar(p=0, m=0)
-	padding p
-	margin m
-
-min-height(h)
-	min-height h
-	height h
-	height auto
-
-
-// Global Styles
+/*
+ * Global Styles
+ */
 
 #wp-admin-bar-wplv-menu,
 #wplv-container,
@@ -43,20 +37,55 @@ min-height(h)
 	.force-wrap
 		word-wrap break-word
 
-	.debug-status-enabled
-		color $debug-enabled-color
+/*
+ * Plugin Styles
+ */
 
-	.debug-status-disabled
-		color $debug-disabled-color
-
-	.debug-status-not-detected
-		color $debug-detected-color
-
-	.debug-status-simulating
-		color $debug-simulating-color
+ #wplv-viewer-container
+ 	cf()
+	padding 25px 0 0
 
 
-// Plugin Styles
+.wplv-page--header
+	cf()
+	display block
+	margin 0 0 30px
+
+	> header
+		cf()
+		display block
+		padding 0 0 20px
+
+		h2
+			span(0.2)
+			
+			.wplv-module--debug-status
+				margin-left 10px
+
+		.wplv-module--error-legends
+			display none
+			span(0.8)
+
+
+.wplv-page--viewer
+	display block
+
+
+.wplv-page--content
+	cf()
+	box-sizing border-box
+
+
+.wplv-page--sidebar
+	cf()
+	box-sizing border-box
+
+
+
+
+
+
+
 
 #wplv-container
 	min-height 800px

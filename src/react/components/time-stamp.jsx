@@ -54,7 +54,7 @@ wplv.TimeStamp = React.createClass({
 			}
 
 			return (
-				<div className="when">
+				<div className="wplv-module--timestamp">
 					<div className="date">{ currentDate }</div>
 					<div className="time">{ currentTime }</div>
 				</div>
@@ -62,7 +62,7 @@ wplv.TimeStamp = React.createClass({
 		}
 
 		return (
-			<div className="when"></div>
+			<div className="wplv-module--timestamp"></div>
 		);
 	}
 });

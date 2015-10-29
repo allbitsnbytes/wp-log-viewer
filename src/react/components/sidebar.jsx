@@ -81,8 +81,7 @@ wplv.Sidebar = React.createClass({
 			});
 
 			return (
-				<aside className="sidebar">
-
+				<aside className="wplv-page--sidebar">
 					{ menuOptions }
 
 					{ simulateMenuOption }
@@ -101,7 +100,7 @@ wplv.Sidebar = React.createClass({
 		}
 
 		return (
-			<aside className="sidebar"></aside>
+			<aside className="wplv-page--sidebar"></aside>
 		);
 	}
 });

@@ -442,14 +442,14 @@ wplv.App = React.createClass({
 					var errorLabel = entries.length == 1 ? ' entry' : ' entries';
 
 					content = (
-						<div className="viewer-pane">
+						<section className="wplv-page--content">
 							<div className="entries-list-header">
 								<h3>Log Entries</h3>
 								<span className="entries-count"><span className={ errorClass }>{ count }</span> { errorLabel }</span>
 							</div>
 
 							{ view }
-						</div>
+						</section>
 					);
 
 					sidebar = (
@@ -459,87 +459,78 @@ wplv.App = React.createClass({
 					if (this.state.debugging.enabled) {
 						if (this.state.debugging.simulating) {
 							content = (
-								<div className="viewer-pane">
-									<div className="content">
-										<p>Currently <strong className="debug-status-simulating">simulating</strong>.  The <strong>debug.log file does not exist or was not found.</strong></p>
+								<section className="wplv-page--content">
+									<p>Currently <strong className="debug-status-simulating">simulating</strong>.  The <strong>debug.log file does not exist or was not found.</strong></p>
 
-										<ul className="inline-buttons">
-											<li><a href="#" onClick={ function(e) { e.preventDefault(); this.stopSimulation(); }.bind(this) } className="stop-simulation-btn"><i className="fa fa-arrow-circle-right"></i> Stop simulation</a></li>
-										</ul>
-									</div>
-								</div>
+									<ul className="inline-buttons">
+										<li><a href="#" onClick={ function(e) { e.preventDefault(); this.stopSimulation(); }.bind(this) } className="stop-simulation-btn"><i className="fa fa-arrow-circle-right"></i> Stop simulation</a></li>
+									</ul>
+								</section>
 							);
 						} else {
 							content = (
-								<div className="viewer-pane">
-									<div className="content">
-										<p>Debugging is <strong className="debug-status-enabled">enabled</strong>.  However, the <strong>debug.log file does not exist or was not found.</strong></p>
-									</div>
-								</div>
+								<section className="wplv-page--content">
+									<p>Debugging is <strong className="debug-status-enabled">enabled</strong>.  However, the <strong>debug.log file does not exist or was not found.</strong></p>
+								</section>
 							);
 						}
 					} else {
 						content = (
-							<div className="viewer-pane">
-								<div className="content">
-									<p><strong>Debugging is currently <span className="debug-status-disabled">disabled</span>.</strong></p>
+							<section className="wplv-page--content">
+								<p><strong>Debugging is currently <span className="debug-status-disabled">disabled</span>.</strong></p>
 
-									{ this.showDebugHelp() }
-								</div>
-							</div>
+								{ this.showDebugHelp() }
+							</section>
 						);
 					}
 				}
 			} else {
 				content = (
-					<div className="viewer-pane">
-						<div className="content">
-							<p className="debugging-unknown">Sorry, we <strong>could not detect if debugging is enabled or disabled</strong>.</p>
-							<br />
+					<section className="wplv-page--content">
+						<p className="debugging-unknown">Sorry, we <strong>could not detect if debugging is enabled or disabled</strong>.</p>
+						<br />
 
-							<h3>Simulate Debugging?</h3>
+						<h3>Simulate Debugging?</h3>
 
-							<p>If you know that debugging is enabled, click below to continue.</p>
+						<p>If you know that debugging is enabled, click below to continue.</p>
 
-							<ul className="inline-buttons">
-								<li><a href="#" onClick={ function(e) { e.preventDefault(); this.startSimulation(); }.bind(this) } className="start-simulation-btn"><i className="fa fa-arrow-circle-right"></i> Start simulation</a></li>
-							</ul>
+						<ul className="inline-buttons">
+							<li><a href="#" onClick={ function(e) { e.preventDefault(); this.startSimulation(); }.bind(this) } className="start-simulation-btn"><i className="fa fa-arrow-circle-right"></i> Start simulation</a></li>
+						</ul>
 
-							<br />
-							<p><small>** Please note that the status of WP_DEBUG is not actually being changed.  This is just a simulation.</small></p>
-							<br />
+						<br />
+						<p><small>** Please note that the status of WP_DEBUG is not actually being changed.  This is just a simulation.</small></p>
+						<br />
 
-							<h3>How to Enable Debugging?</h3>
+						<h3>How to Enable Debugging?</h3>
 
-							{ this.showDebugHelp() }
-						</div>
-					</div>
+						{ this.showDebugHelp() }
+					</section>
 				);
 			}
 		} else {
 			content = (
-				<div className="viewer-pane">
+				<section className="wplv-page--content">
 					<div className="loading-viewer">
 						<i className="fa fa-spin fa-refresh" /> Loading entries ...
 					</div>
-				</div>
+				</section>
 			);
 		}
 
 		return (
-			<div className="container">
-				<section className="row">
-					<div className="content-pane">
-						<header className="view-header">
-							<h2>Log Viewer { debugStatus }</h2>
+			<div className="wplv-container">
+				<section className="wplv-page--header">
+					<header>
+						<h2>Log Viewer { debugStatus }</h2>
 
-							<wplv.ErrorLegend />
-						</header>
+						<wplv.ErrorLegend />
+					</header>
 
-						<wplv.Search app={ this } />
-
-						{ content }
-					</div>
+					<wplv.Search app={ this } />
+				</section>
+				<section className="wplv-page--viewer">
+					{ content }
 
 					{ sidebar }
 				</section>

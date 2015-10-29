@@ -47,7 +47,7 @@ wplv.PrettyFilesize = React.createClass({
 		}
 
 		return (
-			<div className="filesize">
+			<div className="wplv-module--filesize">
 				{ this.formatDecimal(filesize, this.props.precision) } { format }
 			</div>
 		);

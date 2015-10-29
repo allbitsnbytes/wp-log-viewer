@@ -29,7 +29,7 @@ wplv.DebugStatus = React.createClass({
 			status = 'simulating';
 		}
 
-		var className = 'debugger-status '+status;
+		var className = 'wplv-module--debug-status '+status;
 
 		return (
 			<span className={ className }>

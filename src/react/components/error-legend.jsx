@@ -6,7 +6,7 @@ wplv.ErrorLegend = React.createClass({
 	// Render component
 	render: function() {
 		return (
-			<ul className="error-indicator-legend">
+			<ul className="wplv-module--error-legends">
 				<li className="php-fatal-error">Fatal Error</li>
 				<li className="php-warning">PHP Warning</li>
 				<li className="php-notice">PHP Notice</li>

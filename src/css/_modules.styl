@@ -1,0 +1,106 @@
+/**
+ * Modules
+ */
+
+
+@import '_variables'
+@import '_mixins'
+@import 'jeet'
+@import 'rupture'
+
+
+/*
+ * Debug Status
+ */
+
+.wplv-module--debug-status
+	display inline-block
+	color $white
+	font-size 10px
+	font-weight bold
+	line-height 11px
+	border-radius 5px
+	padmar 5px 8px, 0
+
+	&.enabled
+		background-color $debug-enabled-color
+
+	&.disabled
+		background-color $debug-disabled-color
+
+	&.not-detected
+		color $black
+		background-color $debug-detected-color
+
+	&.simulating
+		background-color $debug-simulating-color
+
+
+/*
+ * Error legends
+ */
+
+.wplv-module--error-legends
+	display block
+
+
+/*
+ * Filesize
+ */
+
+.wplv-module--filesize
+	display block
+
+
+/*
+ * Search Component
+ */
+
+.wplv-module--search
+	width 100%
+
+	.search-component
+		display block
+		background-color $input-bg-color
+		border 1px solid $input-border-color
+		border-radius 6px
+		padmar 4px, 0
+
+		.fa
+			margin-left 6px
+
+		.search-field
+			position relative
+			display inline-block
+			right 0
+			left 8px
+			font-size 1.15em
+			width inherit
+			color $input-color
+			background none
+			box-shadow none
+			border none
+
+			&::-webkit-input-placeholder
+				font-style italic
+				color $input-placeholder-color
+
+	.search-query
+		display block
+		font-size 0.9em
+		font-style italic
+		margin-top 8px
+
+		.label
+			color lighten($text-color, 25%)
+
+		.query
+			font-weight bold
+
+
+/*
+ * Time Stamp
+ */
+
+.wplv-module--timestamp
+	display block
