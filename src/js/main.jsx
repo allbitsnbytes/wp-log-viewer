@@ -68,7 +68,7 @@ var wplvDDStatus = WPLOGVIEWER.debug_enabled == 1 || WPLOGVIEWER.debug_enabled =
 if (WPLOGVIEWER.current_page === 'tools_page_wp-log-viewer') {
 	React.render(
 		<wplv.App user={ WPLOGVIEWER.user_id } settings={ WPLOGVIEWER.settings } debugging={ wplvDDStatus } pluginUrl={ WPLOGVIEWER.plugin_url } />,
-		document.getElementById('wplv-container')
+		document.getElementById('wplv-viewer-container')
 	);
 } else if (WPLOGVIEWER.current_page === 'dashboard') {
 	React.render(

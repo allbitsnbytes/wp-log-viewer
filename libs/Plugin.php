@@ -104,7 +104,7 @@ class Plugin {
 	 * @since 0.1.0
 	 */
 	public function display_viewer_page() {
-		echo '<div id="wplv-container" class="wrap"></div>';
+		echo '<div id="wplv-viewer-container" class="wrap"></div>';
 	}
 
 
