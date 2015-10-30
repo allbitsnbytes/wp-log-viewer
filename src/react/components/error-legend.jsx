@@ -7,11 +7,11 @@ wplv.ErrorLegend = React.createClass({
 	render: function() {
 		return (
 			<ul className="wplv-module--error-legends">
-				<li className="php-fatal-error">Fatal Error</li>
-				<li className="php-warning">PHP Warning</li>
-				<li className="php-notice">PHP Notice</li>
-				<li className="php-deprecated">PHP Deprecated</li>
-				<li className="wordpress-database-error">Database error</li>
+				<li className="php-fatal-error"><span className="count"></span> Fatal Error</li>
+				<li className="php-warning"><span className="count"></span> PHP Warning</li>
+				<li className="php-notice"><span className="count"></span> PHP Notice</li>
+				<li className="php-deprecated"><span className="count"></span> PHP Deprecated</li>
+				<li className="wordpress-database-error"><span className="count"></span> Database error</li>
 			</ul>
 		);
 	}

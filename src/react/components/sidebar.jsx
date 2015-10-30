@@ -87,12 +87,12 @@ wplv.Sidebar = React.createClass({
 					{ simulateMenuOption }
 
 					<div className="last-modified">
-						<strong>Last modified</strong><br />
+						<h4>Last modified</h4>
 						<wplv.TimeStamp date={ lastModifiedDate !== '' ? new Date(lastModifiedDate) : '' } />
 					</div>
 
 					<div className="log-filesize">
-						<strong>Filesize</strong><br />
+						<h4>Filesize</h4>
 						<wplv.PrettyFilesize filesize={ this.props.app.getFilesize() } />
 					</div>
 				</aside>

@@ -16,9 +16,9 @@
 .wplv-module--debug-status
 	display inline-block
 	color $white
-	font-size 10px
+	font-size 0.4em
 	font-weight bold
-	line-height 11px
+	line-height 1.2em
 	border-radius 5px
 	padmar 5px 8px, 0
 
@@ -42,6 +42,66 @@
 
 .wplv-module--error-legends
 	display block
+	list-style none
+	padmar 0, 0
+
+	li
+		display block
+		text-align left
+		font-size 0.8em
+
+		.count
+			display inline-block
+			font-size 1.2em
+			padmar 0 3px, 0 7px 0 0
+
+		&.wordpress-database-error
+			.count
+				background-color $database-error-color !important
+
+		&.php-deprecated
+			.count
+				background-color $deprecated-error-color !important
+
+		&.php-fatal-error
+			.count
+				background-color $fatal-error-color !important
+
+		&.php-notice
+			.count
+				background-color $notice-error-color !important
+
+		&.php-warning
+			.count
+				background-color $warning-error-color !important
+
+
+/*
+ * Error summary
+ */
+
+.wplv-module--error-summary
+	.error-type
+		display inline-block
+		padding-right 40px
+
+		.type
+			font-weight bold
+			padding-left 5px
+
+	.line-number
+		display inline-block
+
+		.line
+			font-weight bold
+			padding-left 5px
+
+	.file-path
+		display block
+
+		.path
+			font-weight bold
+			padding-left 5px
 
 
 /*
@@ -103,4 +163,5 @@
  */
 
 .wplv-module--timestamp
-	display block
+	.date
+		font-weight 700

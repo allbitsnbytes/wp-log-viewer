@@ -74,18 +74,18 @@ wplv.GroupEntry = React.createClass({
 
 			if (groupEntryDetails.length > 1) {
 				groupLabel = (
-					<p>Date and time these errors occured:</p>
+					<p className="label">Date and time these errors occured:</p>
 				);
 			} else {
 				groupLabel = (
-					<p>Date and time this error occured:</p>
+					<p className="label">Date and time this error occured:</p>
 				);
 			}
 
 			groupDetails = (
 				<div className="group-entry-details active">
 					<div className="details">
-						<a href="#" className="hide-group-details" onClick={ this.toggleDetails }>Hide details</a>
+						<a href="#" className="toggle hide-group-details" onClick={ this.toggleDetails }>Hide details</a>
 
 						{ groupLabel }
 						{ groupEntryDetails }
@@ -96,26 +96,27 @@ wplv.GroupEntry = React.createClass({
 			groupDetails = (
 				<div className="group-entry-details">
 					<div className="details">
-						<a href="#" className="show-group-details" onClick={ this.toggleDetails }>More details</a>
+						<a href="#" className="toggle show-group-details" onClick={ this.toggleDetails }>More details</a>
 					</div>
 				</div>
 			);
 		}
 
 		return (
-			<div className={ entryClasses.join(' ') }>
-				<div clanssName="error-legend"></div>
-				<wplv.TimeStamp date={ group.date } />
+			<section className={ entryClasses.join(' ') }>
+				<aside className="summary">
+					<wplv.TimeStamp date={ group.date } />
+				</aside>
 				<div className="message">
 					<div className="force-wrap">
 						{ group.message }
 					</div>
-					<div className="error-details">
+					<div className="wplv-module--error-summary">
 						{ errorDetails }
 					</div>
 					{ groupDetails }
 				</div>
-			</div>
+			</section>
 		);
 	}
 });

@@ -13,7 +13,7 @@ wplv.LogEntry = React.createClass({
 				filePath: '',
 				message: '',
 				time: '',
-				timezone: ''		
+				timezone: ''
 			},
 			className: ''
 		};
@@ -28,22 +28,22 @@ wplv.LogEntry = React.createClass({
 	render: function() {
 		var entryClasses = ['log-entry'];
 		var entryDate = new Date(this.props.entry.date + ' ' + this.props.entry.time + ' ' + this.props.entry.timezone);
-		
+
 		if (this.props.className) {
 			entryClasses.push(this.props.className);
-		} 
-		
+		}
+
 		if (this.props.entry.errorType) {
 			entryClasses.push(this.props.entry.errorType.toLowerCase().replace(/[ ]+/gi, '-'));
 		}
 
 		return (
-			<div className={ entryClasses.join(' ') }>
+			<section className={ entryClasses.join(' ') }>
 				<wplv.TimeStamp date={ entryDate } />
 				<div className="message force-wrap">
 					{ this.props.entry.message }
 				</div>
-			</div>
+			</section>
 		);
 	}
 });

@@ -37,13 +37,17 @@
 	.force-wrap
 		word-wrap break-word
 
+
 /*
  * Plugin Styles
  */
 
- #wplv-viewer-container
+#wplv-viewer-container
  	cf()
 	padding 25px 0 0
+
+	a, a:hover
+		text-decoration none !important
 
 
 .wplv-page--header
@@ -54,17 +58,26 @@
 	> header
 		cf()
 		display block
-		padding 0 0 20px
+		padding 0 0 15px
 
 		h2
 			span(0.2)
-			
+			font-size 1.8em
+			box-sizing border-box
+
 			.wplv-module--debug-status
-				margin-left 10px
+				padmar 3px 8px, 0 0 0 10px
 
 		.wplv-module--error-legends
-			display none
 			span(0.8)
+			text-align right
+			list-style none
+			box-sizing border-box
+			padmar 18px 0 0, 0
+
+			li
+				display inline-block
+				padmar 0, 0 0 0 18px
 
 
 .wplv-page--viewer
@@ -73,12 +86,316 @@
 
 .wplv-page--content
 	cf()
+	span(0.85)
 	box-sizing border-box
+	padmar 20px 25px 0 0, 0
+
+	.entries-header
+		padding-bottom 30px
+
+		h3
+			span(0.15)
+			display inline-block
+			padmar 0, 0
+
+		.entries-count
+			display inline-block
+			padding-left 16px
+
+			.count
+				color $white
+				border-radius 5px
+				padding 2px 5px
+
+				&.has-errors
+					background-color $red
+
+				&.no-errors
+					background-color $green
+
+	.group-entries,
+	.log-entries
+		.group-entry,
+		.log-entry
+			&.wordpress-database-error
+				border-left-color $database-error-color
+
+			&.php-deprecated
+				border-left-color $deprecated-error-color
+
+			&.php-fatal-error
+				border-left-color $fatal-error-color
+
+			&.php-notice
+				border-left-color $notice-error-color
+
+			&.php-warning
+				border-left-color $warning-error-color
+
+	.group-entries
+		.group-entry
+			cf()
+			border-left 3px solid $default-legend-color
+			border-bottom 1px solid lighten($black, 82%)
+			box-sizing border-box
+			padmar 3px 0 0 15px, 0 0 25px
+
+			.summary
+				span(0.15)
+				box-sizing border-box
+
+				.wplv-module--timestamp
+					font-size 0.85em
+
+			.message
+				span(0.85)
+				box-sizing border-box
+
+				.force-wrap
+					word-wrap break-word
+
+				.wplv-module--error-summary
+					font-size 0.85em
+					padding 15px 0 0
+
+					&:empty
+						dipslay none
+
+				.group-entry-details
+					padding 15px 0 0
+
+					.details
+						background-color lighten($black, 89%)
+						padding 10px 20px
+
+						.toggle,
+						.toggle:hover
+							display block
+							background-color lighten($black, 84%)
+							text-decoration none
+							padmar 10px 20px, -10px -20px
+
+						.label
+							padding-top 10px
+
+						.wplv-module--timestamp
+							font-size 0.85em
+							line-height 1em
+							padding-bottom 6px
+
+							&:last-child
+								padding-bottom 0
+
+							.date,
+							.time
+								display inline-block
+								font-weight normal
+
+							.date
+								padding-right 15px
+
+					&.active
+						.details
+							padding-bottom 15px
+
+
+	.log-entries
+		.log-entry
+			border-left 3px solid $default-legend-color
+			border-bottom 1px solid lighten($black, 82%)
+			padmar 3px 0 18px 15px, 0 0 25px
+
+			.wplv-module--timestamp
+				font-size 0.85em
+				padding-bottom 6px
+
+				.date,
+				.time
+					display inline-block
+
+				.date
+					padding-right 35px
 
 
 .wplv-page--sidebar
 	cf()
+	span(0.15)
 	box-sizing border-box
+	border-left 1px solid lighten($black, 85%)
+	padmar 20px 0 25px 25px, 0
+
+	.menu-group
+		padmar 0 0 30px, 0
+
+		h3
+			padmar 0, 0
+
+		ul
+			padmar 10px 0 0, 0
+			li
+				padmar 0 0 8px, 0
+
+				&:last-child
+					padding-bottom 0
+
+				a
+					color $text-color
+					text-decoration none
+					padding 3px 12px
+
+					&:hover
+						color lighten($text-color, 10%)
+
+					.fa
+						margin-right 7px
+
+				&.active
+					a
+						background lighten($black, 85%)
+						border 1px solid lighten($black, 82%)
+						border-radius 5px
+
+				span
+					font-size 0.85em
+					line-height 1em
+
+	.last-modified,
+	.log-filesize
+		padmar 10px 0 0, 0
+
+		h4
+			font-size 1em
+			line-height 1em
+			font-weight bold
+			padmar 0, 0 0 10px
+
+	.last-modified
+		.wplv-module--timestamp
+			font-size 0.85em
+
+	.log-filesize
+		.wplv-module--filesize
+			font-size 0.85em
+
+	&:empty
+		display none
+
+
+/*
+ * Humane Alerts
+ */
+
+.humane-wplv-alert,
+.humane-wplv-error,
+.humane-wplv-success
+	text-align left
+	box-shadow: 0px 2px 21px 0px rgba(0,0,0,0.53);
+	padding 8px 20px 12px
+
+.humane-wplv-alert
+	color $black
+	background $humane-alert
+
+.humane-wplv-error
+	color $white
+	background $humane-error
+
+.humane-wplv-success
+	color $white
+	background $humane-success
+
+
+/*
+ * Admin bar
+ */
+
+#wp-admin-bar-wplv-menu
+	padding 0 10px !important
+
+	.error-count
+		font-size 0.7em
+
+	.summary
+		display inline
+		font-weight bold
+		padmar 0, 0 0 0 10px
+
+	.debug-status
+		display inline-block
+		font-size 0.8em
+
+		&.enabled
+			color $debug-enabled-color
+
+		&.disabled
+			color $debug-disabled-color
+
+		&.simulating
+			color lighten($blue, 50%)
+
+
+/*
+ * Dashboard Widget
+ */
+
+#wplv-dashboard-widget-container
+	.button
+		display inline-block
+		margin-top 18px
+
+		i
+			margin-right 5px
+
+		&:hover
+			color $light-grey
+
+	.error-types-list
+		list-style none
+		padmar 0, 0
+
+		li
+			list-style none
+			border 0
+			border-left 2px
+			padmar 5px 0, 0
+
+			.label
+				col(0.4)
+				dislplay inline-block
+				font-weight bold
+
+			.count
+				col(0.58)
+				dislplay inline-block
+				font-weight bold
+
+			.fa
+				display inline-block
+				margin-right 6px
+
+	.wordpress-database-error
+		.fa
+			color $database-error-color !important
+
+	.php-deprecated
+		.fa
+			color $deprecated-error-color !important
+
+	.php-fatal-error
+		.fa
+			color $fatal-error-color !important
+
+	.php-notice
+		.fa
+			color $notice-error-color !important
+
+	.php-warning
+		.fa
+			color $warning-error-color !important
+
+	.php-misc
+		.fa
+			color $misc-error-color !important
 
 
 
@@ -86,7 +403,7 @@
 
 
 
-
+//****************************
 #wplv-container
 	min-height 800px
 	color $text-color
@@ -487,112 +804,3 @@
 		border 2px solid darken($dark-grey, 20%)
 		background $dark-grey
 		padding 15px
-
-
-.humane-wplv-alert,
-.humane-wplv-error,
-.humane-wplv-success
-	text-align left
-	box-shadow: 0px 2px 21px 0px rgba(0,0,0,0.53);
-	padding 8px 20px 12px
-
-.humane-wplv-alert
-	color $black
-	background $humane-alert
-
-.humane-wplv-error
-	color $white
-	background $humane-error
-
-.humane-wplv-success
-	color $white
-	background $humane-success
-
-
-// Dashboard Widget Styles
-
-#wplv-dashboard-widget-container
-	.button
-		display inline-block
-		margin-top 18px
-
-		i
-			margin-right 5px
-
-		&:hover
-			color $light-grey
-
-	.error-types-list
-		list-style none
-		padmar 0, 0
-
-		li
-			list-style none
-			border 0
-			border-left 2px
-			padmar 5px 0, 0
-
-			.label
-				col(0.4)
-				dislplay inline-block
-				font-weight bold
-
-			.count
-				col(0.58)
-				dislplay inline-block
-				font-weight bold
-
-			.fa
-				display inline-block
-				margin-right 6px
-
-	.wordpress-database-error
-		.fa
-			color $database-error-color !important
-
-	.php-deprecated
-		.fa
-			color $deprecated-error-color !important
-
-	.php-fatal-error
-		.fa
-			color $fatal-error-color !important
-
-	.php-notice
-		.fa
-			color $notice-error-color !important
-
-	.php-warning
-		.fa
-			color $warning-error-color !important
-
-	.php-misc
-		.fa
-			color $misc-error-color !important
-
-
-// Admin Bar Menu Styles
-
-#wp-admin-bar-wplv-menu
-	padding 0 10px !important
-
-	.error-count
-		font-size 0.7em
-
-	.summary
-		display inline
-		font-weight bold
-		padmar 0, 0 0 0 10px
-
-	.debug-status
-		display inline-block
-		font-size 0.8em
-
-		&.enabled
-			color $debug-enabled-color
-
-		&.disabled
-			color $debug-disabled-color
-
-		&.simulating
-			color lighten($blue, 50%)

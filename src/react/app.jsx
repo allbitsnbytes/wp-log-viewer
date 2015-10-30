@@ -438,15 +438,15 @@ wplv.App = React.createClass({
 						view = ( <wplv.ListViewer entries={ entries } /> );
 					}
 
-					var errorClass = entries.length > 0 ? 'error-count has-errors' : 'error-count no-errors';
+					var errorClass = entries.length > 0 ? 'count has-errors' : 'count no-errors';
 					var errorLabel = entries.length == 1 ? ' entry' : ' entries';
 
 					content = (
 						<section className="wplv-page--content">
-							<div className="entries-list-header">
+							<header className="entries-header">
 								<h3>Log Entries</h3>
 								<span className="entries-count"><span className={ errorClass }>{ count }</span> { errorLabel }</span>
-							</div>
+							</header>
 
 							{ view }
 						</section>
