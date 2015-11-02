@@ -70,15 +70,18 @@
 
 		.wplv-module--error-legends
 			span(0.8)
-			text-align right
+			text-align left
 			list-style none
 			box-sizing border-box
-			padmar 18px 0 0, 0
+			padmar 18px 0 0 25px, 0
 
 			li
 				display inline-block
-				padmar 0, 0 0 0 18px
+				line-height 1.1em
+				padmar 0, 0 0 0 25px
 
+				&:first-child
+					margin-left 0
 
 .wplv-page--viewer
 	display block
@@ -105,7 +108,7 @@
 			.count
 				color $white
 				border-radius 5px
-				padding 2px 5px
+				padmar 2px 5px, 0 5px 0 0
 
 				&.has-errors
 					background-color $red
@@ -132,6 +135,14 @@
 			&.php-warning
 				border-left-color $warning-error-color
 
+			.message
+				.wplv-module--error-summary
+					font-size 0.85em
+					padding 15px 0 0
+
+					&:empty
+						dipslay none
+
 	.group-entries
 		.group-entry
 			cf()
@@ -154,26 +165,19 @@
 				.force-wrap
 					word-wrap break-word
 
-				.wplv-module--error-summary
-					font-size 0.85em
-					padding 15px 0 0
-
-					&:empty
-						dipslay none
-
 				.group-entry-details
 					padding 15px 0 0
 
 					.details
 						background-color lighten($black, 89%)
-						padding 10px 20px
+						padding 6px 20px
 
 						.toggle,
 						.toggle:hover
 							display block
 							background-color lighten($black, 84%)
 							text-decoration none
-							padmar 10px 20px, -10px -20px
+							padmar 6px 20px, -6px -20px
 
 						.label
 							padding-top 10px
@@ -261,13 +265,13 @@
 
 	.last-modified,
 	.log-filesize
-		padmar 10px 0 0, 0
+		padmar 15px 0 0, 0
 
 		h4
 			font-size 1em
 			line-height 1em
 			font-weight bold
-			padmar 0, 0 0 10px
+			padmar 0, 0 0 5px
 
 	.last-modified
 		.wplv-module--timestamp
