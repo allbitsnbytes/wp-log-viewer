@@ -2,6 +2,20 @@
 
 All notable changes will be tracked in this change log.  This project uses [Semantic Versioning](http://semver.org/)
 
+## [0.14.0] - Unreleased
+### UI
+
+- Updated the header to display more error messages and to use less vertical space
+- Smarter display of error legends.  Only legends with errors are displayed
+- Search query is not displayed under search bar
+- Increased error message area to display more horizontally which will reduce scrolling
+- Made error message more readable by removing line number and file path
+- Reorganized error details (type, line number and file path) to make it more space efficient
+
+### Fix
+
+- Fixed a bug that was breaking file path regex
+
 ## [0.13.0] - 2015-10-16
 ### Fix
 
