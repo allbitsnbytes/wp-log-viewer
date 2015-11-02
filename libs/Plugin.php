@@ -38,7 +38,7 @@ class Plugin {
 		add_action('admin_enqueue_scripts', [$this, 'load_plugin_css_and_js']);
 		add_action('wp_dashboard_setup', [$this, 'register_dashboard_widgets']);
 		add_action('admin_bar_menu', [$this, 'add_admin_bar_menu'], 900);
-		add_action('template_redirect','add_dynamic_routes');
+		add_action('template_redirect', [$this, 'add_dynamic_routes']);
 
 		// Initialize ajax handler
 		Ajax::get_instance();
