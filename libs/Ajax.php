@@ -38,6 +38,7 @@ class Ajax {
 		add_action('wp_ajax_log-changed', [$this, 'check_if_log_modified']);
 		add_action('wp_ajax_log-exists', [$this, 'check_if_log_exists']);
 		add_action('wp_ajax_debug-enabled', [$this, 'check_if_debug_enabled']);
+		add_action('wp_ajax_toggle-debugging', [$this, 'toggle_debugging_status']);
 		add_action('wp_ajax_get-entries', [$this, 'get_log_entries']);
 		add_action('wp_ajax_get-entries-if-modified', [$this, 'get_log_entries_if_modified']);
 		add_action('wp_ajax_clear-log', [$this, 'clear_log']);
@@ -107,6 +108,23 @@ class Ajax {
 		wp_send_json([
 			'debugEnabled'	=> $log->debug_enabled(),
 			'debugDetected'	=> $log->debug_status_detected(),
+		]);
+	}
+
+
+	/**
+	 * Toggle debugging status
+	 *
+	 * @since 0.14.0
+	 */
+	function toggle_debugging_status() {
+		$log = Log::get_instance();
+		$status = $log->debug_enabled();
+		$changed = $status ? $log->disable_debugging() : $log->enable_debugging();
+		
+		wp_send_json([
+			'changed'		=> $changed,
+			'status'		=> $changed ? !$status : $status,
 		]);
 	}
 
