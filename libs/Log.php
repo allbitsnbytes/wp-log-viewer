@@ -84,6 +84,30 @@ class Log {
 
 
 	/**
+	 * Enable debugging
+	 *
+	 * @since 0.14.0
+	 *
+	 * @return boolean True if debugging was enabled
+	 */
+	public function enable_debugging() {
+		return false;
+	}
+
+
+	/**
+	 * Disable debugging
+	 *
+	 * @since 0.14.0
+	 *
+	 * @return boolean True if debugging was disabled
+	 */
+	public function disable_debugging() {
+		return false;
+	}
+	
+
+	/**
 	 * Check if file was modified since provided timestamp
 	 *
 	 * @since 0.1.0
