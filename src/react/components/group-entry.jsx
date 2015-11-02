@@ -74,7 +74,7 @@ wplv.GroupEntry = React.createClass({
 
 			if (groupEntryDetails.length > 1) {
 				groupLabel = (
-					<p className="label">Date and time these errors occured:</p>
+					<p className="label">Dates and times this error occured:</p>
 				);
 			} else {
 				groupLabel = (

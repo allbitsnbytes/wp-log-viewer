@@ -52,11 +52,14 @@
 
 		.count
 			display inline-block
-			font-size 1.2em
-			padmar 0 3px, 0 7px 0 0
+			font-size 1em
+			line-height 1em
+			border-radius 4px
+			padmar 4px 5px, 0 5px 0 0
 
 		&.wordpress-database-error
 			.count
+				color $white
 				background-color $database-error-color !important
 
 		&.php-deprecated
@@ -65,10 +68,12 @@
 
 		&.php-fatal-error
 			.count
+				color $white
 				background-color $fatal-error-color !important
 
 		&.php-notice
 			.count
+				color $white
 				background-color $notice-error-color !important
 
 		&.php-warning
@@ -99,7 +104,7 @@
 	.file-path
 		display block
 
-		.path
+		.file
 			font-weight bold
 			padding-left 5px
 
@@ -147,12 +152,12 @@
 
 	.search-query
 		display block
-		font-size 0.9em
+		font-size 1em
 		font-style italic
 		margin-top 8px
 
 		.label
-			color lighten($text-color, 25%)
+			color lighten($text-color, 45%)
 
 		.query
 			font-weight bold
