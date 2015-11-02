@@ -105,7 +105,7 @@ class Log {
 	public function disable_debugging() {
 		return false;
 	}
-	
+
 
 	/**
 	 * Check if file was modified since provided timestamp
@@ -225,6 +225,22 @@ class Log {
 		}
 
 		return array_reverse($entries);
+	}
+
+
+	/**
+	 * Get all file contents
+	 *
+	 * @since 0.14.0
+	 *
+	 * @return string The contents or empty string
+	 */
+	public function get_contents() {
+		if ($this->file_exists()) {
+			return file_get_contents($this->log_file);
+		}
+
+		return '';
 	}
 
 

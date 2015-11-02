@@ -14,6 +14,7 @@ if (!defined('WPLOGVIEWER_BASE')) {
 // use Allbitsnbytes\WPLogViewer\Auth;
 use Allbitsnbytes\WPLogViewer\Ajax;
 use Allbitsnbytes\WPLogViewer\Characteristic\IsSingleton;
+use Allbitsnbytes\WPLogViewer\Log;
 use Allbitsnbytes\WPLogViewer\Settings;
 
 
@@ -37,7 +38,7 @@ class Plugin {
 		add_action('admin_enqueue_scripts', [$this, 'load_plugin_css_and_js']);
 		add_action('wp_dashboard_setup', [$this, 'register_dashboard_widgets']);
 		add_action('admin_bar_menu', [$this, 'add_admin_bar_menu'], 900);
-
+		add_action('template_redirect','add_dynamic_routes');
 
 		// Initialize ajax handler
 		Ajax::get_instance();
@@ -142,6 +143,30 @@ class Plugin {
 			'href'	=> admin_url('tools.php?page=wp-log-viewer'),
 			'meta'	=> ['class' => 'wplv-admin-bar-node']
 		]);
+	}
+
+
+	/**
+	 * Add dynamic routes
+	 *
+	 * @since 0.14.0
+	 */
+	public function add_dynamic_routes() {
+		$log = Log::get_instance();
+
+		if (is_user_logged_in()) {
+			if ($_SERVER['REQUEST_URI'] == '/debugging/download/log') {
+				header('Content-Type: text/plain; charset=utf-8');
+				header("Content-Disposition: Attachment; filename=debug.log");
+				header("Pragma: no-cache");
+
+				return $log->get_contents();
+			}
+		}
+
+		if ($_SERVER['REQUEST_URI'] == '/debugging/share/') {
+			// TODO
+		}
 	}
 
 
