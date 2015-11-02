@@ -26,22 +26,43 @@ wplv.LogEntry = React.createClass({
 
 	// Render component
 	render: function() {
+		var entry = this.props.entry;
 		var entryClasses = ['log-entry'];
-		var entryDate = new Date(this.props.entry.date + ' ' + this.props.entry.time + ' ' + this.props.entry.timezone);
+		var entryDate = new Date(entry.date + ' ' + entry.time + ' ' + entry.timezone);
+		var errorDetails = [];
 
 		if (this.props.className) {
 			entryClasses.push(this.props.className);
 		}
 
-		if (this.props.entry.errorType) {
-			entryClasses.push(this.props.entry.errorType.toLowerCase().replace(/[ ]+/gi, '-'));
+		if (entry.errorType) {
+			entryClasses.push(entry.errorType.toLowerCase().replace(/[ ]+/gi, '-'));
+			errorDetails.push((
+				<div className="error-type"><i className="fa fa-angle-right"></i> Type: <span className="type">{ entry.errorType }</span></div>
+			));
+		}
+
+		if (entry.line) {
+			errorDetails.push((
+				<div className="line-number"><i className="fa fa-angle-right"></i> Line: <span className="line">{ entry.line }</span></div>
+			));
+		}
+
+		if (entry.filePath) {
+			errorDetails.push((
+				<div className="file-path"><i className="fa fa-angle-right"></i> File: <span className="file">{ entry.filePath }</span></div>
+			));
 		}
 
 		return (
 			<section className={ entryClasses.join(' ') }>
 				<wplv.TimeStamp date={ entryDate } />
 				<div className="message force-wrap">
-					{ this.props.entry.message }
+					{ entry.message }
+
+					<div className="wplv-module--error-summary">
+						{ errorDetails }
+					</div>
 				</div>
 			</section>
 		);

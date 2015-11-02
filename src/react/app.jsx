@@ -257,6 +257,9 @@ wplv.App = React.createClass({
 		// Process entries and prepare for use
 		entries = entries.map(function(entry) {
 
+			// Generate entry key based on error message
+			entry.key = md5(entry.message);
+
 			// Get line number if present
 			var line = entry.message.replace(/.* on line ([\d]+).*/gi, '$1');
 			entry.line = line && line !== entry.message ? line.trim() : '';
@@ -272,11 +275,19 @@ wplv.App = React.createClass({
 			}
 
 			// Get file path if present
-			var filePath = entry.message.replace(/^.*in (\/[\w /_-]+.php).*/gi, '$1');
+			var filePath = entry.message.replace(/.*in (\/[\w\/._-]+.php).*/gi, '$1');
 			entry.filePath = filePath && filePath != entry.message ? filePath.trim() : '';
 
 			// Reformat message
 			if (entry.errorType) {
+				if (entry.line) {
+					entry.message = entry.message.replace('in ' + entry.filePath, '');
+				}
+
+				if (entry.filePath) {
+					entry.message = entry.message.replace('on line ' + entry.line, '');
+				}
+
 				entry.message = entry.message.replace(/^(PHP [\w ]+:|Wordpress database error)(.*)/gi, '$2', '').trim();
 			}
 
@@ -354,11 +365,9 @@ wplv.App = React.createClass({
 
 		// Filter duplicate entries
 		entries.forEach(function(entry) {
-			var key = md5(entry.message);
-
-			if (found[key] === undefined) {
+			if (found[entry.key] === undefined) {
 				filtered.push(entry);
-				found[key] = true;
+				found[entry.key] = true;
 			}
 		}.bind(this));
 
@@ -524,7 +533,7 @@ wplv.App = React.createClass({
 					<header>
 						<h2>Log Viewer { debugStatus }</h2>
 
-						<wplv.ErrorLegend />
+						<wplv.ErrorLegend entries={ this.state.log.entries } />
 					</header>
 
 					<wplv.Search app={ this } />
