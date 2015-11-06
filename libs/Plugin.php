@@ -160,7 +160,8 @@ class Plugin {
 				header("Content-Disposition: Attachment; filename=debug.log");
 				header("Pragma: no-cache");
 
-				return $log->get_contents();
+				echo trim($log->get_contents());
+				exit();
 			}
 		}
 

@@ -105,6 +105,11 @@ wplv.App = React.createClass({
 		this._getLatestEntries(true);
 	},
 
+	// Download debug.log
+	downloadFile: function() {
+		window.location.href = '/debugging/download/log';
+	},
+
 	// Search entries
 	searchEntries: function(query) {
 		this.setState({

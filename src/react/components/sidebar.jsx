@@ -14,7 +14,8 @@ wplv.Sidebar = React.createClass({
 				trackSelected: false,
 				options: [
 					{ label: 'Refresh',		key: 'refresh',		icon: 'refresh',	action: this.props.app.refreshViewer },
-					{ label: 'Clear Log',	key: 'clear',		icon: 'remove',		action: this.props.app.clearLog }
+					{ label: 'Clear Log',	key: 'clear',		icon: 'remove',		action: this.props.app.clearLog },
+					{ label: 'Download', 	key: 'download',	icon: 'download', 	action: this.props.app.downloadFile }
 				]
 			},
 
@@ -24,8 +25,8 @@ wplv.Sidebar = React.createClass({
 				default: this.props.app.state.log.sort,
 				trackSelected: true,
 				options: [
-					{ label: 'By Newest',	key: 'newest',	icon: 'sort-down',	action: this.props.app.sortNewest },
-					{ label: 'By Oldest',	key: 'oldest',	icon: 'sort-up',	action: this.props.app.sortOldest }
+					{ label: 'By Newest',	key: 'newest',	icon: 'sort-alpha-asc',	action: this.props.app.sortNewest },
+					{ label: 'By Oldest',	key: 'oldest',	icon: 'sort-alpha-desc',	action: this.props.app.sortOldest }
 				]
 			},
 
@@ -35,7 +36,7 @@ wplv.Sidebar = React.createClass({
 				default: this.props.app.state.log.view,
 				trackSelected: true,
 				options: [
-					{ label: 'Group View',	key: 'group',	icon: 'th',			action: this.props.app.showGroupView },
+					{ label: 'Group View',	key: 'group',	icon: 'list-alt',			action: this.props.app.showGroupView },
 					{ label: 'List View',	key: 'list',	icon: 'list',		action: this.props.app.showListView }
 				]
 			}

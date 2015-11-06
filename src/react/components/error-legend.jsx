@@ -32,7 +32,7 @@ wplv.ErrorLegend = React.createClass({
 		// Load errors
 		entries.forEach(function(entry) {
 			if (found[entry.key] === undefined && entry.errorType) {
-				var className = entry.errorType.replace(' ', '-').toLowerCase();
+				var className = entry.errorType.replace(/[ ]+/, '-').toLowerCase();
 
 				if (errors[className] === undefined) {
 					errors[className] = {
