@@ -121,7 +121,7 @@ class Ajax {
 		$log = Log::get_instance();
 		$status = $log->debug_enabled();
 		$changed = $status ? $log->disable_debugging() : $log->enable_debugging();
-		
+
 		wp_send_json([
 			'changed'		=> $changed,
 			'status'		=> $changed ? !$status : $status,
@@ -251,7 +251,7 @@ class Ajax {
 
 		if (isset($_REQUEST['user_id']) && isset($_REQUEST['settings'])) {
 			$handler = Settings::get_instance();
-			$updated = $handler->update_user_settings($_REQUEST['user_id'], $_REQUEST['setttings']);
+			$updated = $handler->update_user_settings($_REQUEST['user_id'], $_REQUEST['settings']);
 		}
 
 		wp_send_json([

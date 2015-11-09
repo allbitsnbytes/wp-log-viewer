@@ -28,6 +28,13 @@ wplv.remote = (function() {
 
 		clearEntries: function(success, fail) {
 			return callRemote('clear-log', 'POST', {}, success, fail);
+		},
+
+		updateUserSetting: function(key, value, success, fail) {
+			var data = {};
+			data[key] = value;
+
+			return callRemote('update-user-settings', 'POST', {user_id: WPLOGVIEWER.user_id, settings: data}, success, fail);
 		}
 	};
 })();

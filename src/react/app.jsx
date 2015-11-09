@@ -32,7 +32,8 @@ wplv.App = React.createClass({
 				timezone: '',
 				view: this.props.settings.view
 			},
-			query: ''
+			query: '',
+			errorTypes: []
 		};
 	},
 
@@ -117,6 +118,13 @@ wplv.App = React.createClass({
 		});
 	},
 
+	// Filter entries by error type
+	filterEntriesByErrorType: function(errors) {
+		this.setState({
+			errorTypes: errors
+		});
+	},
+
 	// Clear entries
 	clearLog: function() {
 		wplv.remote.clearEntries(function(result) {
@@ -154,6 +162,8 @@ wplv.App = React.createClass({
 			this.setState({
 				log: log
 			});
+
+			wplv.remote.updateUserSetting('sort', 'newest');
 		}
 	},
 
@@ -168,6 +178,8 @@ wplv.App = React.createClass({
 			this.setState({
 				log: log
 			});
+
+			wplv.remote.updateUserSetting('sort', 'oldest');
 		}
 	},
 
@@ -180,6 +192,8 @@ wplv.App = React.createClass({
 		this.setState({
 			log: log
 		});
+
+		wplv.remote.updateUserSetting('view', 'group');
 	},
 
 	// Show list view
@@ -191,6 +205,13 @@ wplv.App = React.createClass({
 		this.setState({
 			log: log
 		});
+
+		wplv.remote.updateUserSetting('view', 'list');
+	},
+
+	// Get list of current entries
+	getEntries: function() {
+		return this.state.log.entries;
 	},
 
 	// Get last modified date
@@ -201,11 +222,6 @@ wplv.App = React.createClass({
 	// Get filesize
 	getFilesize: function() {
 		return this.state.log.filesize;
-	},
-
-	// Download log
-	downloadLog: function() {
-		console.log('Feature coming soon.');
 	},
 
 	// Pretend debugging is enabled
@@ -424,24 +440,35 @@ wplv.App = React.createClass({
 			if (this.state.debugging.enabled || this.state.debugging.detected || this.state.debugging.simulating) {
 				if (this.state.log.found) {
 					var count = 0;
-					var entries = [];
+					var entries = this.state.log.entries;
 					var query = this.state.query;
+					var filterErrorTypes = this.state.errorTypes;
 					var view = '';
 
 					debugStatus = (
 						<wplv.DebugStatus debugging={ this.state.debugging } />
 					);
 
+					if (filterErrorTypes.length > 0) {
+						entries = entries.map(function(entry) {
+							if (filterErrorTypes.indexOf(entry.errorType) !== -1) {
+								return entry;
+							}
+
+							return false;
+						}.bind(this));
+					}
+
 					if (query !== '') {
-						this.state.log.entries.forEach(function(entry) {
+						entries = entries.map(function(entry) {
 							var match = new RegExp(query, 'gi');
 
 							if (entry && entry.message && match.test(entry.message + ' ' + entry.errorType)) {
-								entries.push(entry);
+								return entry
 							}
+
+							return false;
 						}.bind(this));
-					} else {
-						entries = this.state.log.entries;
 					}
 
 					if (this.state.log.view === 'group') {
@@ -538,7 +565,7 @@ wplv.App = React.createClass({
 					<header>
 						<h2>Log Viewer { debugStatus }</h2>
 
-						<wplv.ErrorLegend entries={ this.state.log.entries } />
+						<wplv.ErrorLegend app={ this } />
 					</header>
 
 					<wplv.Search app={ this } />
