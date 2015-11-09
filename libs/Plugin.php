@@ -153,14 +153,34 @@ class Plugin {
 	 */
 	public function add_dynamic_routes() {
 		$log = Log::get_instance();
+		$settings = Settings::get_instance();
 
 		if (is_user_logged_in()) {
+			$user_id = \get_current_user_id();
+
 			if ($_SERVER['REQUEST_URI'] == '/debugging/download/log') {
 				header('Content-Type: text/plain; charset=utf-8');
 				header("Content-Disposition: Attachment; filename=debug.log");
 				header("Pragma: no-cache");
 
-				echo trim($log->get_contents());
+				$config = $settings->get_settings($user_id);
+
+				if (isset($config['truuncate_download']) && $config['truncate_download']) {
+					$found = [];
+					$entries = $log->get_entries();
+
+					foreach ($entries as $entry) {
+						$key = md5($entry['message']);
+
+						if (!isset($found[$key])) {
+							$found[$key] = true;
+							echo '[' . $entry['date'] . ' ' . $entry['time'] . ' ' . $entry['timezone'] . '] ' . $entry['message'];
+						}
+					}
+				} else {
+					echo trim($log->get_contents());
+				}
+
 				exit();
 			}
 		}

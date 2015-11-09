@@ -24,20 +24,25 @@ class Settings {
 	use IsSingleton;
 
 	/**
-	 * Default view
+	 * Allowed setting fields
 	 *
-	 * @since 0.12.0
-	 *
-	 * @var string
+	 * @since 0.13.0
 	 */
-	private $view = 'group';
+	private $allowed = ['sort', 'view', 'query', 'legends', 'truncate_download'];
+
 
 	/**
-	 * Default sort order
+	 * Default settings
 	 *
-	 * @since 0.12.0
+	 * @since 0.13.0
 	 */
-	private $sort = 'newest';
+	private $defaults = [
+		'view'				=> 'group',
+		'sort'				=> 'newest',
+		'query'				=> '',
+		'legends'			=> '',
+		'truncate_download'	=> true,
+	];
 
 
 	/**
@@ -49,7 +54,7 @@ class Settings {
 	 * @return array
 	 */
 	public function get_settings($user_id=0) {
-		$settings = false;
+		$settings = [];
 
 		if ($user_id > 0) {
 			$settings = $this->get_user_settings($user_id);
@@ -59,14 +64,7 @@ class Settings {
 			$settings = $this->get_default_settings();
 		}
 
-		if (empty($settings)) {
-			$settings = [
-				'view'	=> $this->view,
-				'sort'	=> $this->sort,
-			];
-		}
-
-		return $settings;
+		return $this->merge_settings($this->defaults, $settings);
 	}
 
 
@@ -144,7 +142,9 @@ class Settings {
 	private function merge_settings($default, $new) {
 		if (is_array($new) && count($new) > 0) {
 			foreach ($new as $key=>$value) {
-				$default[$key] = $value;
+				if (in_array($key, $this->allowed)) {
+					$default[$key] = $value;
+				}
 			}
 		}
 
