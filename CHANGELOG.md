@@ -3,6 +3,12 @@
 All notable changes will be tracked in this change log.  This project uses [Semantic Versioning](http://semver.org/)
 
 ## [0.14.0] - Unreleased
+### Feature
+
+- Added one click log downloading
+- Smart debug.log, only the latest unique entries are downloaded.  Duplicates are removed to reduce filesize and make reading the file easier
+- Persist selected view, sorting across login sessions
+
 ### UI
 
 - Updated the header to display more error messages and to use less vertical space
