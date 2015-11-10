@@ -78,8 +78,9 @@ class Log {
 	 * @return boolean True if debugging status was detected
 	 */
 	public function debug_status_detected() {
-		return defined('WP_DEBUG') && (WP_DEBUG === true || WP_DEBUG === 'true') ? true : false;
 		//return defined('WP_DEBUG_DETECTED') && (WP_DEBUG_DETECTED === true || WP_DEBUG_DETECTED === 'true') ? true : false;
+		
+		return defined('WP_DEBUG') && (WP_DEBUG === true || WP_DEBUG === 'true') ? true : false;
 	}
 
 
@@ -91,7 +92,7 @@ class Log {
 	 * @return boolean True if debugging was enabled
 	 */
 	public function enable_debugging() {
-		return false;
+		return set_debugging_status(true);
 	}
 
 
@@ -103,7 +104,7 @@ class Log {
 	 * @return boolean True if debugging was disabled
 	 */
 	public function disable_debugging() {
-		return false;
+		return set_debugging_status(false);
 	}
 
 
@@ -281,5 +282,35 @@ class Log {
 	 */
 	public function delete() {
 		return unlink($this->log_file) === TRUE ? true : false;
+	}
+
+
+	/**
+	 * Set debugging status if possible
+	 *
+	 * @since 0.14.0
+	 *
+	 * @return boolean True if status updated
+	 */
+	private function set_debugging_status($value) {
+		$settings = Settings::get_instance();
+		$user_id = \get_current_user_id();
+		$config = $settings->get_settings($user_id);
+
+		// Check if path to debug.log is set
+		if (isset($config['config_path']) && !empty($config['config_path'])) {
+			$file = $config['config_path'];
+
+			// Get file contents then updated constant value
+			$content = file_get_contents($file);
+			$content = preg_replace('/define\(["\' ]+WP_DEBUG["\' ]+,["\' ]+(true|false)["\' ]+\)/', 'define("WP_DEBUG", '.$value.');', $content);
+
+			// Write updated content to debug.log
+			file_put_contents($file, $content);
+
+			return true;
+		}
+
+		return false;
 	}
 }

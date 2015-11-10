@@ -26,15 +26,15 @@ class Settings {
 	/**
 	 * Allowed setting fields
 	 *
-	 * @since 0.13.0
+	 * @since 0.14.0
 	 */
-	private $allowed = ['sort', 'view', 'query', 'legends', 'truncate_download'];
+	private $allowed = ['sort', 'view', 'query', 'legends', 'truncate_download', 'wpconfig_path'];
 
 
 	/**
 	 * Default settings
 	 *
-	 * @since 0.13.0
+	 * @since 0.14.0
 	 */
 	private $defaults = [
 		'view'				=> 'group',
@@ -42,6 +42,7 @@ class Settings {
 		'query'				=> '',
 		'legends'			=> '',
 		'truncate_download'	=> true,
+		'wpconfig_path'		=> '',
 	];
 
 
