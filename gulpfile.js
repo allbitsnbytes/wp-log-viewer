@@ -22,6 +22,7 @@ var paths = {
 			'src/bower/humane/humane.js',
 			'src/react/app.jsx',
 			'src/react/admin-bar-nav.jsx',
+			'src/react/mixins/**/*.jsx',
 			'src/react/components/**/*.jsx',
 			'src/js/main.jsx'
 		]

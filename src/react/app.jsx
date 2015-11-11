@@ -23,6 +23,7 @@ wplv.App = React.createClass({
 				detected: false,
 				simulating: false
 			},
+			errorTypes: [],
 			log: {
 				entries: [],
 				filesize: 0,
@@ -33,7 +34,7 @@ wplv.App = React.createClass({
 				view: this.props.settings.view
 			},
 			query: '',
-			errorTypes: []
+			showSettings: false
 		};
 	},
 
@@ -222,6 +223,29 @@ wplv.App = React.createClass({
 	// Get filesize
 	getFilesize: function() {
 		return this.state.log.filesize;
+	},
+
+	// Open settings page
+	openSettingsPane: function(e) {
+		e.preventDefault();
+
+		this.setState({showSettings: true});
+	},
+
+	// Save settings pane
+	saveSettingsPane: function(e) {
+		e.preventDefault();
+
+		// TODO
+
+		this.setState({showSettings: false});
+	},
+
+	// Close settings page
+	closeSettingsPane: function(e) {
+		e.preventDefault();
+
+		this.setState({showSettings: false});
 	},
 
 	// Pretend debugging is enabled
@@ -435,6 +459,7 @@ wplv.App = React.createClass({
 		var content = '';
 		var debugStatus = '';
 		var sidebar = '';
+		var settingsPane = '';
 
 		if (this.ready) {
 			if (this.state.debugging.enabled || this.state.debugging.detected || this.state.debugging.simulating) {
@@ -570,11 +595,23 @@ wplv.App = React.createClass({
 
 					<wplv.Search app={ this } />
 				</section>
+
 				<section className="wplv-page--viewer">
 					{ content }
 
 					{ sidebar }
 				</section>
+
+				<wplv.ContentModal ref="settingsPane" className="settings-pane" isOpen={ this.state.showSettings } size="medium">
+					<h2>Settings</h2>
+
+					<p>TODO: Add fields</p>
+
+					<ul className="buttons">
+						<li><a href="#" onClick={ this.saveSettingsPane } className="primary"><i className="fa fa-chevron-circle-right" />Save</a></li>
+						<li><a href="#" onClick={ this.closeSettingsPane }><i className="fa fa-chevron-circle-right" />Close</a></li>
+					</ul>
+				</wplv.ContentModal>
 			</div>
 		);
 	},

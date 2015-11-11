@@ -165,7 +165,7 @@ class Plugin {
 
 				$config = $settings->get_settings($user_id);
 
-				if (isset($config['truuncate_download']) && $config['truncate_download']) {
+				if (isset($config['truncate_download']) && $config['truncate_download']) {
 					$found = [];
 					$entries = $log->get_entries();
 

@@ -39,7 +39,7 @@ wplv.Sidebar = React.createClass({
 					{ label: 'Group View',	key: 'group',	icon: 'list-alt',			action: this.props.app.showGroupView },
 					{ label: 'List View',	key: 'list',	icon: 'list',		action: this.props.app.showListView }
 				]
-			}
+			},
 		];
 	},
 
@@ -86,6 +86,10 @@ wplv.Sidebar = React.createClass({
 					{ menuOptions }
 
 					{ simulateMenuOption }
+
+					<div className="settings">
+						<a href="#" onClick={ this.props.app.openSettingsPane }><i className="fa fa-cog" /> Settings</a>
+					</div>
 
 					<div className="last-modified">
 						<h4>Last modified</h4>

@@ -79,7 +79,7 @@ class Log {
 	 */
 	public function debug_status_detected() {
 		//return defined('WP_DEBUG_DETECTED') && (WP_DEBUG_DETECTED === true || WP_DEBUG_DETECTED === 'true') ? true : false;
-		
+
 		return defined('WP_DEBUG') && (WP_DEBUG === true || WP_DEBUG === 'true') ? true : false;
 	}
 
@@ -273,6 +273,7 @@ class Log {
 		return @ftruncate($fp, 0);
 	}
 
+
 	/**
 	 * Delete debug.log file
 	 *
@@ -298,8 +299,8 @@ class Log {
 		$config = $settings->get_settings($user_id);
 
 		// Check if path to debug.log is set
-		if (isset($config['config_path']) && !empty($config['config_path'])) {
-			$file = $config['config_path'];
+		if (isset($config['wpconfig_path']) && !empty($config['wpconfig_path'])) {
+			$file = $config['wpconfig_path'];
 
 			// Get file contents then updated constant value
 			$content = file_get_contents($file);
