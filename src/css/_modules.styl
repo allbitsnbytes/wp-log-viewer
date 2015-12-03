@@ -63,9 +63,6 @@
 			border-radius 4px
 			padmar 4px 5px, 0 5px 0 0
 
-		&.not-selected
-			opacity 0.4
-
 		&.wordpress-database-error
 			.count
 				color $white
@@ -88,6 +85,13 @@
 		&.php-warning
 			.count
 				background-color $warning-error-color !important
+
+		&.not-selected
+			opacity 0.4
+
+			.count
+				color $black
+				background-color $light-grey !important
 
 
 /*
@@ -249,3 +253,16 @@
 .wplv-module--timestamp
 	.date
 		font-weight 700
+
+
+/*
+ * Form
+ */
+
+.wplv-module--form
+	.form-row
+		span(1)
+		padding 5px
+
+	label
+		font-weight bold

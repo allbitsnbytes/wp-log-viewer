@@ -117,6 +117,8 @@ wplv.App = React.createClass({
 		this.setState({
 			query: query
 		});
+
+		wplv.remote.updateUserSetting('query', query);
 	},
 
 	// Filter entries by error type
@@ -124,6 +126,8 @@ wplv.App = React.createClass({
 		this.setState({
 			errorTypes: errors
 		});
+
+		wplv.remote.updateUserSetting('legends', errors);
 	},
 
 	// Clear entries
@@ -236,7 +240,9 @@ wplv.App = React.createClass({
 	saveSettingsPane: function(e) {
 		e.preventDefault();
 
-		// TODO
+		wplv.remote.updateUserSettings({
+			'fold_sidebar': React.findDOMNode(this.refs.foldSidebar).value;
+		});
 
 		this.setState({showSettings: false});
 	},
@@ -605,7 +611,15 @@ wplv.App = React.createClass({
 				<wplv.ContentModal ref="settingsPane" className="settings-pane" isOpen={ this.state.showSettings } size="medium">
 					<h2>Settings</h2>
 
-					<p>TODO: Add fields</p>
+					<div className="wplv-module--form">
+						<div className="form-row">
+							<label>Fold sidebar to increase viewing area?</label>
+							<select ref="foldSidebar">
+								<option value="0">No</option>
+								<option value="1">Yes</option>
+							</select>
+						</div>
+					</div>
 
 					<ul className="buttons">
 						<li><a href="#" onClick={ this.saveSettingsPane } className="primary"><i className="fa fa-chevron-circle-right" />Save</a></li>

@@ -54,16 +54,18 @@ class Plugin {
 		// $auth = Auth::get_instance();
 		$settings = Settings::get_instance();
 		$user_id = \get_current_user_id();
+		$user_settings = $settings->get_settings($user_id);
 		$screen = get_current_screen();
 		$localized = [
 			'api' 				=> admin_url('admin-ajax.php'),
 			'debug_enabled' 	=> WP_DEBUG,
 			'current_page'		=> is_object($screen) ? $screen->id : '',
 			'plugin_url'		=> admin_url('tools.php?page=wp-log-viewer'),
-			'settings'			=> $settings->get_settings($user_id),
+			'settings'			=> $user_settings,
 			// 'cookie_token'		=> '',
 			// 'session_key'		=> '',
 			'user_id'			=> $user_id,
+			'fold_sidebar'		=> $user_settings['fold_sidebar'],
 			// 'path'				=> ABSPATH,
 		];
 

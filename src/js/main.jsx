@@ -35,6 +35,12 @@ wplv.remote = (function() {
 			data[key] = value;
 
 			return callRemote('update-user-settings', 'POST', {user_id: WPLOGVIEWER.user_id, settings: data}, success, fail);
+		},
+
+		updateUserSettings: function(data, success, fail) {
+			if (typeof data === 'object') {
+				return callRemote('update-user-settings', 'POST', {user_id: WPLOGVIEWER.user_id, settings: data}, success, fail);
+			}
 		}
 	};
 })();
@@ -78,7 +84,9 @@ if (WPLOGVIEWER.current_page === 'tools_page_wp-log-viewer') {
 		document.getElementById('wplv-viewer-container')
 	);
 
-	document.querySelector('body').className += ' folded';
+	if (WPLOGVIEWER['fold_sidebar'] && parseInt(WPLOGVIEWER.fold_sidebar) === 1) {
+		document.querySelector('body').className += ' folded';
+	}
 } else if (WPLOGVIEWER.current_page === 'dashboard') {
 	React.render(
 		<wplv.DashboardWidget debugging={ wplvDDStatus } pluginUrl={ WPLOGVIEWER.plugin_url } />,

@@ -28,7 +28,7 @@ class Settings {
 	 *
 	 * @since 0.14.0
 	 */
-	private $allowed = ['sort', 'view', 'query', 'legends', 'truncate_download', 'wpconfig_path'];
+	private $allowed = ['sort', 'view', 'query', 'legends', 'fold_sidebar', 'truncate_download', 'wpconfig_path'];
 
 
 	/**
@@ -41,6 +41,7 @@ class Settings {
 		'sort'				=> 'newest',
 		'query'				=> '',
 		'legends'			=> '',
+		'fold_sidebar'		=> true,
 		'truncate_download'	=> true,
 		'wpconfig_path'		=> '',
 	];
