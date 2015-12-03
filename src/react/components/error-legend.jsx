@@ -37,10 +37,10 @@ wplv.ErrorLegend = React.createClass({
 			} else {
 				var found = types.indexOf(type);
 
-				if (found) {
-					types.splice(found, 1);
-				} else {
+				if (found === -1) {
 					types.push(type);
+				} else {
+					types.splice(found, 1);
 				}
 			}
 
@@ -83,7 +83,7 @@ wplv.ErrorLegend = React.createClass({
 				var className = error.className;
 
 				if (this.state.errorTypes.length > 0) {
-					className += this.state.errorTypes.indexOf(error.label) ? ' selected' : ' not-selected';
+					className += this.state.errorTypes.indexOf(error.label) !== -1 ? ' selected' : ' not-selected';
 				}
 
 				errorsList.push((

@@ -475,9 +475,9 @@ wplv.App = React.createClass({
 					);
 
 					if (filterErrorTypes.length > 0) {
-						entries = entries.map(function(entry) {
+						entries = entries.filter(function(entry) {
 							if (filterErrorTypes.indexOf(entry.errorType) !== -1) {
-								return entry;
+								return true;
 							}
 
 							return false;
@@ -485,11 +485,11 @@ wplv.App = React.createClass({
 					}
 
 					if (query !== '') {
-						entries = entries.map(function(entry) {
+						entries = entries.filter(function(entry) {
 							var match = new RegExp(query, 'gi');
 
 							if (entry && entry.message && match.test(entry.message + ' ' + entry.errorType)) {
-								return entry
+								return true
 							}
 
 							return false;
