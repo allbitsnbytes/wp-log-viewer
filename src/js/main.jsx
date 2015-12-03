@@ -77,6 +77,8 @@ if (WPLOGVIEWER.current_page === 'tools_page_wp-log-viewer') {
 		<wplv.App user={ WPLOGVIEWER.user_id } settings={ WPLOGVIEWER.settings } debugging={ wplvDDStatus } pluginUrl={ WPLOGVIEWER.plugin_url } />,
 		document.getElementById('wplv-viewer-container')
 	);
+
+	document.querySelector('body').className += ' folded';
 } else if (WPLOGVIEWER.current_page === 'dashboard') {
 	React.render(
 		<wplv.DashboardWidget debugging={ wplvDDStatus } pluginUrl={ WPLOGVIEWER.plugin_url } />,
