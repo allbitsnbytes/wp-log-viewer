@@ -93,14 +93,14 @@ $router->get('login', ['\Allbitsnbytes\WPLogViewer\Api', 'login_user'], Auth::SK
 // Logout user
 $router->get('logout', ['\Allbitsnbytes\WPLogViewer\Api', 'logout_user']);
 
-// Get default settings
-$router->get('get-default-settings', ['\Allbitsnbytes\WPLogViewer\Api', 'get_default_settings']);
+// Get global settings
+$router->get('get-global-settings', ['\Allbitsnbytes\WPLogViewer\Api', 'get_global_settings']);
 
 // Get user settings
 $router->get('get-user-settings', ['\Allbitsnbytes\WPLogViewer\Api', 'get_user_settings']);
 
-// Update default settings
-$router->post('update-default-settings', ['\Allbitsnbytes\WPLogViewer\Api', 'update_default_settings']);
+// Update global settings
+$router->post('update-global-settings', ['\Allbitsnbytes\WPLogViewer\Api', 'update_global_settings']);
 
 // Update user settings
 $router->post('update-user-settings', ['\Allbitsnbytes\WPLogViewer\Api', 'update_user_settings']);

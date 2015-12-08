@@ -5,12 +5,15 @@ All notable changes will be tracked in this change log.  This project uses [Sema
 ## [0.14.0] - Unreleased
 ### Feature
 
-- Added one click log downloading
-- Smart debug.log, only the latest unique entries are downloaded.  Duplicates are removed to reduce filesize and make reading the file easier
+- One click enable/disable debugging status
+- One click downloading of log file
+- Smart downloads, only the latest unique entries are downloaded.  Duplicates are removed to reduce filesize and make reading the file easier
 - Persist selected view, sorting across login sessions
+- Settings pane added for easy management of viewer settings
 
 ### UI
 
+- Wordpress sidebar is folded to increase viewer space
 - Updated the header to display more error messages and to use less vertical space
 - Smarter display of error legends.  Only legends with errors are displayed
 - Search query is not displayed under search bar
