@@ -71,6 +71,20 @@ class Log {
 
 
 	/**
+	 * Check if debugging status can be toggled and saved
+	 *
+	 * @since 0.14.0
+	 *
+	 * @return boolean True if status can be toggled and saved
+	 */
+	function is_debug_toggleable() {
+		$index_file = $_SERVER['DOCUMENT_ROOT'].'/wplv-config.php';
+
+		return defined('WPLV_DEBUG') && file_exists($index_file) && is_writable($index_file) ? true : false;
+	}
+
+
+	/**
 	 * Check if debug status was detected or not
 	 *
 	 * @since 0.11.0
@@ -80,7 +94,7 @@ class Log {
 	public function debug_status_detected() {
 		//return defined('WP_DEBUG_DETECTED') && (WP_DEBUG_DETECTED === true || WP_DEBUG_DETECTED === 'true') ? true : false;
 
-		return defined('WP_DEBUG') && (WP_DEBUG === true || WP_DEBUG === 'true') ? true : false;
+		return defined('WP_DEBUG'); // && (WP_DEBUG === true || WP_DEBUG === 'true') ? true : false;
 	}
 
 
@@ -92,7 +106,7 @@ class Log {
 	 * @return boolean True if debugging was enabled
 	 */
 	public function enable_debugging() {
-		return set_debugging_status(true);
+		return $this->set_debugging_status(true);
 	}
 
 
@@ -104,7 +118,7 @@ class Log {
 	 * @return boolean True if debugging was disabled
 	 */
 	public function disable_debugging() {
-		return set_debugging_status(false);
+		return $this->set_debugging_status(false);
 	}
 
 
@@ -291,27 +305,23 @@ class Log {
 	 *
 	 * @since 0.14.0
 	 *
+	 * @param $status boolean The new status
 	 * @return boolean True if status updated
 	 */
-	private function set_debugging_status($value) {
-		$settings = Settings::get_instance();
-		$user_id = \get_current_user_id();
-		$config = $settings->get_settings($user_id);
+	private function set_debugging_status($status=false) {
+		$saved = false;
 
-		// Check if path to debug.log is set
-		if (isset($config['wpconfig_path']) && !empty($config['wpconfig_path'])) {
-			$file = $config['wpconfig_path'];
+		if ($this->is_debug_toggleable()) {
+			$index_file = $_SERVER['DOCUMENT_ROOT'].'/wplv-config.php';
 
 			// Get file contents then updated constant value
-			$content = file_get_contents($file);
-			$content = preg_replace('/define\(["\' ]+WP_DEBUG["\' ]+,["\' ]+(true|false)["\' ]+\)/', 'define("WP_DEBUG", '.$value.');', $content);
+			$content = file_get_contents($index_file);
+			$content = preg_replace('/define\([ \"\']+WPLV_DEBUG[ \"\']+,.*;/', 'define("WPLV_DEBUG", '.($status == true ? 'true' : 'false').');', $content);
 
 			// Write updated content to debug.log
-			file_put_contents($file, $content);
-
-			return true;
+			$saved = file_put_contents($index_file, $content);
 		}
 
-		return false;
+		return $saved !== false || $saved > 0 ? true : false;
 	}
 }

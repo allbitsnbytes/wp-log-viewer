@@ -32,23 +32,23 @@ class Settings {
 
 
 	/**
-	 * Default settings
+	 * Global settings
 	 *
 	 * @since 0.14.0
 	 */
-	private $defaults = [
+	private $globals = [
 		'view'				=> 'group',
 		'sort'				=> 'newest',
 		'query'				=> '',
 		'legends'			=> '',
-		'fold_sidebar'		=> true,
-		'truncate_download'	=> true,
+		'fold_sidebar'		=> 1,
+		'truncate_download'	=> 1,
 		'wpconfig_path'		=> '',
 	];
 
 
 	/**
-	 * Get settings for user provided.  If no user is provided or no settings have been set for that user, return defailt settings
+	 * Get settings for user provided.  If no user is provided or no settings have been set for that user, return global settings
 	 *
 	 * @since 0.12.0
 	 *
@@ -63,34 +63,34 @@ class Settings {
 		}
 
 		if (empty($settings)) {
-			$settings = $this->get_default_settings();
+			$settings = $this->get_global_settings();
 		}
 
-		return $this->merge_settings($this->defaults, $settings);
+		return $this->merge_settings($this->globals, $settings);
 	}
 
 
 	/**
-	 * Get default settings
+	 * Get global settings
 	 *
 	 * @since 0.12.0
 	 *
 	 * @return array|false
 	 */
-	public function get_default_settings() {
+	public function get_global_settings() {
 		return \get_option('_wplv_settings', false);
 	}
 
 
 	/**
-	 * Update default settings
+	 * Update global settings
 	 *
 	 * @since 0.12.0
 	 *
 	 * @param array $new_settings The settings to set
 	 * @return boolean
 	 */
-	public function update_default_settings($new_settings) {
+	public function update_global_settings($new_settings) {
 		$settings = $this->get_settings();
 		$settings = $this->merge_settings($settings, $new_settings);
 
@@ -133,24 +133,24 @@ class Settings {
 
 
 	/**
-	 * Merge key and value into default array if it's not currently present set.  If it is already set, update the value
+	 * Merge key and value into global array if it's not currently present set.  If it is already set, update the value
 	 *
 	 * @since 0.12.0
 	 *
-	 * @param array $default The array to merge into or update
+	 * @param array $global The array to merge into or update
 	 * @param array $new The array to merge
 	 * @return array
 	 */
-	private function merge_settings($default, $new) {
+	private function merge_settings($global, $new) {
 		if (is_array($new) && count($new) > 0) {
 			foreach ($new as $key=>$value) {
 				if (in_array($key, $this->allowed)) {
-					$default[$key] = $value;
+					$global[$key] = $value;
 				}
 			}
 		}
 
-		return $default;
+		return $global;
 	}
 
 }

@@ -284,7 +284,7 @@ class Api {
 
 
 	/**
-	 * Get default settings
+	 * Get global settings
 	 *
 	 * @since 0.12.0
 	 *
@@ -292,9 +292,9 @@ class Api {
 	 * @param Response $res Response instance
 	 * @return Response The current response instance
 	 */
-	public static function get_default_settings($req, $res) {
+	public static function get_global_settings($req, $res) {
 		$handler = Settings::get_instance();
-		$settings = $handler->get_default_settings();
+		$settings = $handler->get_global_settings();
 
 		$res->set_json([
 			'settings'		=> $settings,
@@ -305,7 +305,7 @@ class Api {
 
 
 	/**
-	 * Update default settings
+	 * Update global settings
 	 *
 	 * @since 0.12.0
 	 *
@@ -313,12 +313,12 @@ class Api {
 	 * @param Response $res Response instance
 	 * @return Response The current response instance
 	 */
-	public static function update_default_settings($req, $res) {
+	public static function update_global_settings($req, $res) {
 		$updated = false;
 
 		if (isset($req->params['settings'])) {
 			$handler = Settings::get_instance();
-			$updated = $handler->update_default_settings($req->params['settings']);
+			$updated = $handler->update_global_settings($req->params['settings']);
 		}
 
 		$res->set_json([
