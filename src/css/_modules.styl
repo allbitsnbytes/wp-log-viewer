@@ -49,6 +49,7 @@
 		display block
 		text-align left
 		font-size 0.8em
+		padmar 7px, 0
 
 		a, a:hover
 			color $text-color
@@ -92,6 +93,11 @@
 			.count
 				color $black
 				background-color $light-grey !important
+
+		&.selected
+			border 1px solid #ddd
+			border-radius 6px
+			padding 6px !important
 
 
 /*
@@ -182,12 +188,12 @@
 
 .wplv-module--modal
 	position absolute
+	height 100vh
 	top 0
-	bottom 0
 	left 0
 	right 0
 	background-color rgba($modal-bg, 0.85)
-	z-index 2000
+	z-index 10000
 
 	.modal-confirm-pane,
 	.modal-content-pane
@@ -261,8 +267,21 @@
 
 .wplv-module--form
 	.form-row
-		span(1)
-		padding 5px
+		cf()
+		display block
+		padmar 5px 0, 10px 0 0
 
 	label
 		font-weight bold
+
+	.toggle-field
+		display inline-block
+		font-size 28px
+		line-height 1em
+
+	.buttons
+		.primary
+			color $white
+			background-color $black
+			border-radius 5px
+			padding 10px 15px

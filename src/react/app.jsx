@@ -67,7 +67,7 @@ wplv.App = React.createClass({
 
 			this.ready = true;
 
-			debugging.enabled = result.debugDetected ? result.debugEnabled : this.props.debugging;
+			debugging.enabled = this.props.debugging;
 			debugging.simulating = this._isSimulationEnabled();
 			debugging.detected = result.debugDetected;
 
@@ -128,6 +128,20 @@ wplv.App = React.createClass({
 		});
 
 		wplv.remote.updateUserSetting('legends', errors);
+	},
+
+	// Toggle debugging status
+	setDebugStatus: function(status) {
+		wplv.remote.toggleDebugging((status ? 1 : 0), function(result) {
+			if (result.changed == true || result.changed == 'true') {
+				this.setState({
+					debugging: { enabled: result.status }
+				});
+
+				this._broadcastChangeEvent();
+				wplv.notify.alert('Debbugging has been <strong>' + (result.status ? 'enabled' : 'disabled') + '</strong>');
+			}
+		}.bind(this));
 	},
 
 	// Clear entries
@@ -241,7 +255,7 @@ wplv.App = React.createClass({
 		e.preventDefault();
 
 		wplv.remote.updateUserSettings({
-			'fold_sidebar': React.findDOMNode(this.refs.foldSidebar).value;
+			'fold_sidebar': React.findDOMNode(this.refs.foldSidebar).value
 		});
 
 		this.setState({showSettings: false});
@@ -320,8 +334,14 @@ wplv.App = React.createClass({
 			entry.errorType = errorType && errorType !== entry.message ? errorType.trim() : '';
 
 			if (entry.errorType === '') {
-				// Check for Wordpress Database error type if present
-				var errorType = entry.message.replace(/^(Wordpress database error ).*/gi, '$1');
+				// Check for custom errors
+				if (entry.message.match(/^#[\w_-]+:/gi) !== null) {
+					errorType = entry.message.replace(/^#([\w_-]+):.*/gi, '$1');
+				} else {
+					// Check for Wordpress Database error type if present
+					errorType = entry.message.replace(/^(Wordpress database error ).*/gi, '$1');
+				}
+
 				entry.errorType = errorType && errorType !== entry.message ? errorType.trim() : '';
 			}
 
@@ -339,7 +359,7 @@ wplv.App = React.createClass({
 					entry.message = entry.message.replace('on line ' + entry.line, '');
 				}
 
-				entry.message = entry.message.replace(/^(PHP [\w ]+:|Wordpress database error)(.*)/gi, '$2', '').trim();
+				entry.message = entry.message.replace(/^(PHP [\w ]+:|Wordpress database error|\#[\W_-]+:)(.*)/gi, '$2', '').trim();
 			}
 
 			return entry;
@@ -378,7 +398,7 @@ wplv.App = React.createClass({
 		showStatus = showStatus === true ? true : false;
 
 		wplv.remote.getLatestEntries(data, function(result) {
-			if (result.changed) {
+			if (result.changed == true && result.changed == 'true') {
 				var log = this.state.log;
 
 				log.entries = this._prepareEntries(result.entries);
@@ -609,22 +629,7 @@ wplv.App = React.createClass({
 				</section>
 
 				<wplv.ContentModal ref="settingsPane" className="settings-pane" isOpen={ this.state.showSettings } size="medium">
-					<h2>Settings</h2>
-
-					<div className="wplv-module--form">
-						<div className="form-row">
-							<label>Fold sidebar to increase viewing area?</label>
-							<select ref="foldSidebar">
-								<option value="0">No</option>
-								<option value="1">Yes</option>
-							</select>
-						</div>
-					</div>
-
-					<ul className="buttons">
-						<li><a href="#" onClick={ this.saveSettingsPane } className="primary"><i className="fa fa-chevron-circle-right" />Save</a></li>
-						<li><a href="#" onClick={ this.closeSettingsPane }><i className="fa fa-chevron-circle-right" />Close</a></li>
-					</ul>
+					<wplv.Settings app={ this } />
 				</wplv.ContentModal>
 			</div>
 		);

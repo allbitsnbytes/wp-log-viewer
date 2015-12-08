@@ -26,7 +26,7 @@ wplv.Sidebar = React.createClass({
 				trackSelected: true,
 				options: [
 					{ label: 'By Newest',	key: 'newest',	icon: 'sort-alpha-asc',	action: this.props.app.sortNewest },
-					{ label: 'By Oldest',	key: 'oldest',	icon: 'sort-alpha-desc',	action: this.props.app.sortOldest }
+					{ label: 'By Oldest',	key: 'oldest',	icon: 'sort-alpha-desc',action: this.props.app.sortOldest }
 				]
 			},
 
@@ -36,8 +36,8 @@ wplv.Sidebar = React.createClass({
 				default: this.props.app.state.log.view,
 				trackSelected: true,
 				options: [
-					{ label: 'Group View',	key: 'group',	icon: 'list-alt',			action: this.props.app.showGroupView },
-					{ label: 'List View',	key: 'list',	icon: 'list',		action: this.props.app.showListView }
+					{ label: 'Group View',	key: 'group',	icon: 'list-alt',		action: this.props.app.showGroupView },
+					{ label: 'List View',	key: 'list',	icon: 'list',			action: this.props.app.showListView }
 				]
 			},
 		];
@@ -83,22 +83,24 @@ wplv.Sidebar = React.createClass({
 
 			return (
 				<aside className="wplv-page--sidebar">
-					{ menuOptions }
+					<div className="sidebar-container">
+						{ menuOptions }
 
-					{ simulateMenuOption }
+						{ simulateMenuOption }
 
-					<div className="settings">
-						<a href="#" onClick={ this.props.app.openSettingsPane }><i className="fa fa-cog" /> Settings</a>
-					</div>
+						<div className="settings">
+							<a href="#" onClick={ this.props.app.openSettingsPane }><i className="fa fa-cog" /> Settings</a>
+						</div>
 
-					<div className="last-modified">
-						<h4>Last modified</h4>
-						<wplv.TimeStamp date={ lastModifiedDate !== '' ? new Date(lastModifiedDate) : '' } />
-					</div>
+						<div className="last-modified">
+							<h4>Last modified</h4>
+							<wplv.TimeStamp date={ lastModifiedDate !== '' ? new Date(lastModifiedDate) : '' } />
+						</div>
 
-					<div className="log-filesize">
-						<h4>Filesize</h4>
-						<wplv.PrettyFilesize filesize={ this.props.app.getFilesize() } />
+						<div className="log-filesize">
+							<h4>Filesize</h4>
+							<wplv.PrettyFilesize filesize={ this.props.app.getFilesize() } />
+						</div>
 					</div>
 				</aside>
 			);

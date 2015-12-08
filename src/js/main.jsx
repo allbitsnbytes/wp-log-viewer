@@ -30,6 +30,23 @@ wplv.remote = (function() {
 			return callRemote('clear-log', 'POST', {}, success, fail);
 		},
 
+		toggleDebugging: function(status, success, fail) {
+			return callRemote('toggle-debugging', 'POST', {status: status}, success, fail);
+		},
+
+		updateGlobalSetting: function(key, value, success, fail) {
+			var data = {};
+			data[key] = value;
+
+			return callRemote('update-global-settings', 'POST', {user_id: WPLOGVIEWER.user_id, settings: data}, success, fail);
+		},
+
+		updateGlobalSettings: function(data, success, fail) {
+			if (typeof data === 'object') {
+				return callRemote('update-global-settings', 'POST', {user_id: WPLOGVIEWER.user_id, settings: data}, success, fail);
+			}
+		},
+
 		updateUserSetting: function(key, value, success, fail) {
 			var data = {};
 			data[key] = value;
@@ -84,9 +101,27 @@ if (WPLOGVIEWER.current_page === 'tools_page_wp-log-viewer') {
 		document.getElementById('wplv-viewer-container')
 	);
 
-	if (WPLOGVIEWER['fold_sidebar'] && parseInt(WPLOGVIEWER.fold_sidebar) === 1) {
-		document.querySelector('body').className += ' folded';
+	if (WPLOGVIEWER['settings'] && WPLOGVIEWER.settings['fold_sidebar'] && WPLOGVIEWER.settings.fold_sidebar == 1) {
+		document.getElementsByTagName('body')[0].className += ' folded';
 	}
+
+	var fixedSidebar = false;
+
+	window.onscroll = function() {
+		var body = document.getElementsByTagName('body')[0];
+
+		if (body.scrollTop >= 130) {
+			if (fixedSidebar === false) {
+				body.className += ' fixed-sidebar';
+				fixedSidebar = true;
+			}
+		} else {
+			if (fixedSidebar === true) {
+				body.className = body.className.replace(' fixed-sidebar', ' ');
+				fixedSidebar = false;
+			}
+		}
+	};
 } else if (WPLOGVIEWER.current_page === 'dashboard') {
 	React.render(
 		<wplv.DashboardWidget debugging={ wplvDDStatus } pluginUrl={ WPLOGVIEWER.plugin_url } />,

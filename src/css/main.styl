@@ -79,12 +79,12 @@
 			text-align left
 			list-style none
 			box-sizing border-box
-			padmar 18px 0 0 25px, 0
+			padmar 12px 0 0 25px, 0
 
 			li
 				display inline-block
 				line-height 1.1em
-				padmar 0, 0 0 0 25px
+				margin-left 15px
 
 				&:first-child
 					margin-left 0
@@ -252,15 +252,39 @@
 					padding-right 35px
 
 
+/**
+ * Settings Pane
+ */
+
+.wplv-container
+	.settings-pane
+		.wplv-module--form
+			label
+				display block
+				font-size 1.1em
+				margin-bottom 8px
+
+			.buttons
+				margin-top 25px
+
+
+/**
+ * Sidebar
+ */
+
 .wplv-page--sidebar
 	cf()
 	+between(768px, 1039px)
 		span(0.2)
 	+above(1040px)
 		span(0.15)
-	box-sizing border-box
-	border-left 1px solid lighten($black, 85%)
-	padmar 20px 0 25px 25px, 0
+
+	.sidebar-container
+		width 100%
+		background-color $white
+		border-left 1px solid lighten($black, 85%)
+		box-sizing border-box
+		padmar 20px 0 25px 25px, 0
 
 	.menu-group
 		padmar 0 0 30px, 0
@@ -323,6 +347,16 @@
 
 	&:empty
 		display none
+
+
+.fixed-sidebar
+	.wplv-page--sidebar
+		position relative
+
+		.sidebar-container
+			position fixed
+			top 35px
+			z-index 3000
 
 
 /*
