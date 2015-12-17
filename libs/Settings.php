@@ -23,32 +23,40 @@ class Settings {
 
 	use IsSingleton;
 
+
 	/**
-	 * Allowed setting fields
+	 * Default global settings
 	 *
 	 * @since 0.14.0
 	 */
-	private $allowed = ['sort', 'view', 'query', 'legends', 'fold_sidebar', 'truncate_download', 'wpconfig_path'];
+	private $global_fields = [
+		'view'				=> 'group',
+		'sort'				=> 'newest',
+		'query'				=> '',
+		'custom_errors'		=> '',
+		'legends'			=> '',
+		'fold_sidebar'		=> 1,
+		'truncate_download'	=> 1,
+	];
 
 
 	/**
-	 * Global settings
+	 * Default user settings
 	 *
 	 * @since 0.14.0
 	 */
-	private $globals = [
+	private $user_fields = [
 		'view'				=> 'group',
 		'sort'				=> 'newest',
 		'query'				=> '',
 		'legends'			=> '',
 		'fold_sidebar'		=> 1,
 		'truncate_download'	=> 1,
-		'wpconfig_path'		=> '',
 	];
 
 
 	/**
-	 * Get settings for user provided.  If no user is provided or no settings have been set for that user, return global settings
+	 * Get all settings.  If user id is provided, user and global settings will be merged and returned.  If no user id is provided, only global settings are returned.
 	 *
 	 * @since 0.12.0
 	 *
@@ -56,17 +64,17 @@ class Settings {
 	 * @return array
 	 */
 	public function get_settings($user_id=0) {
-		$settings = [];
+		$global_settings = $this->get_global_settings();
+		$global_settings = $this->merge_settings($this->global_fields, $global_settings, array_keys($this->global_fields));
 
 		if ($user_id > 0) {
-			$settings = $this->get_user_settings($user_id);
-		}
+			$user_settings = $this->get_user_settings($user_id);
+			$user_settings = $this->merge_settings($this->user_fields, $user_settings, array_keys($this->user_fields));
 
-		if (empty($settings)) {
-			$settings = $this->get_global_settings();
+			return array_merge($user_settings, array_diff_key($global_settings, $user_settings));
+		} else {
+			return $global_settings;
 		}
-
-		return $this->merge_settings($this->globals, $settings);
 	}
 
 
@@ -92,7 +100,7 @@ class Settings {
 	 */
 	public function update_global_settings($new_settings) {
 		$settings = $this->get_settings();
-		$settings = $this->merge_settings($settings, $new_settings);
+		$settings = $this->merge_settings($settings, $new_settings, array_keys($this->global_fields));
 
 		$updated = \update_option('_wplv_settings', $settings);
 
@@ -126,7 +134,7 @@ class Settings {
 	 */
 	public function update_user_settings($user_id, $new_settings) {
 		$settings = $this->get_settings($user_id);
-		$settings = $this->merge_settings($settings, $new_settings);
+		$settings = $this->merge_settings($settings, $new_settings, array_keys($this->user_fields));
 
 		return \update_user_meta($user_id, '_wplv_settings', $settings);
 	}
@@ -139,12 +147,13 @@ class Settings {
 	 *
 	 * @param array $global The array to merge into or update
 	 * @param array $new The array to merge
+	 * @param array $allowed The allowed fields
 	 * @return array
 	 */
-	private function merge_settings($global, $new) {
+	private function merge_settings($global, $new, $allowed) {
 		if (is_array($new) && count($new) > 0) {
 			foreach ($new as $key=>$value) {
-				if (in_array($key, $this->allowed)) {
+				if (in_array($key, $allowed)) {
 					$global[$key] = $value;
 				}
 			}

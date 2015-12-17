@@ -31,7 +31,11 @@ wplv.App = React.createClass({
 				modified: '',
 				sort: this.props.settings.sort,
 				timezone: '',
-				view: this.props.settings.view
+				view: this.props.settings.view,
+				customErrors: this.props.settings.custom_errors
+			},
+			ui: {
+				foldSidebar: this.props.settings.fold_sidebar === 1 ? true : false
 			},
 			query: '',
 			showSettings: false
@@ -45,7 +49,9 @@ wplv.App = React.createClass({
 			pluginUrl: '',
 			settings: {
 				view: 'group',
-				sort: 'newest'
+				sort: 'newest',
+				custom_errors: {},
+				fold_sidebar: 1
 			},
 			user: ''
 		};
@@ -70,7 +76,6 @@ wplv.App = React.createClass({
 			debugging.enabled = this.props.debugging;
 			debugging.simulating = this._isSimulationEnabled();
 			debugging.detected = result.debugDetected;
-
 			log.entries = this._prepareEntries(result.entries);
 			log.found = result.found;
 			log.modified = result.modified;
@@ -337,6 +342,8 @@ wplv.App = React.createClass({
 				// Check for custom errors
 				if (entry.message.match(/^#[\w_-]+:/gi) !== null) {
 					errorType = entry.message.replace(/^#([\w_-]+):.*/gi, '$1');
+
+					// TODO : Add custom error lable
 				} else {
 					// Check for Wordpress Database error type if present
 					errorType = entry.message.replace(/^(Wordpress database error ).*/gi, '$1');
@@ -344,6 +351,8 @@ wplv.App = React.createClass({
 
 				entry.errorType = errorType && errorType !== entry.message ? errorType.trim() : '';
 			}
+
+			entry.errorTypeKey = entry.errorType.replace(/[ ]+/gi, '-').toLowerCase();
 
 			// Get file path if present
 			var filePath = entry.message.replace(/.*in (\/[\w\/._-]+.php).*/gi, '$1');
@@ -359,7 +368,7 @@ wplv.App = React.createClass({
 					entry.message = entry.message.replace('on line ' + entry.line, '');
 				}
 
-				entry.message = entry.message.replace(/^(PHP [\w ]+:|Wordpress database error|\#[\W_-]+:)(.*)/gi, '$2', '').trim();
+				entry.message = entry.message.replace(/^(PHP [\w ]+:|#[\w_-]+:|Wordpress database error)(.*)/gi, '$2', '').trim();
 			}
 
 			return entry;
@@ -433,7 +442,6 @@ wplv.App = React.createClass({
 
 		var filtered = [];
 		var found = {};
-
 		// Filter duplicate entries
 		entries.forEach(function(entry) {
 			if (found[entry.key] === undefined) {
@@ -502,7 +510,7 @@ wplv.App = React.createClass({
 
 					if (filterErrorTypes.length > 0) {
 						entries = entries.filter(function(entry) {
-							if (filterErrorTypes.indexOf(entry.errorType) !== -1) {
+							if (filterErrorTypes.indexOf(entry.errorTypeKey) !== -1) {
 								return true;
 							}
 

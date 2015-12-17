@@ -34,6 +34,10 @@ wplv.remote = (function() {
 			return callRemote('toggle-debugging', 'POST', {status: status}, success, fail);
 		},
 
+		getGlobalSettings: function(success, fail) {
+			return callRemote('get-global-settings', 'POST', {}, success, fail);
+		},
+
 		updateGlobalSetting: function(key, value, success, fail) {
 			var data = {};
 			data[key] = value;

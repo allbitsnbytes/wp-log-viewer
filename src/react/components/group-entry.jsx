@@ -17,13 +17,15 @@ wplv.GroupEntry = React.createClass({
 				date: '',
 				message: '',
 				entries: []
-			}
+			},
+			key: ''
 		};
 	},
 
 	// Property types
 	propTypes: {
-		group: React.PropTypes.object
+		group: React.PropTypes.object,
+		key: React.PropTypes.string
 	},
 
 	// Toggle entry details

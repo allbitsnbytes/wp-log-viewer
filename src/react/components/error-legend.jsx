@@ -54,23 +54,40 @@ wplv.ErrorLegend = React.createClass({
 		var errorsList = [];
 
 		if (this.props.app.ready) {
-			var entries = this.props.app.getEntries();
-			var errors = {};
-			var found = {};
+			var entries = this.props.app.getEntries(),
+				customErrors = this.props.app.state.log.customErrors,
+				errors = {},
+				found = {};
 
 			// Load errors
 			entries.forEach(function(entry) {
 				if (found[entry.key] === undefined && entry.errorType) {
-					var className = entry.errorType.replace(/[ ]+/, '-').toLowerCase();
+					var errorTypeKey = entry.errorTypeKey;  // entry.errorType.replace(/[ ]+/gi, '-').toLowerCase();
 
-					if (errors[className] === undefined) {
-						errors[className] = {
-							className: className,
+					if (errors[errorTypeKey] === undefined) {
+						var custom = {
 							label: entry.errorType,
-							count: 1
+							color: '',
+							background: ''
+						};
+
+						if (typeof customErrors[errorTypeKey] !== 'undefined') {
+							custom.label = customErrors[errorTypeKey].label;
+							custom.color = typeof customErrors[errorTypeKey]['color'] === 'undefined' ? '' : customErrors[errorTypeKey].color;
+							custom.background = typeof customErrors[errorTypeKey]['background'] === 'undefined' ? '' : customErrors[errorTypeKey].background;
+						}
+
+						errors[errorTypeKey] = {
+							className: errorTypeKey,
+							label: custom.label,
+							count: 1,
+							styles: {
+								color: custom.color,
+								background: custom.background
+							}
 						};
 					} else {
-						errors[className].count++;
+						errors[errorTypeKey].count++;
 					}
 
 					found[entry.key] = true;
@@ -78,18 +95,26 @@ wplv.ErrorLegend = React.createClass({
 			});
 
 			// Build markup
-			Object.keys(errors).forEach(function(key) {
-				var error = errors[key];
-				var className = error.className;
+			Object.keys(errors).forEach(function(key, index) {
+				var error = errors[key],
+					className = error.className,
+					styles = {};
 
 				if (this.state.errorTypes.length > 0) {
-					className += this.state.errorTypes.indexOf(error.label) !== -1 ? ' selected' : ' not-selected';
+					className += this.state.errorTypes.indexOf(key) !== -1 ? ' selected' : ' not-selected';
+				}
+
+				if (error.styles.color !== '' && error.styles.background !== '') {
+					styles = {
+						'color': error.styles.color + ' !important',
+						'background-color': error.styles.background + ' !important'
+					};
 				}
 
 				errorsList.push((
-					<li className={ className }>
-						<a href="#" onClick={ this.toggleFilter(error.label) } title={ "Filter by: " + error.label }>
-							<span className="count">{ error.count }</span> { error.label }
+					<li className={ className } key={ index }>
+						<a href="#" onClick={ this.toggleFilter(key) } title={ "Filter by: " + error.label }>
+							<span className="count" style={ styles }>{ error.count }</span> { error.label }
 						</a>
 					</li>
 				));

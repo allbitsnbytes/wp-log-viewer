@@ -188,7 +188,7 @@
 
 .wplv-module--modal
 	position absolute
-	height 100vh
+	bottom 0
 	top 0
 	left 0
 	right 0
@@ -197,14 +197,14 @@
 
 	.modal-confirm-pane,
 	.modal-content-pane
-		position relative
+		position fixed
 		display block
-		width 500px
+		width 560px
 		left 50%
 		background $modal-pane-bg
 		box-shadow 0 0 10px 5px rgba(0, 0, 0, 0.2)
 		border-radius 4px
-		padmar 22px 25px, 50px 0 0 -250px
+		padmar 22px 25px, 25px 0 0 -280px
 		z-index 2100
 
 		&.large
@@ -234,7 +234,7 @@
 					color $text-color
 					background-color $white
 					border 1px solid lighten($text-color, 80%)
-					border-radius 5px
+					border-radius 4px
 					text-decoration none
 					padmar 5px 15px, 0
 
@@ -262,6 +262,46 @@
 
 
 /*
+ * Tabs
+ */
+
+.wplv-module--tabs
+	.tabs
+		display block
+		list-style none
+		border-bottom 1px solid #ccc
+		padmar 0, 15px 0 0
+
+		.tab
+			display inline-block
+			font-weight 400
+			background-color transparent
+			box-sizing border-box
+			border-bottom 1px solid transparent
+			border-right 1px solid #ebebeb
+			cursor pointer
+			padmar 10px 20px 6px, 0
+
+			&.selected
+				background-color #ebebeb
+				border-bottom 1px solid #aaa
+
+			&:first-child
+				border-left none
+
+			&:last-child
+				border-right none
+
+	.tab-content
+		display none
+		box-sizing border-box
+		padding 15px 0 10px
+
+		&.selected
+			display block
+
+
+/*
  * Form
  */
 
@@ -271,8 +311,20 @@
 		display block
 		padmar 5px 0, 10px 0 0
 
+	.form-field
+		box-sizing border-box
+
+		input, textarea
+			width 100%
+
 	label
 		font-weight bold
+
+		&.required:after
+			display inline-block
+			color #f00
+			margin-left 3px
+			content '*'
 
 	.toggle-field
 		display inline-block
