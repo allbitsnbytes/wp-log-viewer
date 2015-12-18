@@ -88,8 +88,11 @@ wplv.Sidebar = React.createClass({
 
 						{ simulateMenuOption }
 
-						<div className="settings">
-							<a href="#" onClick={ this.props.app.openSettingsPane }><i className="fa fa-cog" /> Settings</a>
+						<div className="menu-links">
+							<ul>
+								<li><a href="#" onClick={ this.props.app.openSettings }><i className="fa fa-cog" /> Settings</a></li>
+								<li><a href="#" onClick={ this.props.app.openHelp }><i className="fa fa-question-circle" /> Help</a></li>
+							</ul>
 						</div>
 
 						<div className="last-modified">

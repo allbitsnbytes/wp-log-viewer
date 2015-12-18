@@ -337,7 +337,7 @@ wplv.Settings = React.createClass({
 					</wplv.Tabs>
 
 					<ul className="buttons">
-						<li><a href="#" onClick={ this.props.app.closeSettingsPane }><i className="fa fa-chevron-circle-right" />Close</a></li>
+						<li><a href="#" onClick={ this.props.app.closeSettings }><i className="fa fa-chevron-circle-right" />Close</a></li>
 					</ul>
 				</div>
 			);

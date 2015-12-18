@@ -38,7 +38,8 @@ wplv.App = React.createClass({
 				foldSidebar: this.props.settings.fold_sidebar === 1 ? true : false
 			},
 			query: '',
-			showSettings: false
+			showSettings: false,
+			showHelp: false
 		};
 	},
 
@@ -249,14 +250,14 @@ wplv.App = React.createClass({
 	},
 
 	// Open settings page
-	openSettingsPane: function(e) {
+	openSettings: function(e) {
 		e.preventDefault();
 
 		this.setState({showSettings: true});
 	},
 
 	// Save settings pane
-	saveSettingsPane: function(e) {
+	saveSettings: function(e) {
 		e.preventDefault();
 
 		wplv.remote.updateUserSettings({
@@ -267,10 +268,24 @@ wplv.App = React.createClass({
 	},
 
 	// Close settings page
-	closeSettingsPane: function(e) {
+	closeSettings: function(e) {
 		e.preventDefault();
 
 		this.setState({showSettings: false});
+	},
+
+	// Open help page
+	openHelp: function(e) {
+		e.preventDefault();
+
+		this.setState({showHelp: true});
+	},
+
+	// Close help pane
+	closeHelp: function(e) {
+		e.preventDefault();
+
+		this.setState({showHelp: false});
 	},
 
 	// Pretend debugging is enabled
@@ -638,6 +653,10 @@ wplv.App = React.createClass({
 
 				<wplv.ContentModal ref="settingsPane" className="settings-pane" isOpen={ this.state.showSettings } size="medium">
 					<wplv.Settings app={ this } />
+				</wplv.ContentModal>
+
+				<wplv.ContentModal ref="helpPane" className="help-pane" isOpen={ this.state.showHelp } size="large">
+					<wplv.HelpViewer app={ this } />
 				</wplv.ContentModal>
 			</div>
 		);
