@@ -27,6 +27,10 @@ wplv.GroupViewer = React.createClass({
 					message: entry.message,
 					line: entry.line,
 					errorType: entry.errorType,
+					errorLabel: entry.errorLabel,
+					errorTypeKey: entry.errorTypeKey,
+					legendColor: entry.legendColor,
+					legendBackground: entry.legendBackground,
 					filePath: entry.filePath,
 					entries: []
 				};

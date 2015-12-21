@@ -190,6 +190,7 @@ wplv.Settings = React.createClass({
 	render: function() {
 		if (this.props.app.ready) {
 			var customErrorView = '';
+			var toggleDebugging = '';
 
 			if (this.state.ui.customErrorView === 'add') {
 				customErrorView = (
@@ -306,6 +307,18 @@ wplv.Settings = React.createClass({
 						</div>
 					</div>
 				);
+
+				if (WPLOGVIEWER.settings.debug_toggleable) {
+					toggleDebugging = (
+						<a href="#" className="toggle-field" onClick={ this.updateDebugStatus }>
+							<i className={ this.props.app.state.debugging.enabled ? 'fa fa-toggle-on' : 'fa fa-toggle-off' }></i>
+						</a>
+					);
+				} else {
+					toggleDebugging = (
+						<p>Feature must be configured.  <a href="#" onClick={ this.props.app.openHelp('configure-debug-toggling') }>See help</a>.</p>
+					);
+				}
 			}
 
 			return (
@@ -316,9 +329,7 @@ wplv.Settings = React.createClass({
 						<div>
 							<div className="form-row">
 								<label>Enable debugging?</label>
-								<a href="#" className="toggle-field" onClick={ this.updateDebugStatus }>
-									<i className={ this.props.app.state.debugging.enabled ? 'fa fa-toggle-on' : 'fa fa-toggle-off' }></i>
-								</a>
+								{ toggleDebugging }
 							</div>
 
 							<div className="form-row">

@@ -33,6 +33,8 @@ wplv.ContentModal = React.createClass({
 		var paneClassName = 'modal-content-pane ' + this.props.size
 
 		if (this.props.isOpen) {
+			document.querySelector('body').scrollTop = 0;
+
 			return (
 				<div className={ containerClassName }>
 					<div className={ paneClassName }>

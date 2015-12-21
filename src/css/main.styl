@@ -10,6 +10,23 @@
 
 
 /*
+ * Blocks
+ */
+
+sidebar-menu-icon = @block {
+	display inline-block
+	background transparent
+	color $text-color
+	text-align center
+	text-decoration none
+	border 1px solid lighten($black, 84%)
+	border-radius 5px
+	padding 3px 8px
+	margin 0 4px 0 0
+}
+
+
+/*
  * Global Styles
  */
 
@@ -48,7 +65,6 @@
 
 	a, a:hover
 		text-decoration none !important
-
 
 .wplv-page--header
 	cf()
@@ -291,7 +307,7 @@
 			.table-row
 				cf()
 				border-bottom 1px solid #dfdfdf
-				padding 10px 0
+				padding 4px 0
 
 				.error-label,
 				.error-key
@@ -374,13 +390,7 @@
 					padding-bottom 0
 
 				a
-					background transparent
-					color $text-color
-					text-align center
-					text-decoration none
-					border 1px solid lighten($black, 84%)
-					border-radius 5px
-					padmar 3px 8px, 0 4px 0 0
+					{sidebar-menu-icon}
 
 				&.active
 					a
@@ -436,6 +446,66 @@
 			position fixed
 			top 35px
 			z-index 3000
+
+
+/**
+ * Help Section
+ */
+
+.help-container
+	.help-section
+		box-sizing border-box
+		padmar 5px 0 20px, 0
+
+		.sidebar-icon
+			{sidebar-menu-icon}
+			margin-left 10px
+
+		ul
+			list-style circle
+			padding-left 18px
+
+		.code
+			border 1px solid #eaeaea
+			background #efefef
+			padmar 15px, 5px 0 10px
+
+		p
+			.heading
+				display block
+				margin 0 0 2px
+
+	.back-btn
+		a
+			color $white !important
+			background $black !important
+			border-color $black !important
+
+			&:hover
+				background lighten($black, 20%) !important
+
+	.help--questions
+		padmar  10px 0 0, 0
+
+		li
+			position relative
+			display inline-block
+			width 48%
+			font-size 1.1em
+			line-height 1.15em
+			box-sizing border-box
+			padmar 0 0 12px 20px, 0
+
+			a
+				color $text-color
+				text-decoration none
+
+			.fa
+				position absolute
+				left 0
+
+			&:nth-child(odd)
+				margin-right 4%
 
 
 /*

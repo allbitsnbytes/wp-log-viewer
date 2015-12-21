@@ -39,7 +39,8 @@ wplv.App = React.createClass({
 			},
 			query: '',
 			showSettings: false,
-			showHelp: false
+			showHelp: false,
+			helpSection: ''
 		};
 	},
 
@@ -275,17 +276,19 @@ wplv.App = React.createClass({
 	},
 
 	// Open help page
-	openHelp: function(e) {
-		e.preventDefault();
+	openHelp: function(section) {
+		return function(e) {
+			e.preventDefault();
 
-		this.setState({showHelp: true});
+			this.setState({showHelp: true, helpSection: section});
+		}.bind(this);
 	},
 
 	// Close help pane
 	closeHelp: function(e) {
 		e.preventDefault();
 
-		this.setState({showHelp: false});
+		this.setState({showHelp: false, helpSection: ''});
 	},
 
 	// Pretend debugging is enabled
@@ -339,6 +342,8 @@ wplv.App = React.createClass({
 			entries = [];
 		}
 
+		var customErrors = this.state.log.customErrors;
+
 		// Process entries and prepare for use
 		entries = entries.map(function(entry) {
 
@@ -357,8 +362,6 @@ wplv.App = React.createClass({
 				// Check for custom errors
 				if (entry.message.match(/^#[\w_-]+:/gi) !== null) {
 					errorType = entry.message.replace(/^#([\w_-]+):.*/gi, '$1');
-
-					// TODO : Add custom error lable
 				} else {
 					// Check for Wordpress Database error type if present
 					errorType = entry.message.replace(/^(Wordpress database error ).*/gi, '$1');
@@ -386,8 +389,19 @@ wplv.App = React.createClass({
 				entry.message = entry.message.replace(/^(PHP [\w ]+:|#[\w_-]+:|Wordpress database error)(.*)/gi, '$2', '').trim();
 			}
 
+			// Prep additional fields
+			if (typeof customErrors[entry.errorTypeKey] === 'object') {
+				entry.errorLabel = customErrors[entry.errorTypeKey].label;
+				entry.legendColor = customErrors[entry.errorTypeKey].color;
+				entry.legendBackground = customErrors[entry.errorTypeKey].background;
+			} else {
+				entry.errorLabel = entry.errorType;
+				entry.legendColor = '';
+				entry.legendBackground = '';
+			}
+
 			return entry;
-		});
+		}.bind(this));
 
 		// Sort order if necessary
 		if (this.state.log.sort === 'oldest') {
@@ -523,6 +537,7 @@ wplv.App = React.createClass({
 						<wplv.DebugStatus debugging={ this.state.debugging } />
 					);
 
+					// Filter by error type
 					if (filterErrorTypes.length > 0) {
 						entries = entries.filter(function(entry) {
 							if (filterErrorTypes.indexOf(entry.errorTypeKey) !== -1) {
@@ -533,6 +548,7 @@ wplv.App = React.createClass({
 						}.bind(this));
 					}
 
+					// Filter by query string
 					if (query !== '') {
 						entries = entries.filter(function(entry) {
 							var match = new RegExp(query, 'gi');
@@ -656,7 +672,7 @@ wplv.App = React.createClass({
 				</wplv.ContentModal>
 
 				<wplv.ContentModal ref="helpPane" className="help-pane" isOpen={ this.state.showHelp } size="large">
-					<wplv.HelpViewer app={ this } />
+					<wplv.HelpViewer app={ this } section={ this.state.helpSection } />
 				</wplv.ContentModal>
 			</div>
 		);

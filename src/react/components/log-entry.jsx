@@ -9,6 +9,7 @@ wplv.LogEntry = React.createClass({
 			entry: {
 				date: '',
 				errorType: '',
+				errorLabel: '',
 				line: '',
 				filePath: '',
 				message: '',
@@ -28,6 +29,7 @@ wplv.LogEntry = React.createClass({
 	render: function() {
 		var entry = this.props.entry;
 		var entryClasses = ['log-entry'];
+		var style = entry.legendBackground === '' ? {} : {'border-left-color': entry.legendBackground};
 		var entryDate = new Date(entry.date + ' ' + entry.time + ' ' + entry.timezone);
 		var errorDetails = [];
 
@@ -38,7 +40,7 @@ wplv.LogEntry = React.createClass({
 		if (entry.errorType) {
 			entryClasses.push(entry.errorType.toLowerCase().replace(/[ ]+/gi, '-'));
 			errorDetails.push((
-				<div className="error-type"><i className="fa fa-angle-right"></i> Type: <span className="type">{ entry.errorType }</span></div>
+				<div className="error-type"><i className="fa fa-angle-right"></i> Type: <span className="type">{ entry.errorLabel }</span></div>
 			));
 		}
 

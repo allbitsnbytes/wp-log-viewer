@@ -91,7 +91,7 @@ wplv.Sidebar = React.createClass({
 						<div className="menu-links">
 							<ul>
 								<li><a href="#" onClick={ this.props.app.openSettings }><i className="fa fa-cog" /> Settings</a></li>
-								<li><a href="#" onClick={ this.props.app.openHelp }><i className="fa fa-question-circle" /> Help</a></li>
+								<li><a href="#" onClick={ this.props.app.openHelp() }><i className="fa fa-question-circle" /> Help</a></li>
 							</ul>
 						</div>
 

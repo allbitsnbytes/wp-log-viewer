@@ -27,7 +27,7 @@ wplv.Overlay = React.createClass({
 
 	// Before mount
 	componentWillMount: function() {
-		this.setState({active: this.props.active})
+		this.setState({active: this.props.active});
 	},
 
 	// Properties changed

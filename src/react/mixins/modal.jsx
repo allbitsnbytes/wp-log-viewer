@@ -19,5 +19,5 @@ wplv.ModalMixin = {
 	closeModal: function() {
 		this.setState({isOpen: false});
 	}
-	
+
 };

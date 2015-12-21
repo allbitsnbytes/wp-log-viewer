@@ -39,14 +39,15 @@ wplv.GroupEntry = React.createClass({
 	render: function() {
 		var entryClasses = ['group-entry'];
 		var group = this.props.group;
+		var style = group.legendBackground === '' ? {} : {'border-left-color': group.legendBackground};
 		var errorDetails = [];
 		var groupDetails = '';
 		var groupLabel = '';
 
 		if (group.errorType) {
-			entryClasses.push(group.errorType.toLowerCase().replace(/[ ]+/gi, '-'));
+			entryClasses.push(group.errorTypeKey);
 			errorDetails.push((
-				<div className="error-type"><i className="fa fa-angle-right"></i> Type: <span className="type">{ group.errorType }</span></div>
+				<div className="error-type"><i className="fa fa-angle-right"></i> Type: <span className="type">{ group.errorLabel }</span></div>
 			));
 		}
 
@@ -105,7 +106,7 @@ wplv.GroupEntry = React.createClass({
 		}
 
 		return (
-			<section className={ entryClasses.join(' ') }>
+			<section className={ entryClasses.join(' ') } style={ style }>
 				<aside className="summary">
 					<wplv.TimeStamp date={ group.date } />
 				</aside>
