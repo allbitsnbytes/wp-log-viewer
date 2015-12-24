@@ -35,7 +35,7 @@ wplv.App = React.createClass({
 				customErrors: this.props.settings.custom_errors
 			},
 			ui: {
-				foldSidebar: this.props.settings.fold_sidebar === 1 ? true : false
+				foldSidebar: parseInt(this.props.settings.fold_sidebar) === 1 ? true : false
 			},
 			query: '',
 			showSettings: false,
@@ -139,8 +139,10 @@ wplv.App = React.createClass({
 
 	// Toggle debugging status
 	setDebugStatus: function(status) {
+console.error('debug? '+(status?'yes':'no'))
 		wplv.remote.toggleDebugging((status ? 1 : 0), function(result) {
-			if (result.changed == true || result.changed == 'true') {
+console.error(result)
+			if (result.changed === true || result.changed === 'true') {
 				this.setState({
 					debugging: { enabled: result.status }
 				});
@@ -149,6 +151,23 @@ wplv.App = React.createClass({
 				wplv.notify.alert('Debbugging has been <strong>' + (result.status ? 'enabled' : 'disabled') + '</strong>');
 			}
 		}.bind(this));
+	},
+
+	// Toggle sidebar folded status
+	setSidebarFolded: function(folded) {
+		var body = document.querySelectorAll('body')[0];
+
+		if (folded) {
+			body.className += ' folded';
+		} else {
+			body.className = body.className.replace(' folded', '');
+		}
+
+		wplv.remote.updateUserSetting('fold_sidebar', (folded ? 1 : 0));
+		this.setState({
+			ui: {foldSidebar: folded}
+		});
+		this._broadcastChangeEvent();
 	},
 
 	// Clear entries

@@ -33,22 +33,15 @@ wplv.Settings = React.createClass({
 		e.preventDefault();
 
 		this.props.app.setDebugStatus(!this.props.app.state.debugging.enabled);
+		this.forceUpdate();
 	},
 
 	// Toggle fode sidebar
 	updateFoldSidebar: function(e) {
 		e.preventDefault();
 
-		var folded = !this.props.app.state.ui.foldSidebar,
-			body = document.querySelectorAll('body')[0];
-
-		wplv.remote.updateUserSetting('fold_sidebar', (folded ? 1 : 0));
-
-		if (folded) {
-			body.className += 'folded';
-		} else {
-			body.className = body.className.replace(' folded', ' ');
-		}
+		this.props.app.setSidebarFolded(!this.props.app.state.ui.foldSidebar);
+		this.forceUpdate();
 	},
 
 	// Add custom error
@@ -308,7 +301,7 @@ wplv.Settings = React.createClass({
 					</div>
 				);
 
-				if (WPLOGVIEWER.settings.debug_toggleable) {
+				if (WPLOGVIEWER.debug_toggleable === "1") {
 					toggleDebugging = (
 						<a href="#" className="toggle-field" onClick={ this.updateDebugStatus }>
 							<i className={ this.props.app.state.debugging.enabled ? 'fa fa-toggle-on' : 'fa fa-toggle-off' }></i>
