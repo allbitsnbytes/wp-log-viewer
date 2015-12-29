@@ -136,7 +136,7 @@ class Plugin {
 	/**
 	 * Add dynamic routes
 	 *
-	 * @since 0.14.0
+	 * @since 1.0.0
 	 */
 	public function add_dynamic_routes() {
 		$log = Log::get_instance();

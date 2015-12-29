@@ -46,7 +46,7 @@ class Log {
 	/**
 	 * Get debug.log path
 	 *
-	 * @since 0.14.0
+	 * @since 1.0.0
 	 *
 	 * @return string
 	 */
@@ -82,7 +82,7 @@ class Log {
 	/**
 	 * Check if debugging status can be toggled and saved
 	 *
-	 * @since 0.14.0
+	 * @since 1.0.0
 	 *
 	 * @return boolean True if status can be toggled and saved
 	 */
@@ -108,7 +108,7 @@ class Log {
 	/**
 	 * Enable debugging
 	 *
-	 * @since 0.14.0
+	 * @since 1.0.0
 	 *
 	 * @return boolean True if debugging was enabled
 	 */
@@ -120,7 +120,7 @@ class Log {
 	/**
 	 * Disable debugging
 	 *
-	 * @since 0.14.0
+	 * @since 1.0.0
 	 *
 	 * @return boolean True if debugging was disabled
 	 */
@@ -253,7 +253,7 @@ class Log {
 	/**
 	 * Get all file contents
 	 *
-	 * @since 0.14.0
+	 * @since 1.0.0
 	 *
 	 * @return string The contents or empty string
 	 */
@@ -310,7 +310,7 @@ class Log {
 	/**
 	 * Set debugging status if possible
 	 *
-	 * @since 0.14.0
+	 * @since 1.0.0
 	 *
 	 * @param $status boolean The new status
 	 * @return boolean True if status updated

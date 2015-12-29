@@ -115,7 +115,7 @@ class Ajax {
 	/**
 	 * Toggle debugging status
 	 *
-	 * @since 0.14.0
+	 * @since 1.0.0
 	 */
 	function toggle_debugging_status() {
 		$log = Log::get_instance();

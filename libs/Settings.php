@@ -27,7 +27,7 @@ class Settings {
 	/**
 	 * Default global settings
 	 *
-	 * @since 0.14.0
+	 * @since 1.0.0
 	 */
 	private $global_fields = [
 		'view'				=> 'group',
@@ -43,7 +43,7 @@ class Settings {
 	/**
 	 * Default user settings
 	 *
-	 * @since 0.14.0
+	 * @since 1.0.0
 	 */
 	private $user_fields = [
 		'view'				=> 'group',

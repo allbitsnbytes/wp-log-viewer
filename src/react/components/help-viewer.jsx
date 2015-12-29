@@ -102,7 +102,7 @@ wplv.HelpViewer = React.createClass({
 					<div className="help-section help--fold-sidebar">
 						<h4>Fold Sidebar</h4>
 
-						<p>By default the sidebar will be folded when the log viewer is active. To disable, or toggle this behavious:</p>
+						<p>By default the sidebar will be folded when the log viewer is active. To disable, or toggle this behavior:</p>
 						<br />
 
 						<em>Action</em>
@@ -119,7 +119,7 @@ wplv.HelpViewer = React.createClass({
 					<div className="help-section help--custom-errors">
 						<h4>Manage Custom Errors</h4>
 
-						<p>Custom error messages allow you to create custom errors when testing, color code thos errors in the viewer and filter the entries by those errors.</p>
+						<p>Custom error messages allow you to create custom errors when testing, color code those errors in the viewer and filter the entries by those errors.</p>
 
 						<em>Action</em>
 						<ul>
