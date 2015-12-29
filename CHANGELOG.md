@@ -2,12 +2,12 @@
 
 All notable changes will be tracked in this change log.  This project uses [Semantic Versioning](http://semver.org/)
 
-## [0.14.0] - Unreleased
+## [1.0.0] - 2015-12-30
 ### Feature
 
 - One click enable/disable debugging status
-- One click downloading of log file
-- Smart downloads, only the latest unique entries are downloaded.  Duplicates are removed to reduce filesize and make reading the file easier
+- One click downloading of smart log file
+- Smart downloads include only the latest unique entries.  Duplicates are removed to reduce filesize and make reading the file easier
 - Persist selected view, sorting across login sessions
 - Settings pane added for easy management of viewer settings
 
