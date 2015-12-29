@@ -38,7 +38,7 @@ wplv.Search = React.createClass({
 
 		if (this.props.app.ready) {
 			var query = React.findDOMNode(this.refs.q).value;
-			React.findDOMNode(this.refs.q).value = query = query.replace(/[^a-z0-9 ]+/gi, '');
+			React.findDOMNode(this.refs.q).value = query = query.replace(/[^a-z0-9_=\/ ]+/gi, '');
 
 			if (typeof query === 'string' && query.length >= this.minimumLength && this.props.app.searchEntries) {
 				this.setState({
