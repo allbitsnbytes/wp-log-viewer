@@ -139,9 +139,7 @@ wplv.App = React.createClass({
 
 	// Toggle debugging status
 	setDebugStatus: function(status) {
-console.error('debug? '+(status?'yes':'no'))
 		wplv.remote.toggleDebugging((status ? 1 : 0), function(result) {
-console.error(result)
 			if (result.changed === true || result.changed === 'true') {
 				this.setState({
 					debugging: { enabled: result.status }
@@ -686,7 +684,7 @@ console.error(result)
 					{ sidebar }
 				</section>
 
-				<wplv.ContentModal ref="settingsPane" className="settings-pane" isOpen={ this.state.showSettings } size="medium">
+				<wplv.ContentModal ref="settingsPane" className="settings-pane" isOpen={ this.state.showSettings } size="large">
 					<wplv.Settings app={ this } />
 				</wplv.ContentModal>
 

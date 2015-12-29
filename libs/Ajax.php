@@ -124,7 +124,7 @@ class Ajax {
 
 		wp_send_json([
 			'changed'		=> $changed,
-			'status'		=> $changed ? !$status : $status,
+			'status'		=> $status,
 		]);
 	}
 
