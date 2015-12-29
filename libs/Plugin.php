@@ -37,7 +37,7 @@ class Plugin {
 		add_action('admin_enqueue_scripts', [$this, 'load_plugin_css_and_js']);
 		add_action('wp_dashboard_setup', [$this, 'register_dashboard_widgets']);
 		add_action('admin_bar_menu', [$this, 'add_admin_bar_menu'], 900);
-		add_action('template_redirect', [$this, 'add_dynamic_routes']);
+		add_action('template_redirect', [$this, 'add_dynamic_routes'], 1, 1);
 
 		// Initialize ajax handler
 		Ajax::get_instance();
@@ -144,11 +144,13 @@ class Plugin {
 
 		if (is_user_logged_in()) {
 			$user_id = \get_current_user_id();
+			$url_path = trailingslashit(explode('?', $_SERVER['REQUEST_URI'])[0]);
 
-			if ($_SERVER['REQUEST_URI'] == '/debugging/download/log') {
-				header('Content-Type: text/plain; charset=utf-8');
-				header("Content-Disposition: Attachment; filename=debug.log");
-				header("Pragma: no-cache");
+			if ($url_path == '/debugging/download/log/') {
+				header('Pragma: PUBLIC');
+				header('Content-Type: application/octet-stream; charset=utf-8');
+				header('Content-Disposition: attachment; filename="debug.log"');
+				header('HTTP/1.1 200 OK');
 
 				$config = $settings->get_settings($user_id);
 
@@ -172,7 +174,7 @@ class Plugin {
 			}
 		}
 
-		if ($_SERVER['REQUEST_URI'] == '/debugging/share/') {
+		if ($url_path == '/debugging/share/') {
 			// TODO
 		}
 	}

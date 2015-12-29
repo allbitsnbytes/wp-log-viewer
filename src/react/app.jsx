@@ -117,6 +117,7 @@ wplv.App = React.createClass({
 	// Download debug.log
 	downloadFile: function() {
 		window.location.href = '/debugging/download/log';
+		//wplv.notify.success('Debug log successfully downloaded');
 	},
 
 	// Search entries
@@ -140,9 +141,13 @@ wplv.App = React.createClass({
 	// Toggle debugging status
 	setDebugStatus: function(status) {
 		wplv.remote.toggleDebugging((status ? 1 : 0), function(result) {
+			var debugging = this.state.debugging;
+
 			if (result.changed === true || result.changed === 'true') {
+				debugging.enabled = result.status;
+
 				this.setState({
-					debugging: { enabled: result.status }
+					debugging: debugging
 				});
 
 				this._broadcastChangeEvent();
@@ -477,7 +482,7 @@ wplv.App = React.createClass({
 		function(result) {
 			this._stopUpdateChecker();
 			wplv.notify.error('Checking for updates failed.');
-		});
+		}.bind(this));
 	},
 
 	// Filter out duplicate entries
@@ -605,23 +610,11 @@ wplv.App = React.createClass({
 					);
 				} else {
 					if (this.state.debugging.enabled) {
-						if (this.state.debugging.simulating) {
-							content = (
-								<section className="wplv-page--content">
-									<p>Currently <strong className="debug-status-simulating">simulating</strong>.  The <strong>debug.log file does not exist or was not found.</strong></p>
-
-									<ul className="inline-buttons">
-										<li><a href="#" onClick={ function(e) { e.preventDefault(); this.stopSimulation(); }.bind(this) } className="stop-simulation-btn"><i className="fa fa-arrow-circle-right"></i> Stop simulation</a></li>
-									</ul>
-								</section>
-							);
-						} else {
-							content = (
-								<section className="wplv-page--content">
-									<p>Debugging is <strong className="debug-status-enabled">enabled</strong>.  However, the <strong>debug.log file does not exist or was not found.</strong></p>
-								</section>
-							);
-						}
+						content = (
+							<section className="wplv-page--content">
+								<p>Debugging is <strong className="debug-status-enabled">enabled</strong>.  However, the <strong>debug.log file does not exist or was not found.</strong></p>
+							</section>
+						);
 					} else {
 						content = (
 							<section className="wplv-page--content">
@@ -636,19 +629,6 @@ wplv.App = React.createClass({
 				content = (
 					<section className="wplv-page--content">
 						<p className="debugging-unknown">Sorry, we <strong>could not detect if debugging is enabled or disabled</strong>.</p>
-						<br />
-
-						<h3>Simulate Debugging?</h3>
-
-						<p>If you know that debugging is enabled, click below to continue.</p>
-
-						<ul className="inline-buttons">
-							<li><a href="#" onClick={ function(e) { e.preventDefault(); this.startSimulation(); }.bind(this) } className="start-simulation-btn"><i className="fa fa-arrow-circle-right"></i> Start simulation</a></li>
-						</ul>
-
-						<br />
-						<p><small>** Please note that the status of WP_DEBUG is not actually being changed.  This is just a simulation.</small></p>
-						<br />
 
 						<h3>How to Enable Debugging?</h3>
 

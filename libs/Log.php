@@ -39,10 +39,19 @@ class Log {
 	 * @since 0.1.0
 	 */
 	public function init() {
-		// $base = str_replace('plugins/wp-log-viewer/', '', WPLOGVIEWER_BASE);
-		//$base = preg_replace('/([a-zA-Z0-9_\-\/]+)\/[a-zA-Z0-9_-]+\/wp-log-viewer\//', '$1', WPLOGVIEWER_BASE);
-
 		$this->log_file = WP_CONTENT_DIR . '/debug.log';
+	}
+
+
+	/**
+	 * Get debug.log path
+	 *
+	 * @since 0.14.0
+	 *
+	 * @return string
+	 */
+	public function get_debug_file_path() {
+		return $this->log_file;
 	}
 
 
@@ -92,9 +101,7 @@ class Log {
 	 * @return boolean True if debugging status was detected
 	 */
 	public function debug_status_detected() {
-		//return defined('WP_DEBUG_DETECTED') && (WP_DEBUG_DETECTED === true || WP_DEBUG_DETECTED === 'true') ? true : false;
-
-		return defined('WP_DEBUG'); // && (WP_DEBUG === true || WP_DEBUG === 'true') ? true : false;
+		return defined('WP_DEBUG');
 	}
 
 

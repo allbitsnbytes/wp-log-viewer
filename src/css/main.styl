@@ -375,9 +375,10 @@ sidebar-menu-icon = @block {
 		padmar 20px 0 25px 25px, 0
 
 	.menu-group
-		padmar 0 0 30px, 0
+		padmar 0 0 20px, 0
 
 		h3
+			font-size 20px
 			padmar 0, 0
 
 		ul
@@ -392,10 +393,17 @@ sidebar-menu-icon = @block {
 				a
 					{sidebar-menu-icon}
 
+					&:hover
+						color lighten($text-color, 25%)
+
 				&.active
 					a
-						background lighten($black, 85%)
-						border-color lighten($black, 80%)
+						color $white
+						background $black
+						border-color $black
+
+						&:hover
+							background lighten($black, 20%)
 
 				span
 					display none
