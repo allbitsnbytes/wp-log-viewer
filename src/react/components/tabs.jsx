@@ -21,7 +21,7 @@ wplv.Tabs = React.createClass({
 	// Property types
 	propTypes: {
 		selected: React.PropTypes.number,
-		tabs: React.PropTypes.array
+		tabs: React.PropTypes.array.isRequired
 	},
 
 	// Will mount

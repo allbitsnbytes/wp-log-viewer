@@ -29,7 +29,7 @@ wplv.Search = React.createClass({
 
 	// Property types
 	propTypes: {
-		app: React.PropTypes.object
+		app: React.PropTypes.object.isRequired
 	},
 
 	// Handle query submitted

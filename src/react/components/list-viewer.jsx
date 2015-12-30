@@ -19,7 +19,7 @@ wplv.ListViewer = React.createClass({
 
 	// Property types
 	propTypes: {
-		entries: React.PropTypes.array
+		entries: React.PropTypes.array.isRequired
 	},
 
 	// Render component

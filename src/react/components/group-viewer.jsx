@@ -12,13 +12,13 @@ wplv.GroupViewer = React.createClass({
 
 	// Property types
 	propTypes: {
-		entries: React.PropTypes.array
+		entries: React.PropTypes.array.isRequired
 	},
 
 	// Render component
 	render: function() {
-		var groups = {};
-		var groupContent = [];
+		var groups = {},
+			groupContent = [];
 
 		this.props.entries.forEach(function(entry) {
 			if (groups[entry.key] === undefined) {

@@ -61,17 +61,17 @@ wplv.App = React.createClass({
 
 	// Property types
 	propTypes: {
-		debugging: React.PropTypes.bool,
-		pluginUrl: React.PropTypes.string,
-		settings: React.PropTypes.object,
+		debugging: React.PropTypes.bool.isRequired,
+		pluginUrl: React.PropTypes.string.isRequired,
+		settings: React.PropTypes.object.isRequired,
 		user: React.PropTypes.string
 	},
 
 	// Before mount
 	componentWillMount: function() {
 		wplv.remote.getAllEntries({}, function(result) {
-			var debugging = this.state.debugging;
-			var log = this.state.log;
+			var debugging = this.state.debugging,
+				log = this.state.log;
 
 			this.ready = true;
 
@@ -370,7 +370,7 @@ wplv.App = React.createClass({
 		entries = entries.map(function(entry) {
 
 			// Generate entry key based on error message
-			entry.key = md5(entry.message);
+			entry.key = md5(entry.message.replace('\n', ''));
 
 			// Get line number if present
 			var line = entry.message.replace(/.* on line ([\d]+).*/gi, '$1');
@@ -491,8 +491,8 @@ wplv.App = React.createClass({
 			entries = [];
 		}
 
-		var filtered = [];
-		var found = {};
+		var filtered = [],
+			found = {};
 		// Filter duplicate entries
 		entries.forEach(function(entry) {
 			if (found[entry.key] === undefined) {
@@ -541,42 +541,46 @@ wplv.App = React.createClass({
 
 	// Render component
 	render: function() {
-		var content = '';
-		var debugStatus = '';
-		var sidebar = '';
-		var settingsPane = '';
+		var content = '',
+			debugStatus = '',
+			entries = [],
+			queryFilter = {},
+			sidebar = '',
+			settingsPane = '';
 
 		if (this.ready) {
 			if (this.state.debugging.enabled || this.state.debugging.detected || this.state.debugging.simulating) {
 				if (this.state.log.found) {
-					var count = 0;
-					var entries = this.state.log.entries;
-					var query = this.state.query;
-					var filterErrorTypes = this.state.errorTypes;
-					var view = '';
+					var count = 0,
+						filterErrorTypes = this.state.errorTypes,
+						view = '';
+
+					entries = this.state.log.entries;
 
 					debugStatus = (
 						<wplv.DebugStatus debugging={ this.state.debugging } />
 					);
 
-					// Filter by error type
-					if (filterErrorTypes.length > 0) {
+					// Filter by query string
+					if (this.state.query !== '') {
 						entries = entries.filter(function(entry) {
-							if (filterErrorTypes.indexOf(entry.errorTypeKey) !== -1) {
-								return true;
+							var match = new RegExp(this.state.query, 'gi');
+
+							if (entry && entry.message && match.test(entry.message + ' ' + entry.errorType)) {
+								queryFilter[entry.errorTypeKey] = true;
+
+								return true
 							}
 
 							return false;
 						}.bind(this));
 					}
 
-					// Filter by query string
-					if (query !== '') {
+					// Filter by error type
+					if (filterErrorTypes.length > 0) {
 						entries = entries.filter(function(entry) {
-							var match = new RegExp(query, 'gi');
-
-							if (entry && entry.message && match.test(entry.message + ' ' + entry.errorType)) {
-								return true
+							if (filterErrorTypes.indexOf(entry.errorTypeKey) !== -1) {
+								return true;
 							}
 
 							return false;
@@ -591,8 +595,8 @@ wplv.App = React.createClass({
 						view = ( <wplv.ListViewer entries={ entries } /> );
 					}
 
-					var errorClass = entries.length > 0 ? 'count has-errors' : 'count no-errors';
-					var errorLabel = entries.length == 1 ? ' entry' : ' entries';
+					var errorClass = entries.length > 0 ? 'count has-errors' : 'count no-errors',
+						errorLabel = entries.length == 1 ? ' entry' : ' entries';
 
 					content = (
 						<section className="wplv-page--content">
@@ -652,7 +656,7 @@ wplv.App = React.createClass({
 					<header>
 						<h2>Log Viewer { debugStatus }</h2>
 
-						<wplv.ErrorLegend app={ this } />
+						<wplv.ErrorLegend app={ this } query={ this.state.query } filter={ Object.keys(queryFilter) } />
 					</header>
 
 					<wplv.Search app={ this } />

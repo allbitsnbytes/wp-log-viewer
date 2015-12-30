@@ -16,7 +16,7 @@ wplv.DebugStatus = React.createClass({
 
 	// Property types
 	propTypes: {
-		debugging: React.PropTypes.object
+		debugging: React.PropTypes.object.isRequired
 	},
 
 	// Render component

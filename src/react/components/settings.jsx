@@ -25,7 +25,7 @@ wplv.Settings = React.createClass({
 
 	// Property defaults
 	propTypes: {
-		app: React.PropTypes.object
+		app: React.PropTypes.object.isRequired
 	},
 
 	// Toggle debug status
@@ -60,15 +60,12 @@ wplv.Settings = React.createClass({
 	},
 
 	// Edit custom error
-	showEditCustomErrorForm: function(e) {
-		e.preventDefault();
+	showEditCustomErrorForm: function(error) {
+		return function(e) {
+			e.preventDefault();
 
-		var customErrors = this.props.app.state.log.customErrors,
-			error = jQuery(e.currentTarget).closest('.table-row').attr('data-custom-error');
-
-		if (typeof customErrors[error] === 'object') {
 			this.setState({
-				editing: customErrors[error],
+				editing: error,
 				ui: {
 					customErrorView: 'edit'
 				},
@@ -77,9 +74,7 @@ wplv.Settings = React.createClass({
 					background: false
 				}
 			});
-		} else {
-			wplv.alert('Not found');
-		}
+		}.bind(this);
 	},
 
 	// List custom errors
@@ -93,7 +88,7 @@ wplv.Settings = React.createClass({
 	saveCustomError: function(e) {
 		e.preventDefault();
 
-		var customErrors = this.props.app.state.log.customErrors,
+		var log = this.props.app.state.log,
 			newError = {
 				label: React.findDOMNode(this.refs.errorNewLabel).value,
 				key: React.findDOMNode(this.refs.errorNewKey).value,
@@ -102,12 +97,11 @@ wplv.Settings = React.createClass({
 			};
 
 		if (this._isValidCustomError(newError)) {
-			customErrors[newError.key] = newError;
+			log.customErrors[newError.key] = newError;
 
-			wplv.remote.updateGlobalSetting('custom_errors', customErrors, function(result) {
+			wplv.remote.updateGlobalSetting('custom_errors', log.customErrors, function(result) {
 				if (result.updated) {
 					wplv.notify.success('Custom error successfully added');
-					this.setState({ui: {customErrorView: 'list'}});
 					this._showCustomErrorsList();
 				}
 			}.bind(this));
@@ -117,53 +111,61 @@ wplv.Settings = React.createClass({
 	},
 
 	// Update custom error
-	updateCustomError: function(e) {
-		e.preventDefault();
+	updateCustomError: function(error) {
+		var key = error.key;
 
-		var customErrors = this.props.app.state.log.customErrors,
-			updatedError = {
-				key: React.findDOMNode(this.refs.errorEditKey).value,
-				label: React.findDOMNode(this.refs.errorEditLabel).value,
-				color: React.findDOMNode(this.refs.legendEditColor).value,
-				background: React.findDOMNode(this.refs.legendEditBackgroundColor).value
-			};
+		return function(e) {
+			e.preventDefault();
 
-		if (this._isValidCustomError(updatedError)) {
-			customErrors[updatedError.key] = updatedError;
+			var log = this.props.app.state.log;
 
-			wplv.remote.updateGlobalSetting('custom_errors', customErrors, function(result) {
-				if (result.updated) {
-					wplv.notify.success('Custom error successfully updated');
-					this.props.app.setState({log: {customErrors: customErrors}});
-					this._showCustomErrorsList();
+			error.key = React.findDOMNode(this.refs.errorEditKey).value;
+			error.label = React.findDOMNode(this.refs.errorEditLabel).value;
+			error.color = React.findDOMNode(this.refs.legendEditColor).value;
+			error.background = React.findDOMNode(this.refs.legendEditBackgroundColor).value;
+
+			if (this._isValidCustomError(error)) {
+				if (key !== error.key) {
+					delete(log.customErrors[key]);
 				}
-			}.bind(this));
-		} else {
-			wplv.notify.error('Please complete all required fields');
-		}
-	},
 
-	// Remove custom error
-	removeCustomError: function(e) {
-		e.preventDefault();
+				log.customErrors[error.key] = error;
 
-		if (confirm('Are you sure you want to delete this custom error message?')) {
-			var customErrors = this.props.app.state.log.customErrors,
-				error = jQuery(e.currentTarget).closest('.table-row').attr('data-custom-error');
-
-			if (typeof customErrors[error] === 'object') {
-				delete(customErrors[error]);
-
-				wplv.remote.updateGlobalSetting('custom_errors', customErrors, function(result) {
+				wplv.remote.updateGlobalSetting('custom_errors', log.customErrors, function(result) {
 					if (result.updated) {
-						wplv.notify.success('Custom error successfully deleted');
-						this.props.app.setState({log: {customErrors: customErrors}});
+						wplv.notify.success('Custom error successfully updated');
+						this.props.app.setState({log: log});
+						this._showCustomErrorsList();
 					}
 				}.bind(this));
 			} else {
-				wplv.notify.error('Custom error could not be deleted');
+				wplv.notify.error('Please complete all required fields');
 			}
-		}
+		}.bind(this);
+	},
+
+	// Remove custom error
+	removeCustomError: function(error) {
+		return function(e) {
+			e.preventDefault();
+
+			if (confirm('Are you sure you want to delete "' + error.label + '"?')) {
+				var log = this.props.app.state.log;
+
+				if (typeof log.customErrors[error.key] === 'object') {
+					delete(log.customErrors[error.key]);
+
+					wplv.remote.updateGlobalSetting('custom_errors', log.customErrors, function(result) {
+						if (result.updated) {
+							wplv.notify.success('Custom error successfully deleted');
+							this.props.app.setState({log: log});
+						}
+					}.bind(this));
+				} else {
+					wplv.notify.error('Custom error could not be deleted');
+				}
+			}
+		}.bind(this);
 	},
 
 	// Validate custom error form
@@ -250,26 +252,27 @@ wplv.Settings = React.createClass({
 						</div>
 
 						<div className="view-buttons">
-							<a href="#" className="primary" onClick={ this.updateCustomError }>Update</a>
+							<a href="#" className="primary" onClick={ this.updateCustomError(this.state.editing) }>Update</a>
 							<a href="#" onClick={ this.showCustomErrorsList }>Cancel</a>
 						</div>
 					</div>
 				);
 			} else {
 				var customErrors = this.props.app.state.log.customErrors;
-					listOfErrorEntries = Object.keys(customErrors).map(function(error, index) {
-						var colorSwatch = ( <span className="color-swatch" style={{'background-color': customErrors[error].color}}></span> ),
-							bgColorSwatch = ( <span className="color-swatch" style={{'background-color': customErrors[error].background}}></span> );
+					listOfErrorEntries = Object.keys(customErrors).sort().map(function(key, index) {
+						var	error = customErrors[key],
+							colorSwatch = ( <span className="color-swatch" style={{'background-color': error.color}}></span> ),
+							bgColorSwatch = ( <span className="color-swatch" style={{'background-color': error.background}}></span> );
 
 						return (
-							<li className="table-row" data-custom-error={ error } key={ index }>
-								<div className="error-key">{ customErrors[error].key }</div>
-								<div className="error-label">{ customErrors[error].label }</div>
+							<li className="table-row" key={ index }>
+								<div className="error-key">{ error.key }</div>
+								<div className="error-label">{ error.label }</div>
 								<div className="legend-color"> { colorSwatch }</div>
 								<div className="legend-background">{ bgColorSwatch }</div>
 								<div className="actions">
-									<a href="#" onClick={ this.showEditCustomErrorForm } title="Edit"><i className="fa fa-pencil" /></a>
-									<a href="#" onClick={ this.removeCustomError } title="Delete"><i className="fa fa-trash" /></a>
+									<a href="#" onClick={ this.showEditCustomErrorForm(error) } title="Edit"><i className="fa fa-pencil" /></a>
+									<a href="#" onClick={ this.removeCustomError(error) } title="Delete"><i className="fa fa-trash" /></a>
 								</div>
 							</li>
 						);

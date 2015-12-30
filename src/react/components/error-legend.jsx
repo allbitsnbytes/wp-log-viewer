@@ -16,13 +16,17 @@ wplv.ErrorLegend = React.createClass({
 		return {
 			app: {
 				ready: false
-			}
+			},
+			query: '',
+			filter: []
 		};
 	},
 
 	// Property types
 	propTypes: {
-		app: React.PropTypes.object
+		app: React.PropTypes.object.isRequired,
+		query: React.PropTypes.string,
+		filter: React.PropTypes.array
 	},
 
 	// Toggle filter
@@ -62,40 +66,59 @@ wplv.ErrorLegend = React.createClass({
 			// Load errors
 			entries.forEach(function(entry) {
 				if (found[entry.key] === undefined && entry.errorType) {
-					var errorTypeKey = entry.errorTypeKey;  // entry.errorType.replace(/[ ]+/gi, '-').toLowerCase();
+					var matched = true,
+						errorTypeKey = entry.errorTypeKey;
 
-					if (errors[errorTypeKey] === undefined) {
-						var custom = {
-							label: entry.errorType,
-							color: '',
-							background: ''
-						};
+					if (this.props.query !== '') {
+						var match = new RegExp(this.props.query, 'gi');
 
-						if (typeof customErrors[errorTypeKey] !== 'undefined') {
-							custom.label = customErrors[errorTypeKey].label;
-							custom.color = typeof customErrors[errorTypeKey]['color'] === 'undefined' ? '' : customErrors[errorTypeKey].color;
-							custom.background = typeof customErrors[errorTypeKey]['background'] === 'undefined' ? '' : customErrors[errorTypeKey].background;
+						if (!(entry && entry.message && match.test(entry.message + ' ' + entry.errorType))) {
+							matched = false;
 						}
-
-						errors[errorTypeKey] = {
-							className: errorTypeKey,
-							label: custom.label,
-							count: 1,
-							styles: {
-								color: custom.color,
-								background: custom.background
-							}
-						};
-					} else {
-						errors[errorTypeKey].count++;
 					}
 
-					found[entry.key] = true;
+					if (matched) {
+						if (errors[errorTypeKey] === undefined) {
+							var custom = {
+								label: entry.errorType,
+								color: '',
+								background: ''
+							};
+
+							if (typeof customErrors[errorTypeKey] !== 'undefined') {
+								custom.label = customErrors[errorTypeKey].label;
+								custom.color = typeof customErrors[errorTypeKey]['color'] === 'undefined' ? '' : customErrors[errorTypeKey].color;
+								custom.background = typeof customErrors[errorTypeKey]['background'] === 'undefined' ? '' : customErrors[errorTypeKey].background;
+							}
+
+							errors[errorTypeKey] = {
+								className: errorTypeKey,
+								label: custom.label,
+								count: 1,
+								styles: {
+									color: custom.color,
+									background: custom.background
+								}
+							};
+						} else {
+							errors[errorTypeKey].count++;
+						}
+
+						found[entry.key] = true;
+					}
 				}
-			});
+			}.bind(this));
 
 			// Build markup
-			Object.keys(errors).forEach(function(key, index) {
+			Object.keys(errors).filter(function(key) {
+				var filter = this.props.filter;
+
+				if (filter.length > 0) {
+					return filter.indexOf(key) === -1 ? false : true;
+				}
+
+				return true;
+			}.bind(this)).forEach(function(key, index) {
 				var error = errors[key],
 					className = error.className,
 					styles = {};

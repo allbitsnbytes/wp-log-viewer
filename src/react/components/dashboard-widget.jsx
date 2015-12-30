@@ -41,16 +41,16 @@ wplv.DashboardWidget = React.createClass({
 
 	// Property types
 	propTypes: {
-		debugging: React.PropTypes.bool,
-		pluginUrl: React.PropTypes.string
+		debugging: React.PropTypes.bool.isRequired,
+		pluginUrl: React.PropTypes.string.isRequired
 	},
 
 	// Before mount
 	componentWillMount: function() {
 		wplv.remote.getAllEntries({}, function(result) {
-			var counts = this._prepareCount(result.entries);
-			var debugging = this.state.debugging;
-			var log = this.state.log
+			var counts = this._prepareCount(result.entries),
+				debugging = this.state.debugging,
+				log = this.state.log
 
 			this.ready = true;
 
@@ -77,8 +77,8 @@ wplv.DashboardWidget = React.createClass({
 			entries = [];
 		}
 
-		var filtered = [];
-		var found = {};
+		var filtered = [],
+			found = {};
 
 		// Filter duplicate entries
 		entries.forEach(function(entry) {

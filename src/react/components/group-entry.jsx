@@ -24,8 +24,8 @@ wplv.GroupEntry = React.createClass({
 
 	// Property types
 	propTypes: {
-		group: React.PropTypes.object,
-		key: React.PropTypes.string
+		group: React.PropTypes.object.isRequired,
+		key: React.PropTypes.string.isRequired
 	},
 
 	// Toggle entry details
@@ -37,12 +37,11 @@ wplv.GroupEntry = React.createClass({
 
 	// Render component
 	render: function() {
-		var entryClasses = ['group-entry'];
-		var group = this.props.group;
-		var style = group.legendBackground === '' ? {} : {'border-left-color': group.legendBackground};
-		var errorDetails = [];
-		var groupDetails = '';
-		var groupLabel = '';
+		var entryClasses = ['group-entry'],
+			group = this.props.group,
+			style = group.legendBackground === '' ? {} : {'border-left-color': group.legendBackground},
+			errorDetails = [],
+			groupDetails = '';
 
 		if (group.errorType) {
 			entryClasses.push(group.errorTypeKey);
@@ -67,22 +66,12 @@ wplv.GroupEntry = React.createClass({
 			var groupEntryDetails = [];
 
 			for (var key in group.entries) {
-				var entry = group.entries[key];
-				var entryDate = new Date(entry.date + ' ' + entry.time + ' ' + entry.timezone);
+				var entry = group.entries[key],
+					entryDate = new Date(entry.date + ' ' + entry.time + ' ' + entry.timezone);
 
 				groupEntryDetails.push((
 					<wplv.TimeStamp key={ groupEntryDetails.length } date={ entryDate } />
 				));
-			}
-
-			if (groupEntryDetails.length > 1) {
-				groupLabel = (
-					<p className="label">Dates and times this error occured:</p>
-				);
-			} else {
-				groupLabel = (
-					<p className="label">Date and time this error occured:</p>
-				);
 			}
 
 			groupDetails = (
@@ -90,7 +79,6 @@ wplv.GroupEntry = React.createClass({
 					<div className="details">
 						<a href="#" className="toggle hide-group-details" onClick={ this.toggleDetails }>Hide details</a>
 
-						{ groupLabel }
 						{ groupEntryDetails }
 					</div>
 				</div>

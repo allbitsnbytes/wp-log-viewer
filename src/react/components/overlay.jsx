@@ -20,9 +20,8 @@ wplv.Overlay = React.createClass({
 
 	// Property types
 	propTypes: {
-		active: React.PropTypes.bool,
-		children: React.PropTypes.element
-		//close: React.PropTypes.function
+		active: React.PropTypes.bool.isRequired,
+		children: React.PropTypes.element.isRequired
 	},
 
 	// Before mount

@@ -13,7 +13,7 @@ wplv.PrettyFilesize = React.createClass({
 
 	// Property types
 	propTypes: {
-		filesize: React.PropTypes.number
+		filesize: React.PropTypes.number.isRequired
 	},
 
 	// Format filesize decimal position
@@ -25,7 +25,7 @@ wplv.PrettyFilesize = React.createClass({
 
 	// Render component
 	render: function() {
-	
+
 		var kilobyte = 1000,
 			megabyte = 1000 * kilobyte,
 			gigabyte = 1000 * megabyte,

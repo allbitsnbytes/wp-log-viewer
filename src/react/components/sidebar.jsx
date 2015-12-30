@@ -54,15 +54,15 @@ wplv.Sidebar = React.createClass({
 
 	// Property types
 	propTypes: {
-		app: React.PropTypes.object
+		app: React.PropTypes.object.isRequired
 	},
 
 	// Render component
 	render: function() {
 		if (this.props.app.ready) {
-			var lastModifiedDate = this.props.app.getLastModified();
-			var defaultMenuOptions = this.getMenuOptions();
-			var simulateMenuOption = '';
+			var lastModifiedDate = this.props.app.getLastModified(),
+				defaultMenuOptions = this.getMenuOptions(),
+				simulateMenuOption = '';
 
 			if (this.props.app.isSimulating()) {
 				defaultMenuOptions.push({

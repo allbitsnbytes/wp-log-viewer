@@ -18,7 +18,7 @@ wplv.ContentModal = React.createClass({
 	// Property types
 	propTypes: {
 		className: React.PropTypes.string,
-		isOpen: React.PropTypes.bool,
+		isOpen: React.PropTypes.bool.isRequired,
 		size: React.PropTypes.string
 	},
 
@@ -29,8 +29,8 @@ wplv.ContentModal = React.createClass({
 
 	// Render component
 	render: function() {
-		var containerClassName = this.props.className ? 'wplv-module--modal ' + this.props.className : 'wplv-module--modal';
-		var paneClassName = 'modal-content-pane ' + this.props.size
+		var containerClassName = this.props.className ? 'wplv-module--modal ' + this.props.className : 'wplv-module--modal',
+			paneClassName = 'modal-content-pane ' + this.props.size
 
 		if (this.props.isOpen) {
 			document.querySelector('body').scrollTop = 0;

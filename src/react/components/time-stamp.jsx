@@ -19,7 +19,7 @@ wplv.TimeStamp = React.createClass({
 
 	// Property types
 	propTypes: {
-		date: React.PropTypes.object
+		date: React.PropTypes.object.isRequired
 	},
 
 	// Before mount
@@ -40,13 +40,13 @@ wplv.TimeStamp = React.createClass({
 			var now = new Date();
 
 			if (this.state.localeSupported) {
-				var today = now.toLocaleDateString();
-				var currentDate = this.props.date.toLocaleDateString();
-				var currentTime = this.props.date.toLocaleTimeString();
+				var today = now.toLocaleDateString(),
+					currentDate = this.props.date.toLocaleDateString(),
+					currentTime = this.props.date.toLocaleTimeString();
 			} else {
-				var today = now.toDateString().replace(/([\w]+) ([\w]+) ([\d]+) ([\d]+)/, "$2 $3 $4");
-				var currentDate = this.props.date.toDateString().replace(/([\w]+) ([\w]+) ([\d]+) ([\d]+)/, "$2 $3 $4");
-				var currentTime = this.props.date.toTimeString().replace(/.*(\d{2}:\d{2}:\d{2})[ \w+-]+\(([\w]+)\)/, "$1 $2");
+				var today = now.toDateString().replace(/([\w]+) ([\w]+) ([\d]+) ([\d]+)/, "$2 $3 $4"),
+					currentDate = this.props.date.toDateString().replace(/([\w]+) ([\w]+) ([\d]+) ([\d]+)/, "$2 $3 $4"),
+					currentTime = this.props.date.toTimeString().replace(/.*(\d{2}:\d{2}:\d{2})[ \w+-]+\(([\w]+)\)/, "$1 $2");
 			}
 
 			if (today === currentDate) {

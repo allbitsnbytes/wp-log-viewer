@@ -22,16 +22,16 @@ wplv.LogEntry = React.createClass({
 
 	// Property types
 	propTypes: {
-		entry: React.PropTypes.object
+		entry: React.PropTypes.object.isRequired
 	},
 
 	// Render component
 	render: function() {
-		var entry = this.props.entry;
-		var entryClasses = ['log-entry'];
-		var style = entry.legendBackground === '' ? {} : {'border-left-color': entry.legendBackground};
-		var entryDate = new Date(entry.date + ' ' + entry.time + ' ' + entry.timezone);
-		var errorDetails = [];
+		var entry = this.props.entry,
+			entryClasses = ['log-entry'],
+			style = entry.legendBackground === '' ? {} : {'border-left-color': entry.legendBackground},
+			entryDate = new Date(entry.date + ' ' + entry.time + ' ' + entry.timezone),
+			errorDetails = [];
 
 		if (this.props.className) {
 			entryClasses.push(this.props.className);

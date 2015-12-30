@@ -22,7 +22,7 @@ wplv.HelpViewer = React.createClass({
 
 	// Property types
 	propTypes: {
-		app: React.PropTypes.object,
+		app: React.PropTypes.object.isRequired,
 		section: React.PropTypes.string
 	},
 

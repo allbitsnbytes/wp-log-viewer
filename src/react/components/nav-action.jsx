@@ -19,7 +19,7 @@ wplv.NavAction = React.createClass({
 
 	// Property types
 	propTypes: {
-		nav: React.PropTypes.object,
+		nav: React.PropTypes.object.isRequired,
 		notify: React.PropTypes.func,
 		selected: React.PropTypes.bool
 	},
@@ -46,9 +46,9 @@ wplv.NavAction = React.createClass({
 
 	// Render component
 	render: function() {
-		var className = this.props.selected ? 'active' : '';
-		var icon = 'fa fa-'+this.props.nav.icon;
-		var link = ( <a href="#" onClick={ this.handleLinkClicked } title={ this.props.nav.label }><i className={ icon }></i> { this.props.nav.label }</a> );
+		var className = this.props.selected ? 'active' : '',
+			icon = 'fa fa-'+this.props.nav.icon,
+			link = ( <a href="#" onClick={ this.handleLinkClicked } title={ this.props.nav.label }><i className={ icon }></i> { this.props.nav.label }</a> );
 
 		if (className === 'active') {
 			return ( <li className={ className }>{ link }</li> );
