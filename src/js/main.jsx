@@ -8,11 +8,6 @@ wplv.remote = (function() {
 			url: WPLOGVIEWER.api,
 			method: method,
 			data: data
-			//headers: {
-			//	'wplv-cookie': WPLOGVIEWER.cookie_token,
-			//	'wplv-session': WPLOGVIEWER.session_key,
-			//	'wplv-path': WPLOGVIEWER.path
-			//}
 		}).then(success)
 		.fail(failed);
 	}
