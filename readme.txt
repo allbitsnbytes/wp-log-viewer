@@ -204,10 +204,15 @@ Report bugs and suggest ideas at:  https://wordpress.org/support/plugin/wp-log-v
 
 == Screenshots ==
 
-1. Grouped view makes it easy to see unique errors
-1. Get notified automatically when there is a new error, no need to refresh
-1. Realtime search makes it easy to find what you are looking for
-1. Dashboard widget with glanceable information
+1. ** Grouped view ** - Grouped view makes it easier to analyze errors and debug code
+2. ** Error details ** - Error message and details are neatly displayed
+3. ** Automagically refreshes ** - No need to refresh, new errors will be automatically displayed
+4. ** Realtime search ** - Makes finding what you are looking for super easy
+5. ** Filter errors ** - Click error types to filter results.  Only see what you need
+6. ** Admin bar count ** - Easily see when you have errors.  Click to go to log viewer
+7. ** Dashboard widget ** - Glanceable information when you login
+8. ** Settings Pane ** - Customize your experience in one place
+9. ** Help section ** - Have questions?  Get answers
 
 
 == Changelog ==
@@ -220,13 +225,17 @@ Release date: 2015-12-30
 * Feature:
 	* One click enable/disable debugging status
 	* One click downloading of smart log file
+	* One click error filtering by clicking error legends
 	* Smart downloads include only the latest unique entries.  Duplicates are removed to reduce filesize and make reading the file easier
 	* Persist selected view, sorting across login sessions
 	* Settings pane added for easy management of viewer settings
+	* Add and edit custom error types
 
 * UI:
 	* Wordpress sidebar is folded to increase viewer space
+	* Sidebar is sticky so actions are always present when scrolling
 	* Updated the header to display more error messages and to use less vertical space
+	* Display count for each error type
 	* Smarter display of error legends.  Only legends with errors are displayed
 	* Search query is not displayed under search bar
 	* Increased error message area to display more horizontally which will reduce scrolling
