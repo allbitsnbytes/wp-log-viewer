@@ -210,9 +210,8 @@ Report bugs and suggest ideas at:  https://wordpress.org/support/plugin/wp-log-v
 4. ** Realtime search ** - Makes finding what you are looking for super easy
 5. ** Filter errors ** - Click error types to filter results.  Only see what you need
 6. ** Admin bar count ** - Easily see when you have errors.  Click to go to log viewer
-7. ** Dashboard widget ** - Glanceable information when you login
-8. ** Settings Pane ** - Customize your experience in one place
-9. ** Help section ** - Have questions?  Get answers
+7. ** Settings Pane ** - Customize your experience in one place
+8. ** Help section ** - Have questions?  Get answers
 
 
 == Changelog ==
