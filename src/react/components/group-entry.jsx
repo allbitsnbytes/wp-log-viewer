@@ -17,13 +17,15 @@ wplv.GroupEntry = React.createClass({
 				date: '',
 				message: '',
 				entries: []
-			}
+			},
+			key: ''
 		};
 	},
 
 	// Property types
 	propTypes: {
-		group: React.PropTypes.object
+		group: React.PropTypes.object.isRequired,
+		key: React.PropTypes.string.isRequired
 	},
 
 	// Toggle entry details
@@ -35,16 +37,16 @@ wplv.GroupEntry = React.createClass({
 
 	// Render component
 	render: function() {
-		var entryClasses = ['group-entry'];
-		var group = this.props.group;
-		var errorDetails = [];
-		var groupDetails = '';
-		var groupLabel = '';
+		var entryClasses = ['group-entry'],
+			group = this.props.group,
+			style = group.legendBackground === '' ? {} : {'border-left-color': group.legendBackground},
+			errorDetails = [],
+			groupDetails = '';
 
 		if (group.errorType) {
-			entryClasses.push(group.errorType.toLowerCase().replace(/[ ]+/gi, '-'));
+			entryClasses.push(group.errorTypeKey);
 			errorDetails.push((
-				<div className="error-type"><i className="fa fa-angle-right"></i> Type: <span className="type">{ group.errorType }</span></div>
+				<div className="error-type"><i className="fa fa-angle-right"></i> Type: <span className="type">{ group.errorLabel }</span></div>
 			));
 		}
 
@@ -64,30 +66,19 @@ wplv.GroupEntry = React.createClass({
 			var groupEntryDetails = [];
 
 			for (var key in group.entries) {
-				var entry = group.entries[key];
-				var entryDate = new Date(entry.date + ' ' + entry.time + ' ' + entry.timezone);
+				var entry = group.entries[key],
+					entryDate = new Date(entry.date + ' ' + entry.time + ' ' + entry.timezone);
 
 				groupEntryDetails.push((
 					<wplv.TimeStamp key={ groupEntryDetails.length } date={ entryDate } />
 				));
 			}
 
-			if (groupEntryDetails.length > 1) {
-				groupLabel = (
-					<p>Date and time these errors occured:</p>
-				);
-			} else {
-				groupLabel = (
-					<p>Date and time this error occured:</p>
-				);
-			}
-
 			groupDetails = (
 				<div className="group-entry-details active">
 					<div className="details">
-						<a href="#" className="hide-group-details" onClick={ this.toggleDetails }>Hide details</a>
+						<a href="#" className="toggle hide-group-details" onClick={ this.toggleDetails }>Hide details</a>
 
-						{ groupLabel }
 						{ groupEntryDetails }
 					</div>
 				</div>
@@ -96,26 +87,27 @@ wplv.GroupEntry = React.createClass({
 			groupDetails = (
 				<div className="group-entry-details">
 					<div className="details">
-						<a href="#" className="show-group-details" onClick={ this.toggleDetails }>More details</a>
+						<a href="#" className="toggle show-group-details" onClick={ this.toggleDetails }>More details</a>
 					</div>
 				</div>
 			);
 		}
 
 		return (
-			<div className={ entryClasses.join(' ') }>
-				<div clanssName="error-legend"></div>
-				<wplv.TimeStamp date={ group.date } />
+			<section className={ entryClasses.join(' ') } style={ style }>
+				<aside className="summary">
+					<wplv.TimeStamp date={ group.date } />
+				</aside>
 				<div className="message">
 					<div className="force-wrap">
 						{ group.message }
 					</div>
-					<div className="error-details">
+					<div className="wplv-module--error-summary">
 						{ errorDetails }
 					</div>
 					{ groupDetails }
 				</div>
-			</div>
+			</section>
 		);
 	}
 });

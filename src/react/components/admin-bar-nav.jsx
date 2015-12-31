@@ -28,8 +28,8 @@ wplv.AdminBarNav = React.createClass({
 
 	// Property types
 	propTypes: {
-		debugging: React.PropTypes.bool,
-		pluginUrl: React.PropTypes.string
+		debugging: React.PropTypes.bool.isRequired,
+		pluginUrl: React.PropTypes.string.isRequired
 	},
 
 	// Before mount
@@ -84,8 +84,8 @@ wplv.AdminBarNav = React.createClass({
 			entries = [];
 		}
 
-		var filtered = [];
-		var found = {};
+		var filtered = [],
+			found = {};
 
 		// Filter duplicate entries
 		entries.forEach(function(entry) {
@@ -105,9 +105,9 @@ wplv.AdminBarNav = React.createClass({
 		var summary = '';
 
 		if (this.ready && (this.state.debugging.enabled || this.state.debugging.simulating || this.state.debugging.detected)) {
-			var errorClass = this.state.count > 0 ? 'error-count has-errors' : 'error-count no-errors';
-			var status = this.state.debugging.enabled ? 'enabled' : 'disabled';
-			var statusClass = 'debug-status';
+			var errorClass = this.state.count > 0 ? 'error-count has-errors' : 'error-count no-errors',
+				status = this.state.debugging.enabled ? 'enabled' : 'disabled',
+				statusClass = 'debug-status';
 
 			if (this.state.debugging.simulating) {
 				status = 'simulating';

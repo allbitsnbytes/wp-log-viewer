@@ -21,7 +21,7 @@ wplv.Search = React.createClass({
 			}
 		}
 	},
-	
+
 	// Mounted
 	componentDidMount: function() {
 		React.findDOMNode(this.refs.q).focus();
@@ -29,7 +29,7 @@ wplv.Search = React.createClass({
 
 	// Property types
 	propTypes: {
-		app: React.PropTypes.object
+		app: React.PropTypes.object.isRequired
 	},
 
 	// Handle query submitted
@@ -38,7 +38,7 @@ wplv.Search = React.createClass({
 
 		if (this.props.app.ready) {
 			var query = React.findDOMNode(this.refs.q).value;
-			React.findDOMNode(this.refs.q).value = query = query.replace(/[^a-z0-9 ]+/gi, '');
+			React.findDOMNode(this.refs.q).value = query = query.replace(/[^a-z0-9_=\/ ]+/gi, '');
 
 			if (typeof query === 'string' && query.length >= this.minimumLength && this.props.app.searchEntries) {
 				this.setState({
@@ -63,17 +63,19 @@ wplv.Search = React.createClass({
 		if (this.state.query.length >= this.minimumLength) {
 			searchQuery = (
 				<div className="search-query">
-					Searching for <strong>{ this.state.query }</strong>
+					<span className="label">Searching for</span> <strong className="query">{ this.state.query }</strong>
 				</div>
 			);
 		}
 
 		return (
-			<div className="search-group">
+			<div className="wplv-module--search">
 				<div className="search-component">
 					<i className="fa fa-search"></i>
 					<input type="text" name="q" ref="q" className="search-field" placeholder="Search for ..." onChange={ this.handleSearch } />
 				</div>
+
+				{ searchQuery }
 			</div>
 		);
 	}

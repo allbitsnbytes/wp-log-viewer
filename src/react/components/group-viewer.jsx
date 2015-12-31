@@ -12,29 +12,31 @@ wplv.GroupViewer = React.createClass({
 
 	// Property types
 	propTypes: {
-		entries: React.PropTypes.array
+		entries: React.PropTypes.array.isRequired
 	},
 
 	// Render component
 	render: function() {
-		var groups = {};
-		var groupContent = [];
+		var groups = {},
+			groupContent = [];
 
 		this.props.entries.forEach(function(entry) {
-			var key = md5(entry.message);
-
-			if (groups[key] === undefined) {
-				groups[key] = {
+			if (groups[entry.key] === undefined) {
+				groups[entry.key] = {
 					date: new Date(entry.date + ' ' + entry.time + ' ' + entry.timezone),
 					message: entry.message,
 					line: entry.line,
 					errorType: entry.errorType,
+					errorLabel: entry.errorLabel,
+					errorTypeKey: entry.errorTypeKey,
+					legendColor: entry.legendColor,
+					legendBackground: entry.legendBackground,
 					filePath: entry.filePath,
 					entries: []
 				};
 			}
 
-			groups[key].entries.push(entry);
+			groups[entry.key].entries.push(entry);
 		}.bind(this));
 
 		for (var key in groups) {

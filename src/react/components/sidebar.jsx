@@ -14,7 +14,8 @@ wplv.Sidebar = React.createClass({
 				trackSelected: false,
 				options: [
 					{ label: 'Refresh',		key: 'refresh',		icon: 'refresh',	action: this.props.app.refreshViewer },
-					{ label: 'Clear Log',	key: 'clear',		icon: 'remove',		action: this.props.app.clearLog }
+					{ label: 'Clear Log',	key: 'clear',		icon: 'remove',		action: this.props.app.clearLog },
+					{ label: 'Download', 	key: 'download',	icon: 'download', 	action: this.props.app.downloadFile }
 				]
 			},
 
@@ -24,8 +25,8 @@ wplv.Sidebar = React.createClass({
 				default: this.props.app.state.log.sort,
 				trackSelected: true,
 				options: [
-					{ label: 'By Newest',	key: 'newest',	icon: 'sort-down',	action: this.props.app.sortNewest },
-					{ label: 'By Oldest',	key: 'oldest',	icon: 'sort-up',	action: this.props.app.sortOldest }
+					{ label: 'By Newest',	key: 'newest',	icon: 'sort-alpha-asc',	action: this.props.app.sortNewest },
+					{ label: 'By Oldest',	key: 'oldest',	icon: 'sort-alpha-desc',action: this.props.app.sortOldest }
 				]
 			},
 
@@ -35,10 +36,10 @@ wplv.Sidebar = React.createClass({
 				default: this.props.app.state.log.view,
 				trackSelected: true,
 				options: [
-					{ label: 'Group View',	key: 'group',	icon: 'th',			action: this.props.app.showGroupView },
-					{ label: 'List View',	key: 'list',	icon: 'list',		action: this.props.app.showListView }
+					{ label: 'Group View',	key: 'group',	icon: 'list-alt',		action: this.props.app.showGroupView },
+					{ label: 'List View',	key: 'list',	icon: 'list',			action: this.props.app.showListView }
 				]
-			}
+			},
 		];
 	},
 
@@ -53,15 +54,15 @@ wplv.Sidebar = React.createClass({
 
 	// Property types
 	propTypes: {
-		app: React.PropTypes.object
+		app: React.PropTypes.object.isRequired
 	},
 
 	// Render component
 	render: function() {
 		if (this.props.app.ready) {
-			var lastModifiedDate = this.props.app.getLastModified();
-			var defaultMenuOptions = this.getMenuOptions();
-			var simulateMenuOption = '';
+			var lastModifiedDate = this.props.app.getLastModified(),
+				defaultMenuOptions = this.getMenuOptions(),
+				simulateMenuOption = '';
 
 			if (this.props.app.isSimulating()) {
 				defaultMenuOptions.push({
@@ -81,27 +82,35 @@ wplv.Sidebar = React.createClass({
 			});
 
 			return (
-				<aside className="sidebar">
+				<aside className="wplv-page--sidebar">
+					<div className="sidebar-container">
+						{ menuOptions }
 
-					{ menuOptions }
+						{ simulateMenuOption }
 
-					{ simulateMenuOption }
+						<div className="menu-links">
+							<ul>
+								<li><a href="#" onClick={ this.props.app.openSettings }><i className="fa fa-cog" /> Settings</a></li>
+								<li><a href="#" onClick={ this.props.app.openHelp() }><i className="fa fa-question-circle" /> Help</a></li>
+							</ul>
+						</div>
 
-					<div className="last-modified">
-						<strong>Last modified</strong><br />
-						<wplv.TimeStamp date={ lastModifiedDate !== '' ? new Date(lastModifiedDate) : '' } />
-					</div>
+						<div className="last-modified">
+							<h4>Last modified</h4>
+							<wplv.TimeStamp date={ lastModifiedDate !== '' ? new Date(lastModifiedDate) : '' } />
+						</div>
 
-					<div className="log-filesize">
-						<strong>Filesize</strong><br />
-						<wplv.PrettyFilesize filesize={ this.props.app.getFilesize() } />
+						<div className="log-filesize">
+							<h4>Filesize</h4>
+							<wplv.PrettyFilesize filesize={ this.props.app.getFilesize() } />
+						</div>
 					</div>
 				</aside>
 			);
 		}
 
 		return (
-			<aside className="sidebar"></aside>
+			<aside className="wplv-page--sidebar"></aside>
 		);
 	}
 });

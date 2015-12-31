@@ -11,6 +11,7 @@ var paths = {
 		css: [
 			'src/bower/font-awesome/css/font-awesome.css',
 			'src/bower/humane/themes/flatty.css',
+			'src/bower/spectrum/spectrum.css',
 			'src/css/main.styl'
 		],
 		img: 'src/img/**/*',
@@ -20,8 +21,10 @@ var paths = {
 			'src/bower/reqwest/reqwest.js',
 			'src/bower/blueimp-md5/js/md5.js',
 			'src/bower/humane/humane.js',
+			'src/bower/spectrum/spectrum.js',
 			'src/react/app.jsx',
 			'src/react/admin-bar-nav.jsx',
+			'src/react/mixins/**/*.jsx',
 			'src/react/components/**/*.jsx',
 			'src/js/main.jsx'
 		]

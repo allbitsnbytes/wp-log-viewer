@@ -23,6 +23,7 @@ wplv.App = React.createClass({
 				detected: false,
 				simulating: false
 			},
+			errorTypes: [],
 			log: {
 				entries: [],
 				filesize: 0,
@@ -30,9 +31,16 @@ wplv.App = React.createClass({
 				modified: '',
 				sort: this.props.settings.sort,
 				timezone: '',
-				view: this.props.settings.view
+				view: this.props.settings.view,
+				customErrors: this.props.settings.custom_errors
 			},
-			query: ''
+			ui: {
+				foldSidebar: parseInt(this.props.settings.fold_sidebar) === 1 ? true : false
+			},
+			query: '',
+			showSettings: false,
+			showHelp: false,
+			helpSection: ''
 		};
 	},
 
@@ -43,7 +51,9 @@ wplv.App = React.createClass({
 			pluginUrl: '',
 			settings: {
 				view: 'group',
-				sort: 'newest'
+				sort: 'newest',
+				custom_errors: {},
+				fold_sidebar: 1
 			},
 			user: ''
 		};
@@ -51,24 +61,23 @@ wplv.App = React.createClass({
 
 	// Property types
 	propTypes: {
-		debugging: React.PropTypes.bool,
-		pluginUrl: React.PropTypes.string,
-		settings: React.PropTypes.object,
+		debugging: React.PropTypes.bool.isRequired,
+		pluginUrl: React.PropTypes.string.isRequired,
+		settings: React.PropTypes.object.isRequired,
 		user: React.PropTypes.string
 	},
 
 	// Before mount
 	componentWillMount: function() {
 		wplv.remote.getAllEntries({}, function(result) {
-			var debugging = this.state.debugging;
-			var log = this.state.log;
+			var debugging = this.state.debugging,
+				log = this.state.log;
 
 			this.ready = true;
 
-			debugging.enabled = result.debugDetected ? result.debugEnabled : this.props.debugging;
+			debugging.enabled = this.props.debugging;
 			debugging.simulating = this._isSimulationEnabled();
 			debugging.detected = result.debugDetected;
-
 			log.entries = this._prepareEntries(result.entries);
 			log.found = result.found;
 			log.modified = result.modified;
@@ -105,11 +114,63 @@ wplv.App = React.createClass({
 		this._getLatestEntries(true);
 	},
 
+	// Download debug.log
+	downloadFile: function() {
+		window.location.href = '/debugging/download/log';
+		//wplv.notify.success('Debug log successfully downloaded');
+	},
+
 	// Search entries
 	searchEntries: function(query) {
 		this.setState({
 			query: query
 		});
+
+		wplv.remote.updateUserSetting('query', query);
+	},
+
+	// Filter entries by error type
+	filterEntriesByErrorType: function(errors) {
+		this.setState({
+			errorTypes: errors
+		});
+
+		wplv.remote.updateUserSetting('legends', errors);
+	},
+
+	// Toggle debugging status
+	setDebugStatus: function(status) {
+		wplv.remote.toggleDebugging((status ? 1 : 0), function(result) {
+			var debugging = this.state.debugging;
+
+			if (result.changed === true || result.changed === 'true') {
+				debugging.enabled = result.status;
+
+				this.setState({
+					debugging: debugging
+				});
+
+				this._broadcastChangeEvent();
+				wplv.notify.alert('Debbugging has been <strong>' + (result.status ? 'enabled' : 'disabled') + '</strong>');
+			}
+		}.bind(this));
+	},
+
+	// Toggle sidebar folded status
+	setSidebarFolded: function(folded) {
+		var body = document.querySelectorAll('body')[0];
+
+		if (folded) {
+			body.className += ' folded';
+		} else {
+			body.className = body.className.replace(' folded', '');
+		}
+
+		wplv.remote.updateUserSetting('fold_sidebar', (folded ? 1 : 0));
+		this.setState({
+			ui: {foldSidebar: folded}
+		});
+		this._broadcastChangeEvent();
 	},
 
 	// Clear entries
@@ -149,6 +210,8 @@ wplv.App = React.createClass({
 			this.setState({
 				log: log
 			});
+
+			wplv.remote.updateUserSetting('sort', 'newest');
 		}
 	},
 
@@ -163,6 +226,8 @@ wplv.App = React.createClass({
 			this.setState({
 				log: log
 			});
+
+			wplv.remote.updateUserSetting('sort', 'oldest');
 		}
 	},
 
@@ -175,6 +240,8 @@ wplv.App = React.createClass({
 		this.setState({
 			log: log
 		});
+
+		wplv.remote.updateUserSetting('view', 'group');
 	},
 
 	// Show list view
@@ -186,6 +253,13 @@ wplv.App = React.createClass({
 		this.setState({
 			log: log
 		});
+
+		wplv.remote.updateUserSetting('view', 'list');
+	},
+
+	// Get list of current entries
+	getEntries: function() {
+		return this.state.log.entries;
 	},
 
 	// Get last modified date
@@ -198,9 +272,45 @@ wplv.App = React.createClass({
 		return this.state.log.filesize;
 	},
 
-	// Download log
-	downloadLog: function() {
-		console.log('Feature coming soon.');
+	// Open settings page
+	openSettings: function(e) {
+		e.preventDefault();
+
+		this.setState({showSettings: true});
+	},
+
+	// Save settings pane
+	saveSettings: function(e) {
+		e.preventDefault();
+
+		wplv.remote.updateUserSettings({
+			'fold_sidebar': React.findDOMNode(this.refs.foldSidebar).value
+		});
+
+		this.setState({showSettings: false});
+	},
+
+	// Close settings page
+	closeSettings: function(e) {
+		e.preventDefault();
+
+		this.setState({showSettings: false});
+	},
+
+	// Open help page
+	openHelp: function(section) {
+		return function(e) {
+			e.preventDefault();
+
+			this.setState({showHelp: true, helpSection: section});
+		}.bind(this);
+	},
+
+	// Close help pane
+	closeHelp: function(e) {
+		e.preventDefault();
+
+		this.setState({showHelp: false, helpSection: ''});
 	},
 
 	// Pretend debugging is enabled
@@ -254,8 +364,13 @@ wplv.App = React.createClass({
 			entries = [];
 		}
 
+		var customErrors = this.state.log.customErrors;
+
 		// Process entries and prepare for use
 		entries = entries.map(function(entry) {
+
+			// Generate entry key based on error message
+			entry.key = md5(entry.message.replace('\n', ''));
 
 			// Get line number if present
 			var line = entry.message.replace(/.* on line ([\d]+).*/gi, '$1');
@@ -266,22 +381,49 @@ wplv.App = React.createClass({
 			entry.errorType = errorType && errorType !== entry.message ? errorType.trim() : '';
 
 			if (entry.errorType === '') {
-				// Check for Wordpress Database error type if present
-				var errorType = entry.message.replace(/^(Wordpress database error ).*/gi, '$1');
+				// Check for custom errors
+				if (entry.message.match(/^#[\w_-]+:/gi) !== null) {
+					errorType = entry.message.replace(/^#([\w_-]+):.*/gi, '$1');
+				} else {
+					// Check for Wordpress Database error type if present
+					errorType = entry.message.replace(/^(Wordpress database error ).*/gi, '$1');
+				}
+
 				entry.errorType = errorType && errorType !== entry.message ? errorType.trim() : '';
 			}
 
+			entry.errorTypeKey = entry.errorType.replace(/[ ]+/gi, '-').toLowerCase();
+
 			// Get file path if present
-			var filePath = entry.message.replace(/^.*in (\/[\w /_-]+.php).*/gi, '$1');
+			var filePath = entry.message.replace(/.*in (\/[\w\/._-]+.php).*/gi, '$1');
 			entry.filePath = filePath && filePath != entry.message ? filePath.trim() : '';
 
 			// Reformat message
 			if (entry.errorType) {
-				entry.message = entry.message.replace(/^(PHP [\w ]+:|Wordpress database error)(.*)/gi, '$2', '').trim();
+				if (entry.line) {
+					entry.message = entry.message.replace('in ' + entry.filePath, '');
+				}
+
+				if (entry.filePath) {
+					entry.message = entry.message.replace('on line ' + entry.line, '');
+				}
+
+				entry.message = entry.message.replace(/^(PHP [\w ]+:|#[\w_-]+:|Wordpress database error)(.*)/gi, '$2', '').trim();
+			}
+
+			// Prep additional fields
+			if (typeof customErrors[entry.errorTypeKey] === 'object') {
+				entry.errorLabel = customErrors[entry.errorTypeKey].label;
+				entry.legendColor = customErrors[entry.errorTypeKey].color;
+				entry.legendBackground = customErrors[entry.errorTypeKey].background;
+			} else {
+				entry.errorLabel = entry.errorType;
+				entry.legendColor = '';
+				entry.legendBackground = '';
 			}
 
 			return entry;
-		});
+		}.bind(this));
 
 		// Sort order if necessary
 		if (this.state.log.sort === 'oldest') {
@@ -316,7 +458,7 @@ wplv.App = React.createClass({
 		showStatus = showStatus === true ? true : false;
 
 		wplv.remote.getLatestEntries(data, function(result) {
-			if (result.changed) {
+			if (result.changed == true && result.changed == 'true') {
 				var log = this.state.log;
 
 				log.entries = this._prepareEntries(result.entries);
@@ -340,7 +482,7 @@ wplv.App = React.createClass({
 		function(result) {
 			this._stopUpdateChecker();
 			wplv.notify.error('Checking for updates failed.');
-		});
+		}.bind(this));
 	},
 
 	// Filter out duplicate entries
@@ -349,16 +491,13 @@ wplv.App = React.createClass({
 			entries = [];
 		}
 
-		var filtered = [];
-		var found = {};
-
+		var filtered = [],
+			found = {};
 		// Filter duplicate entries
 		entries.forEach(function(entry) {
-			var key = md5(entry.message);
-
-			if (found[key] === undefined) {
+			if (found[entry.key] === undefined) {
 				filtered.push(entry);
-				found[key] = true;
+				found[entry.key] = true;
 			}
 		}.bind(this));
 
@@ -402,32 +541,50 @@ wplv.App = React.createClass({
 
 	// Render component
 	render: function() {
-		var content = '';
-		var debugStatus = '';
-		var sidebar = '';
+		var content = '',
+			debugStatus = '',
+			entries = [],
+			queryFilter = {},
+			sidebar = '',
+			settingsPane = '';
 
 		if (this.ready) {
 			if (this.state.debugging.enabled || this.state.debugging.detected || this.state.debugging.simulating) {
 				if (this.state.log.found) {
-					var count = 0;
-					var entries = [];
-					var query = this.state.query;
-					var view = '';
+					var count = 0,
+						filterErrorTypes = this.state.errorTypes,
+						view = '';
+
+					entries = this.state.log.entries;
 
 					debugStatus = (
 						<wplv.DebugStatus debugging={ this.state.debugging } />
 					);
 
-					if (query !== '') {
-						this.state.log.entries.forEach(function(entry) {
-							var match = new RegExp(query, 'gi');
+					// Filter by query string
+					if (this.state.query !== '') {
+						entries = entries.filter(function(entry) {
+							var match = new RegExp(this.state.query, 'gi');
 
 							if (entry && entry.message && match.test(entry.message + ' ' + entry.errorType)) {
-								entries.push(entry);
+								queryFilter[entry.errorTypeKey] = true;
+
+								return true
 							}
+
+							return false;
 						}.bind(this));
-					} else {
-						entries = this.state.log.entries;
+					}
+
+					// Filter by error type
+					if (filterErrorTypes.length > 0) {
+						entries = entries.filter(function(entry) {
+							if (filterErrorTypes.indexOf(entry.errorTypeKey) !== -1) {
+								return true;
+							}
+
+							return false;
+						}.bind(this));
 					}
 
 					if (this.state.log.view === 'group') {
@@ -438,18 +595,18 @@ wplv.App = React.createClass({
 						view = ( <wplv.ListViewer entries={ entries } /> );
 					}
 
-					var errorClass = entries.length > 0 ? 'error-count has-errors' : 'error-count no-errors';
-					var errorLabel = entries.length == 1 ? ' entry' : ' entries';
+					var errorClass = entries.length > 0 ? 'count has-errors' : 'count no-errors',
+						errorLabel = entries.length == 1 ? ' entry' : ' entries';
 
 					content = (
-						<div className="viewer-pane">
-							<div className="entries-list-header">
+						<section className="wplv-page--content">
+							<header className="entries-header">
 								<h3>Log Entries</h3>
 								<span className="entries-count"><span className={ errorClass }>{ count }</span> { errorLabel }</span>
-							</div>
+							</header>
 
 							{ view }
-						</div>
+						</section>
 					);
 
 					sidebar = (
@@ -457,84 +614,67 @@ wplv.App = React.createClass({
 					);
 				} else {
 					if (this.state.debugging.enabled) {
-						if (this.state.debugging.simulating) {
-							content = (
-								<div className="viewer-pane">
-									<div className="content">
-										<p>Currently <strong className="debug-status-simulating">simulating</strong>.  The <strong>debug.log file does not exist or was not found.</strong></p>
-
-										<ul className="inline-buttons">
-											<li><a href="#" onClick={ function(e) { e.preventDefault(); this.stopSimulation(); }.bind(this) } className="stop-simulation-btn"><i className="fa fa-arrow-circle-right"></i> Stop simulation</a></li>
-										</ul>
-									</div>
-								</div>
-							);
-						} else {
-							content = (
-								<div className="viewer-pane">
-									<div className="content">
-										<p>Debugging is <strong className="debug-status-enabled">enabled</strong>.  However, the <strong>debug.log file does not exist or was not found.</strong></p>
-									</div>
-								</div>
-							);
-						}
+						content = (
+							<section className="wplv-page--content">
+								<p>Debugging is <strong className="debug-status-enabled">enabled</strong>.  However, the <strong>debug.log file does not exist or was not found.</strong></p>
+							</section>
+						);
 					} else {
 						content = (
-							<div className="viewer-pane">
-								<div className="content">
-									<p><strong>Debugging is currently <span className="debug-status-disabled">disabled</span>.</strong></p>
+							<section className="wplv-page--content">
+								<p><strong>Debugging is currently <span className="debug-status-disabled">disabled</span>.</strong></p>
 
-									{ this.showDebugHelp() }
-								</div>
-							</div>
+								{ this.showDebugHelp() }
+							</section>
 						);
 					}
 				}
 			} else {
 				content = (
-					<div className="viewer-pane">
-						<div className="content">
-							<p className="debugging-unknown">Sorry, we <strong>could not detect if debugging is enabled or disabled</strong>.</p>
-							<br />
+					<section className="wplv-page--content">
+						<p className="debugging-unknown">Sorry, we <strong>could not detect if debugging is enabled or disabled</strong>.</p>
 
-							<h3>Simulate Debugging?</h3>
+						<h3>How to Enable Debugging?</h3>
 
-							<p>If you know that debugging is enabled, click below to continue.</p>
-
-							<ul className="inline-buttons">
-								<li><a href="#" onClick={ function(e) { e.preventDefault(); this.startSimulation(); }.bind(this) } className="start-simulation-btn"><i className="fa fa-arrow-circle-right"></i> Start simulation</a></li>
-							</ul>
-
-							<br />
-							<p><small>** Please note that the status of WP_DEBUG is not actually being changed.  This is just a simulation.</small></p>
-							<br />
-
-							<h3>How to Enable Debugging?</h3>
-
-							{ this.showDebugHelp() }
-						</div>
-					</div>
+						{ this.showDebugHelp() }
+					</section>
 				);
 			}
+		} else {
+			content = (
+				<section className="wplv-page--content">
+					<div className="loading-viewer">
+						<i className="fa fa-spin fa-refresh" /> Loading entries ...
+					</div>
+				</section>
+			);
 		}
 
 		return (
-			<div className="container">
-				<section className="row">
-					<div className="content-pane">
-						<header className="view-header">
-							<h2>Log Viewer { debugStatus }</h2>
+			<div className="wplv-container">
+				<section className="wplv-page--header">
+					<header>
+						<h2>Log Viewer { debugStatus }</h2>
 
-							<wplv.ErrorLegend />
-						</header>
+						<wplv.ErrorLegend app={ this } query={ this.state.query } filter={ Object.keys(queryFilter) } />
+					</header>
 
-						<wplv.Search app={ this } />
+					<wplv.Search app={ this } />
+				</section>
 
-						{ content }
-					</div>
+				<section className="wplv-page--viewer">
+					{ content }
 
 					{ sidebar }
 				</section>
+
+				<wplv.ContentModal ref="settingsPane" className="settings-pane" isOpen={ this.state.showSettings } size="large">
+					<wplv.Settings app={ this } />
+				</wplv.ContentModal>
+
+				<wplv.ContentModal ref="helpPane" className="help-pane" isOpen={ this.state.showHelp } size="large">
+					<wplv.HelpViewer app={ this } section={ this.state.helpSection } />
+				</wplv.ContentModal>
 			</div>
 		);
 	},

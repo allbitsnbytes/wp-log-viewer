@@ -36,13 +36,13 @@ wplv.NavActionGroup = React.createClass({
 
 	// Property types
 	propTypes: {
-		group: React.PropTypes.object
+		group: React.PropTypes.object.isRequired
 	},
 
 	// Render component
 	render: function() {
-		var group = this.props.group;
-		var options = group.options.map(function(option, index) {
+		var group = this.props.group,
+			options = group.options.map(function(option, index) {
 			var selected = (option.key && option.key == this.state.selected) ? true : false;
 
 			return (

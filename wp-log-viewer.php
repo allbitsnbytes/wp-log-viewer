@@ -9,7 +9,7 @@
  * Plugin Name: WP Log Viewer
  * Plugin URI:  https://github.com/allbitsnbytes/wp-log-viewer
  * Description: Wordpress debug log viewer plugin
- * Version:     0.12.4
+ * Version:     1.0.0
  * Author:      Maxwell Berkel
  * Author URI:  http://allbitsnbytes.com
  * Text Domain: wplv

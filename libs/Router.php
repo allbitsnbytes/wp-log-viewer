@@ -13,7 +13,6 @@ if (!defined('WPLOGVIEWER_BASE')) {
  */
 use Allbitsnbytes\WPLogViewer\Auth;
 use Allbitsnbytes\WPLogViewer\Characteristic\IsSingleton;
-use Allbitsnbytes\WPLogViewer\Helper;
 use Allbitsnbytes\WPLogViewer\Http\Request;
 use Allbitsnbytes\WPLogViewer\Http\Response;
 

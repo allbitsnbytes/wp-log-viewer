@@ -1,0 +1,339 @@
+/**
+ * Modules
+ */
+
+
+@import '_variables'
+@import '_mixins'
+@import 'jeet'
+@import 'rupture'
+
+
+/*
+ * Debug Status
+ */
+
+.wplv-module--debug-status
+	display inline-block
+	color $white
+	font-size 0.4em
+	font-weight bold
+	line-height 1.2em
+	border-radius 5px
+	padmar 5px 8px, 0
+
+	&.enabled
+		background-color $debug-enabled-color
+
+	&.disabled
+		background-color $debug-disabled-color
+
+	&.not-detected
+		color $black
+		background-color $debug-detected-color
+
+	&.simulating
+		background-color $debug-simulating-color
+
+
+/*
+ * Error legends
+ */
+
+.wplv-module--error-legends
+	display block
+	list-style none
+	padmar 0, 0
+
+	li
+		display block
+		text-align left
+		font-size 0.8em
+		padmar 7px, 0
+
+		a, a:hover
+			color $text-color
+			text-decoration none
+
+		.count
+			display inline-block
+			font-size 1em
+			line-height 1em
+			color $black
+			background-color $misc-error-color !important
+			border-radius 4px
+			padmar 4px 5px, 0 5px 0 0
+
+		&.wordpress-database-error
+			.count
+				color $white
+				background-color $database-error-color !important
+
+		&.php-deprecated
+			.count
+				background-color $deprecated-error-color !important
+
+		&.php-fatal-error
+			.count
+				color $white
+				background-color $fatal-error-color !important
+
+		&.php-notice
+			.count
+				color $white
+				background-color $notice-error-color !important
+
+		&.php-warning
+			.count
+				background-color $warning-error-color !important
+
+		&.not-selected
+			opacity 0.4
+
+			.count
+				color $black
+				background-color $light-grey !important
+
+		&.selected
+			border 1px solid #ddd
+			border-radius 6px
+			padding 6px !important
+
+
+/*
+ * Error summary
+ */
+
+.wplv-module--error-summary
+	.error-type
+		display inline-block
+		padding-right 40px
+
+		.type
+			font-weight bold
+			padding-left 5px
+
+	.line-number
+		display inline-block
+
+		.line
+			font-weight bold
+			padding-left 5px
+
+	.file-path
+		display block
+
+		.file
+			font-weight bold
+			padding-left 5px
+
+
+/*
+ * Filesize
+ */
+
+.wplv-module--filesize
+	display block
+
+
+/*
+ * Search Component
+ */
+
+.wplv-module--search
+	width 100%
+
+	.search-component
+		display block
+		background-color $input-bg-color
+		border 1px solid $input-border-color
+		border-radius 6px
+		padmar 4px, 0
+
+		.fa
+			margin-left 6px
+
+		.search-field
+			position relative
+			display inline-block
+			right 0
+			left 8px
+			font-size 1.15em
+			width inherit
+			color $input-color
+			background none
+			box-shadow none
+			border none
+
+			&::-webkit-input-placeholder
+				font-style italic
+				color $input-placeholder-color
+
+	.search-query
+		display block
+		font-size 1em
+		font-style italic
+		margin-top 8px
+
+		.label
+			color lighten($text-color, 45%)
+
+		.query
+			font-weight bold
+
+
+/*
+ * Modal
+ */
+
+.wplv-module--modal
+	position absolute
+	bottom 0
+	top 0
+	left 0
+	right 0
+	background-color rgba($modal-bg, 0.85)
+	z-index 10000
+
+	.modal-confirm-pane,
+	.modal-content-pane
+		position absolute
+		display block
+		width 560px
+		left 50%
+		background $modal-pane-bg
+		box-shadow 0 0 10px 5px rgba(0, 0, 0, 0.2)
+		border-radius 4px
+		padmar 22px 25px, 25px 0 0 -280px
+		z-index 2100
+
+		&.large
+			width 800px
+			margin-left -400px
+
+		&.medium
+			width 600px
+			margin-left -300px
+
+		&.small
+			width 400px
+			margin-left -200px
+
+		.buttons
+			display block
+
+			li
+				display inline-block
+				padmar 0 6px 0 0, 0
+
+				.fa
+					margin-right 4px
+
+				a
+					display block
+					color $text-color
+					background-color $white
+					border 1px solid lighten($text-color, 80%)
+					border-radius 4px
+					text-decoration none
+					padmar 5px 15px, 0
+
+					&:hover
+						color $text-color
+						border-color lighten($text-color, 40%)
+						text-decoration none
+
+					&.primary
+						background-color darken($white, 40%)
+						border-color lighten($text-color, 80%)
+
+	.modal-confirm-pane
+		width 400px
+		margin-left -200px
+
+
+/*
+ * Time Stamp
+ */
+
+.wplv-module--timestamp
+	.date
+		font-weight 700
+
+
+/*
+ * Tabs
+ */
+
+.wplv-module--tabs
+	.tabs
+		display block
+		list-style none
+		border-bottom 1px solid #ccc
+		padmar 0, 15px 0 0
+
+		.tab
+			display inline-block
+			font-weight 400
+			background-color transparent
+			box-sizing border-box
+			border-bottom 1px solid transparent
+			border-right 1px solid #ebebeb
+			cursor pointer
+			padmar 10px 20px 6px, 0
+
+			&.selected
+				background-color #ebebeb
+				border-bottom 1px solid #aaa
+
+			&:first-child
+				border-left none
+
+			&:last-child
+				border-right none
+
+	.tab-content
+		display none
+		box-sizing border-box
+		padding 15px 0 10px
+
+		&.selected
+			display block
+
+
+/*
+ * Form
+ */
+
+.wplv-module--form
+	.form-row
+		cf()
+		display block
+		padmar 5px 0, 10px 0 0
+
+	.form-field
+		box-sizing border-box
+
+		input, textarea
+			width 100%
+
+	label
+		font-weight bold
+
+		&.required:after
+			display inline-block
+			color #f00
+			margin-left 3px
+			content '*'
+
+	.toggle-field
+		display inline-block
+		font-size 28px
+		line-height 1em
+
+	.buttons
+		.primary
+			color $white
+			background-color $black
+			border-radius 5px
+			padding 10px 15px

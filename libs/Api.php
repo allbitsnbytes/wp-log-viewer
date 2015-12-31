@@ -1,5 +1,5 @@
 <?php
-	
+
 namespace Allbitsnbytes\WPLogViewer;
 
 if (!defined('WPLOGVIEWER_BASE')) {
@@ -11,7 +11,6 @@ if (!defined('WPLOGVIEWER_BASE')) {
 /**
  * Dependencies
  */
-use Allbitsnbytes\WPLogViewer\Helper;
 use Allbitsnbytes\WPLogViewer\Log;
 use Allbitsnbytes\WPLogViewer\Settings;
 
@@ -47,7 +46,7 @@ class Api {
 
 		return $res;
 	}
-	
+
 
 	/**
 	 * Check if log file has been modified
@@ -60,15 +59,15 @@ class Api {
 	 */
 	public static function check_if_log_modified($req, $res) {
 		$log = Log::get_instance();
-		
+
 		$res->set_json([
 			'modified'		=> isset($req->params['modified']) && $log->is_modified($req->params['modified']) ? true : false,
 			'truncated'		=> $log->is_smaller(),
 		]);
-		
+
 		return $res;
 	}
-	
+
 
 	/**
 	 * Check if log file exists
@@ -88,7 +87,7 @@ class Api {
 
 		return $res;
 	}
-	
+
 
 	/**
 	 * Check if debugging is enabled
@@ -109,7 +108,7 @@ class Api {
 
 		return $res;
 	}
-	
+
 
 	/**
 	 * Get log entries
@@ -134,8 +133,8 @@ class Api {
 
 		return $res;
 	}
-	
-	
+
+
 	/**
 	 * Get log entries if log file has been modified
 	 *
@@ -152,7 +151,7 @@ class Api {
 		if (isset($req->params['modified']) && $log->is_modified($req->params['modified'])) {
 			$res = self::get_log_entries($req, $res);
 			$changed = true;
-		} 
+		}
 
 		$res->set_json([
 			'changed'		=> $changed,
@@ -249,7 +248,7 @@ class Api {
 		if (isset($req->params['user_id'])) {
 			$handler = Settings::get_instance();
 			$settings = $handler->get_user_settings($req->params['user_id']);
-		} 
+		}
 
 		$res->set_json([
 			'settings'	=> $settings,
@@ -285,7 +284,7 @@ class Api {
 
 
 	/**
-	 * Get default settings
+	 * Get global settings
 	 *
 	 * @since 0.12.0
 	 *
@@ -293,9 +292,9 @@ class Api {
 	 * @param Response $res Response instance
 	 * @return Response The current response instance
 	 */
-	public static function get_default_settings($req, $res) {
+	public static function get_global_settings($req, $res) {
 		$handler = Settings::get_instance();
-		$settings = $handler->get_default_settings();
+		$settings = $handler->get_global_settings();
 
 		$res->set_json([
 			'settings'		=> $settings,
@@ -306,7 +305,7 @@ class Api {
 
 
 	/**
-	 * Update default settings
+	 * Update global settings
 	 *
 	 * @since 0.12.0
 	 *
@@ -314,12 +313,12 @@ class Api {
 	 * @param Response $res Response instance
 	 * @return Response The current response instance
 	 */
-	public static function update_default_settings($req, $res) {
+	public static function update_global_settings($req, $res) {
 		$updated = false;
 
 		if (isset($req->params['settings'])) {
 			$handler = Settings::get_instance();
-			$updated = $handler->update_default_settings($req->params['settings']);
+			$updated = $handler->update_global_settings($req->params['settings']);
 		}
 
 		$res->set_json([

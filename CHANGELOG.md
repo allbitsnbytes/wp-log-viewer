@@ -2,6 +2,38 @@
 
 All notable changes will be tracked in this change log.  This project uses [Semantic Versioning](http://semver.org/)
 
+## [1.0.0] - 2015-12-30
+### Feature
+
+- One click enable/disable debugging status
+- One click downloading of smart log file
+- One click error filtering by clicking error legends
+- Smart downloads include only the latest unique entries.  Duplicates are removed to reduce filesize and make reading the file easier
+- Persist selected view, sorting across login sessions
+- Settings pane added for easy management of viewer settings
+- Add and edit custom error types
+
+### UI
+
+- Wordpress sidebar is folded to increase viewer space
+- Sidebar is sticky so actions are always present when scrolling
+- Updated the header to display more error messages and to use less vertical space
+- Display count for each error type
+- Smarter display of error legends.  Only legends with errors are displayed
+- Search query is not displayed under search bar
+- Increased error message area to display more horizontally which will reduce scrolling
+- Made error message more readable by removing line number and file path
+- Reorganized error details (type, line number and file path) to make it more space efficient
+
+### Fix
+
+- Fixed a bug that was breaking file path regex
+
+## [0.13.0] - 2015-10-16
+### Fix
+
+- Disabled remote api and replaced it with Wordpress Ajax handling.  This should solve problems experienced with Multi-Tenant and extreme custom installs
+
 ## [0.12.5] - 2015-08-28
 ### Fix
 
