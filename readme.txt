@@ -7,7 +7,7 @@ Requires at least: 3.9
 Tested up to: 4.4
 Stable tag: 1.0.0
 
-Debugging and working with errors made easy.  One click enable/disable debugging, clear debug.log, search, sort, and filter errors.  See new errors automatically without refreshing.
+One click enable/disable debugging, clear debug.log, search, sort, and filter errors.  See new errors automatically without refreshing.
 
 
 == Description ==
@@ -15,7 +15,7 @@ Debugging and working with errors made easy.  One click enable/disable debugging
 WP Log viewer makes debugging your Wordpress site easy and stress free.
 
 
-== Features ==
+= Features =
 
 Some features of this plugin.
 

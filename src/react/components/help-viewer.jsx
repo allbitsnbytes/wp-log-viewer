@@ -129,6 +129,22 @@ wplv.HelpViewer = React.createClass({
 				);
 				break;
 
+			// How to use custom errors
+			case 'how-to-use-custom-errors':
+				return (
+					<div className="help-section help--how-to-use-custom-errors">
+						<h4>How to Use Custom Errors</h4>
+
+						<p>When you write an error to the log, you have to start the error message with a <strong>#</strong> and the custom error key followed by a <strong>:</strong></p>
+
+						<p><em>Example:   If you defined a custom error with a key:  my-custom-error</em></p>
+
+						<p>In your code:<br />
+						<strong>error_log('#my-custom-error:  The error message goes here');</strong></p>
+					</div>
+				);
+				break;
+
 			// Sort entries
 			case 'sort-entries':
 				return (
@@ -230,6 +246,7 @@ wplv.HelpViewer = React.createClass({
 							<li><a href="#" onClick={ this.switchHelpSection('configure-debug-toggling') }><i className="fa fa-arrow-circle-o-right" />How to configure debug toggling?</a></li>
 							<li><a href="#" onClick={ this.switchHelpSection('fold-sidebar') }><i className="fa fa-arrow-circle-o-right" /> How to fold sidebar to increase viewing space?</a></li>
 							<li><a href="#" onClick={ this.switchHelpSection('custom-errors') }><i className="fa fa-arrow-circle-o-right" /> How to add custom errors?</a></li>
+							<li><a href="#" onClick={ this.switchHelpSection('how-to-use-custom-errors') }><i className="fa fa-arrow-circle-o-right" /> How to use custom errors?</a></li>
 							<li><a href="#" onClick={ this.switchHelpSection('sort-entries') }><i className="fa fa-arrow-circle-o-right" /> How to sort log entries?</a></li>
 							<li><a href="#" onClick={ this.switchHelpSection('switch-view-type') }><i className="fa fa-arrow-circle-o-right" /> How to switch between group and list views?</a></li>
 							<li><a href="#" onClick={ this.switchHelpSection('refresh-entries') }><i className="fa fa-arrow-circle-o-right" /> How to check for new log entries?</a></li>
