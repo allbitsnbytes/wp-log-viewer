@@ -10,23 +10,17 @@ wplv.DashboardWidget = React.createClass({
 	getInitialState: function() {
 		return {
 			counts: {
-				database: 0,
-				deprecated: 0,
-				fatal: 0,
-				notice: 0,
-				warning: 0,
-				misc: 0
 			},
 			debugging: {
 				detected: false,
-				enabled: false,
-				simulating: false
+				enabled: false
 			},
 			log: {
 				filsesize: 0,
 				found: false,
 				modified: '',
-				timezone: ''
+				timezone: '',
+				customErrors: this.props.settings.custom_errors
 			}
 		};
 	},
@@ -55,7 +49,6 @@ wplv.DashboardWidget = React.createClass({
 			this.ready = true;
 
 			debugging.enabled = result.debugDetected ? result.debugEnabled : this.props.debugging;
-			debugging.simulating = this._isSimulationEnabled();
 			debugging.detected = result.debugDetected;
 
 			log.found = result.found;
@@ -71,77 +64,62 @@ wplv.DashboardWidget = React.createClass({
 		}.bind(this));
 	},
 
-	// Filter out duplicate entries
-	_filterDuplicateEntries: function(entries) {
-		if (!entries || !(entries instanceof Array)) {
-			entries = [];
-		}
-
-		var filtered = [],
-			found = {};
-
-		// Filter duplicate entries
-		entries.forEach(function(entry) {
-			var key = md5(entry.message);
-
-			if (found[key] === undefined) {
-				filtered.push(entry);
-				found[key] = true;
-			}
-		}.bind(this));
-
-		return filtered;
-	},
-
-	// Check if simulation is enabled
-	_isSimulationEnabled: function() {
-		return document.cookie.indexOf('_wplv-sim=1') > 0 ? true : false;
-	},
-
 	// Prepare count
 	_prepareCount: function(entries) {
+		var counts = {},
+			customErrors = this.state.log.customErrors,
+			found = {},
+			key = '';
+
 		if (!entries || !(entries instanceof Array)) {
 			entries = [];
 		}
 
-		var counts = this.state.counts;
+		entries.forEach(function(entry) {
+			key = md5(entry.message.replace('\n', ''));
+
+			if (typeof found[key] === 'undefined') {
+				found[key] = entry;
+			}
+		});
 
 		// Process entries and prepare for use
-		this._filterDuplicateEntries(entries).forEach(function(entry) {
+		Object.keys(found).forEach(function(key) {
+			var entry = found[key],
+				errorType = entry.message.replace(/^(PHP [\w ]+):.*/gi, '$1');
+				
+			errorType = errorType && errorType !== entry.message ? errorType.trim() : '';
 
-			// Get error type if present
-			var errorType = entry.message.replace(/^(PHP [\w ]+):.*/gi, '$1');
-			entry.errorType = errorType && errorType !== entry.message ? errorType.trim() : '';
+			if (errorType === '') {
+				// Check for custom errors
+				if (entry.message.match(/^#[\w_-]+:/gi) !== null) {
+					errorType = entry.message.replace(/^#([\w_-]+):.*/gi, '$1');
+				} else {
+					// Check for Wordpress Database error type if present
+					errorType = entry.message.replace(/^(Wordpress database error ).*/gi, '$1');
+				}
 
-			if (entry.errorType === '') {
-				// Check for Wordpress Database error type if present
-				var errorType = entry.message.replace(/^(Wordpress database error ).*/gi, '$1');
-				entry.errorType = errorType && errorType !== entry.message ? errorType.trim() : '';
+				errorType = errorType && errorType !== entry.message ? errorType.trim() : '';
 			}
 
-			switch (entry.errorType) {
-				case 'PHP Fatal error':
-					counts.fatal++;
-					break;
+			errorTypeKey = errorType.replace(/[ ]+/gi, '-').toLowerCase();
 
-				case 'PHP Notice':
-					counts.notice++;
-					break;
+			if (typeof counts[errorTypeKey] === 'undefined') {
+				counts[errorTypeKey] = {
+					label: errorType,
+					count: 1,
+					type: errorTypeKey,
+					legendColor: '',
+					legendBackground: ''
+				};
 
-				case 'PHP Warning':
-					counts.warning++;
-					break;
-
-				case 'PHP Deprecated':
-					counts.deprecated++;
-					break;
-
-				case 'Wordpress database error':
-					counts.database++;
-					break;
-
-				default:
-					counts.misc++;
+				if (typeof customErrors[errorTypeKey] === 'object') {
+					counts[errorTypeKey].label = customErrors[errorTypeKey].label;
+					counts[errorTypeKey].legendColor = customErrors[errorTypeKey].color;
+					counts[errorTypeKey].legendBackground = customErrors[errorTypeKey].background;
+				}
+			} else {
+				counts[errorTypeKey].count++;
 			}
 		}.bind(this));
 
@@ -153,47 +131,35 @@ wplv.DashboardWidget = React.createClass({
 		var content = '';
 
 		if (this.ready) {
-			if (this.state.debugging.enabled || this.state.debugging.detected || this.state.debugging.simulating) {
+			if (this.state.debugging.enabled || this.state.debugging.detected) {
 				if (this.state.log.found) {
+					var errors = {},
+						lis = [];
+
+					Object.keys(this.state.counts).forEach(function(key) {
+						var count = this.state.counts[key],
+							styles = count.legendColor !== '' && count.legendBackground !== '' ? { 'color': count.legendColor + ' !important', 'background': count.legendBackground + ' !important'} : {};
+						errors[count.label] = (
+							<li className={ count.type } key={ count.key }>
+								<span className="count" style={ styles }>{ count.count }</span> { count.label }
+							</li>
+						);
+					}.bind(this));
+
+					Object.keys(errors).sort().forEach(function(key) {
+						lis.push(errors[key]);
+					});
+
 					content = (
-						<ul className="error-types-list">
-							<li className="php-fatal-error">
-								<div className="label"><i className="fa fa-arrow-circle-o-right" /> Fatal</div>
-								<div className="count">{ this.state.counts.fatal }</div>
-							</li>
-							<li className="php-notice">
-								<div className="label"><i className="fa fa-arrow-circle-o-right" /> Notice</div>
-								<div className="count">{ this.state.counts.notice }</div>
-							</li>
-							<li className="php-warning">
-								<div className="label"><i className="fa fa-arrow-circle-o-right" /> Warning</div>
-								<div className="count">{ this.state.counts.warning }</div>
-							</li>
-							<li className="wordpress-database-error">
-								<div className="label"><i className="fa fa-arrow-circle-o-right" /> Database</div>
-								<div className="count">{ this.state.counts.database }</div>
-							</li>
-							<li className="php-deprecated">
-								<div className="label"><i className="fa fa-arrow-circle-o-right" /> Deprecated</div>
-								<div className="count">{ this.state.counts.deprecated }</div>
-							</li>
-							<li className="php-misc">
-								<div className="label"><i className="fa fa-arrow-circle-o-right" /> Misc</div>
-								<div className="count">{ this.state.counts.misc }</div>
-							</li>
+						<ul className="wplv-module--error-legends">
+							{ lis }
 						</ul>
 					);
 				} else {
 					if (this.state.debugging.enabled) {
-						if (this.state.debugging.simulating) {
-							content = (
-								<p>Currently <strong className="debug-status-simulating">simulating</strong>. However, the <strong>debug.log file does not exist or was not found</strong>.</p>
-							);
-						} else {
-							content = (
-								<p>Debugging is <strong className="debug-status-enabled">enabled</strong>. However, the <strong>debug.log file does not exist or was not found</strong>.</p>
-							);
-						}
+						content = (
+							<p>Debugging is <strong className="debug-status-enabled">enabled</strong>. However, the <strong>debug.log file does not exist or was not found</strong>.</p>
+						);
 					} else {
 						content = (
 							<p><strong>Debugging is currently <span className="debug-status-disabled">disabled</span>.</strong></p>
