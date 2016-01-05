@@ -5,7 +5,7 @@ License URI: http://www.gnu.org/licenses/gpl.html
 Tags: actions, activity, activate debugging, admin, admin bar, ajax log viewer, best error log, best log viewer, best plugin, clear log, custom error, custom error types, custom reporting, dashboard, debug, debug log, debug plugin, debug theme, debug tool, debugging, development, display errors, download errors, download log, enable debugging, error, error log, error logging, error reporter, error reporting, error tracker, error tracking, errors, free, free debugging, free error log, log, log monitor, log viewer, log viewing, notifications, php errors, php error log, plugin, plugin errors, plugin testing, react, react plugin, react ui, search errors, search log, sort errors, sort log, theme errors, theme testing, track errors, widget error, widget testing, wordpress, wordpress error, wordpress error log, wp error, wp error viewer, wp log viewer, wp_debug
 Requires at least: 3.9
 Tested up to: 4.4
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 
 One click enable/disable debugging, clear debug.log, search, sort, and filter errors.  See new errors automatically without refreshing.
 
@@ -217,6 +217,16 @@ Report bugs and suggest ideas at:  https://wordpress.org/support/plugin/wp-log-v
 == Changelog ==
 
 All notable changes will be tracked in this change log.
+
+= 1.0.1 =
+Release date: 2016-01-04
+
+* Feature:
+	* Dashboard widget now supports custom errors
+
+* Fix:
+	* Fixed logic error that lead to undefined url_path error
+	* Fixed auto refresh not updating view
 
 = 1.0.0 =
 Release date: 2015-12-30
