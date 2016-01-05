@@ -141,10 +141,10 @@ class Plugin {
 	public function add_dynamic_routes() {
 		$log = Log::get_instance();
 		$settings = Settings::get_instance();
+		$url_path = trailingslashit(explode('?', $_SERVER['REQUEST_URI'])[0]);
 
 		if (is_user_logged_in()) {
 			$user_id = \get_current_user_id();
-			$url_path = trailingslashit(explode('?', $_SERVER['REQUEST_URI'])[0]);
 
 			if ($url_path == '/debugging/download/log/') {
 				header('Pragma: PUBLIC');

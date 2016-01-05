@@ -121,16 +121,18 @@ wplv.ErrorLegend = React.createClass({
 			}.bind(this)).forEach(function(key, index) {
 				var error = errors[key],
 					className = error.className,
+					hasSelected = this.state.errorTypes.length > 0 ? true : false,
+					isSelected = hasSelected && this.state.errorTypes.indexOf(key) !== -1 ? true : false,
 					styles = {};
 
-				if (this.state.errorTypes.length > 0) {
-					className += this.state.errorTypes.indexOf(key) !== -1 ? ' selected' : ' not-selected';
+				if (hasSelected) {
+					className += isSelected ? ' selected' : ' not-selected';
 				}
 
-				if (error.styles.color !== '' && error.styles.background !== '') {
+				if ((!hasSelected || isSelected) && error.styles.color !== '' && error.styles.background !== '') {
 					styles = {
-						'color': error.styles.color + ' !important',
-						'background-color': error.styles.background + ' !important'
+						color: error.styles.color + ' !important',
+						backgroundColor: error.styles.background + ' !important'
 					};
 				}
 

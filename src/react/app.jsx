@@ -458,7 +458,7 @@ wplv.App = React.createClass({
 		showStatus = showStatus === true ? true : false;
 
 		wplv.remote.getLatestEntries(data, function(result) {
-			if (result.changed == true && result.changed == 'true') {
+			if (result.changed === true || result.changed === 'true') {
 				var log = this.state.log;
 
 				log.entries = this._prepareEntries(result.entries);

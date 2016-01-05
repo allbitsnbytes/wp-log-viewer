@@ -123,7 +123,7 @@ if (WPLOGVIEWER.current_page === 'tools_page_wp-log-viewer') {
 	};
 } else if (WPLOGVIEWER.current_page === 'dashboard') {
 	React.render(
-		<wplv.DashboardWidget debugging={ wplvDDStatus } pluginUrl={ WPLOGVIEWER.plugin_url } />,
+		<wplv.DashboardWidget debugging={ wplvDDStatus } pluginUrl={ WPLOGVIEWER.plugin_url }  settings={ WPLOGVIEWER.settings } />,
 		document.getElementById('wplv-dashboard-widget-container')
 	);
 }

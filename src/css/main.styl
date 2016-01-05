@@ -588,50 +588,11 @@ sidebar-menu-icon = @block {
 		&:hover
 			color $light-grey
 
-	.error-types-list
-		list-style none
+	.wplv-module--error-legends
+		cf()
 		padmar 0, 0
 
 		li
-			list-style none
-			border 0
-			border-left 2px
-			padmar 5px 0, 0
-
-			.label
-				col(0.4)
-				dislplay inline-block
-				font-weight bold
-
-			.count
-				col(0.58)
-				dislplay inline-block
-				font-weight bold
-
-			.fa
-				display inline-block
-				margin-right 6px
-
-	.wordpress-database-error
-		.fa
-			color $database-error-color !important
-
-	.php-deprecated
-		.fa
-			color $deprecated-error-color !important
-
-	.php-fatal-error
-		.fa
-			color $fatal-error-color !important
-
-	.php-notice
-		.fa
-			color $notice-error-color !important
-
-	.php-warning
-		.fa
-			color $warning-error-color !important
-
-	.php-misc
-		.fa
-			color $misc-error-color !important
+			span(1/3)
+			box-size border-box
+			padmar 0, 0 0 10px
