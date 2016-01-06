@@ -2,6 +2,16 @@
 
 All notable changes will be tracked in this change log.  This project uses [Semantic Versioning](http://semver.org/)
 
+## [1.0.1] - 2016-01-04
+### Feature
+
+- Dashboard widget now supports custom errors
+
+### Fix
+
+- Fixed logic error that lead to undefined url_path error
+- Fixed auto refresh not updating view
+
 ## [1.0.0] - 2015-12-30
 ### Feature
 
