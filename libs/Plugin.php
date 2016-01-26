@@ -33,14 +33,17 @@ class Plugin {
 	 */
 	public function init() {
 		// Register actions
-		add_action('admin_menu', [$this, 'add_navigation']);
-		add_action('admin_enqueue_scripts', [$this, 'load_plugin_css_and_js']);
-		add_action('wp_dashboard_setup', [$this, 'register_dashboard_widgets']);
-		add_action('admin_bar_menu', [$this, 'add_admin_bar_menu'], 900);
 		add_action('template_redirect', [$this, 'add_dynamic_routes'], 1, 1);
 
-		// Initialize ajax handler
-		Ajax::get_instance();
+		if (\is_admin()) {
+			add_action('admin_menu', [$this, 'add_navigation']);
+			add_action('admin_enqueue_scripts', [$this, 'load_plugin_css_and_js']);
+			add_action('wp_dashboard_setup', [$this, 'register_dashboard_widgets']);
+			add_action('admin_bar_menu', [$this, 'add_admin_bar_menu'], 900);
+
+			// Initialize ajax handler
+			Ajax::get_instance();
+		}
 	}
 
 
@@ -50,29 +53,31 @@ class Plugin {
 	 * @since 0.1.0
 	 */
 	public function load_plugin_css_and_js() {
-		// $auth = Auth::get_instance();
-		$settings = Settings::get_instance();
-		$log = Log::get_instance();
-		$user_id = \get_current_user_id();
-		$screen = get_current_screen();
-		$localized = [
-			'api' 				=> admin_url('admin-ajax.php'),
-			'debug_enabled' 	=> WP_DEBUG,
-			'debug_toggleable'	=> $log->is_debug_toggleable() ? 1 : 0,
-			'current_page'		=> is_object($screen) ? $screen->id : '',
-			'plugin_url'		=> admin_url('tools.php?page=wp-log-viewer'),
-			'settings'			=> $settings->get_settings($user_id),
-			'user_id'			=> $user_id,
-		];
+		if (\current_user_can('manage_options')) {
+			// $auth = Auth::get_instance();
+			$settings = Settings::get_instance();
+			$log = Log::get_instance();
+			$user_id = \get_current_user_id();
+			$screen = get_current_screen();
+			$localized = [
+				'api' 				=> admin_url('admin-ajax.php'),
+				'debug_enabled' 	=> WP_DEBUG,
+				'debug_toggleable'	=> $log->is_debug_toggleable() ? 1 : 0,
+				'current_page'		=> is_object($screen) ? $screen->id : '',
+				'plugin_url'		=> admin_url('tools.php?page=wp-log-viewer'),
+				'settings'			=> $settings->get_settings($user_id),
+				'user_id'			=> $user_id,
+			];
 
-		// Stylesheet files
-		wp_enqueue_style('wplogviewer-css', WPLOGVIEWER_URL . 'assets/css/main.min.css');
+			// Stylesheet files
+			wp_enqueue_style('wplogviewer-css', WPLOGVIEWER_URL . 'assets/css/main.min.css');
 
-		// Javascript files
-		wp_enqueue_script('wplogviewer-js', WPLOGVIEWER_URL . 'assets/js/main.min.js', false, false, true);
+			// Javascript files
+			wp_enqueue_script('wplogviewer-js', WPLOGVIEWER_URL . 'assets/js/main.min.js', false, false, true);
 
-		// Localize variables
-		wp_localize_script('wplogviewer-js', 'WPLOGVIEWER', $localized);
+			// Localize variables
+			wp_localize_script('wplogviewer-js', 'WPLOGVIEWER', $localized);
+		}
 	}
 
 
@@ -82,7 +87,9 @@ class Plugin {
 	 * @since 0.1.0
 	 */
 	public function add_navigation() {
-		add_management_page('Wordpress Log Viewer', 'Log Viewer', 'manage_options', 'wp-log-viewer', [$this, 'display_viewer_page']);
+		if (\current_user_can('manage_options')) {
+			add_management_page('Wordpress Log Viewer', 'Log Viewer', 'manage_options', 'wp-log-viewer', [$this, 'display_viewer_page']);
+		}
 	}
 
 
@@ -124,12 +131,14 @@ class Plugin {
 	 * @since 0.12.0
 	 */
 	public function add_admin_bar_menu($admin_bar) {
-		$admin_bar->add_node([
-			'id'	=> 'wplv-menu',
-			'title'	=> 'Debug Log',
-			'href'	=> admin_url('tools.php?page=wp-log-viewer'),
-			'meta'	=> ['class' => 'wplv-admin-bar-node']
-		]);
+		if (\current_user_can('manage_options')) {
+			$admin_bar->add_node([
+				'id'	=> 'wplv-menu',
+				'title'	=> 'Debug Log',
+				'href'	=> admin_url('tools.php?page=wp-log-viewer'),
+				'meta'	=> ['class' => 'wplv-admin-bar-node']
+			]);
+		}
 	}
 
 
