@@ -2,6 +2,17 @@
 
 All notable changes will be tracked in this change log.  This project uses [Semantic Versioning](http://semver.org/)
 
+## [1.0.2] - 2016-01-28
+### Feature
+
+- Added ability to limit who can see WP Log Viewer
+
+### Hook
+- Added filter wplv_user_authorized
+- Added filter wplv_can_download_log
+- Added filter wplv_show_dashboard_widget
+- Added filter wplv_show_adminbar_widget
+
 ## [1.0.1] - 2016-01-04
 ### Feature
 
