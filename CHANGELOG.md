@@ -2,6 +2,10 @@
 
 All notable changes will be tracked in this change log.  This project uses [Semantic Versioning](http://semver.org/)
 
+## [1.0.3] - 2016-01-29
+### Fix
+- Fixed a bug with permissions
+
 ## [1.0.2] - 2016-01-28
 ### Feature
 
