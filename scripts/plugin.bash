@@ -65,24 +65,29 @@ get_current_version () {
 #
 # TODO: Check to make sure file was changed and display error if it wasn't
 bump_version () {
-  local NEW_VERSION="${1}"
+  local NEW_VERSION=""
   local CURRENT_VERSION="$(get_current_version)"
 
-  if [[ -z "${VERSION}" ]]; then
-    err "Please specify a new version."
-	echo "Current version: ${CURRENT_VERSION}"
-	exit ${ERR_PARAM_MISSING}
-  fi
+  echo "The current version is ${CURRENT_VERSION}"
+
+  while [[ -z "${NEW_VERSION}" ]]; do
+    read -p "Enter the new version: " NEW_VERSION
+
+	# Check if new version is SEM
+	if ! [[ "${NEW_VERSION}" =~ [0-9]+.[0-9]+.[0-9]+ ]]; then
+	  err "${NEW_VERSION} is not a valid SEM Version"
+	  NEW_VERSION=""
+	fi
+  done
 
   # Update version in files
-  sed -i '' 's/"version": ".*"/"version": "1.0.4"/' bower.json
-  sed -i '' 's/"version": ".*"/"version": "1.0.4"/' package.json
-  #sed -i '' 's/"version": ".*"/"version": "1.0.4"/' readme.txt
-  #sed -i '' 's/"version": ".*"/"version": "1.0.4"/' Plugin.php
-  #sed -i '' 's/"version": ".*"/"version": "1.0.4"/' wp-log-viewer.php
+  sed -i "" "s/\"version\": \".*\"/\"version\": \"${NEW_VERSION}\"/" bower.json
+  sed -i "" "s/\"version\": \".*\"/\"version\": \"${NEW_VERSION}\"/" package.json
+  sed -i "" "s/Stable tag: .*/Stable tag: ${NEW_VERSION}/" readme.txt
+  sed -i "" "s/Version: .*/Version:     ${NEW_VERSION}/" wp-log-viewer.php
 
   # Update timestamp in files
-  #sed -i '' 's/"version": ".*"/"version": "1.0.4"/' humans.txt
+  sed -i "" "s/Updated: .*/Updated: $(date +%m-%d-%Y)/" humans.txt
 
   return 0
 }
@@ -91,10 +96,11 @@ bump_version () {
 # Release copies the latest files to svn trunk, create new tag if needed, get latest from repo, add new files, then checks in changes
 release () {
   local FILE
-  local DEST="svn_test"
+  local SRC
+  local DEST="svn"
   local CURRENT_VERSION="$(get_current_version)"
   local TAG_DIR="${DEST}/tags/${CURRENT_VERSION}"
-  local TRUNK_DIR="{$DEST}/trunk"
+  local TRUNK_DIR="${DEST}/trunk"
 
   # Create new tag directory if needed
   if [[ ! -d "${TAG_DIR}" ]]; then
@@ -102,25 +108,40 @@ release () {
     mkdir -p ${TAG_DIR}
   fi
 
+  # Create trunk if needed
+  if [[ ! -d "${TRUNK_DIR}" ]]; then
+    echo "Making directory for trunk: ${TRUNK_DIR}"
+	mkdir -p ${TRUNK_DIR}
+  fi
+
   # Get latest from repo
-  # TODO: svn up
+  svn up
 
   # Copy files to tag and trunk directories
   for FILE in ${PLUGIN_FILES[@]}; do
-    rsync -av ./${FILE} ${TAG_DIR}/
-	rsync -av ./${FILE} ${TRUNK_DIR}/
+    if [[ -d ${FILE} ]]; then
+      SRC="${FILE}/"
+    else
+      SRC="${FILE}"
+    fi
+
+    rsync -arq ${SRC} ${TAG_DIR}
+	rsync -arq ${SRC} ${TRUNK_DIR}
   done
 
   # Get list of new files and add them
-  # TODO: svn stat
+  FILES_TO_ADD="$(svn stat | grep ^? | cut -d' ' -f2)"
 
-  # Add new files
-  # TODO: svn add files
+  # If there are new files to add, add them
+  if [[ -n "${FILES_TO_ADD}" ]]; then
+    svn add ${FILES_TO_ADD}
+  fi
 
-  read -p "Enter a message for checking: (q to cancel) "
+  printf "\nEnter a message for checking: (q to cancel) "
+  read
 
   if [[ "${REPLY}" != 'q' ]]; then
-    # TODO: svn ci -m "${REPLY}"
+    svn ci -m "${REPLY}"
   fi
 
   return 0
@@ -132,7 +153,7 @@ release () {
 # @params
 # $1 - The destination directory for the zip file
 zip () {
-  local DEST="${1:-..}"
+  local DEST=".."
   local ZIP="$(which zip)"
   local FILENAME="${PWD##*/}.zip"
 
@@ -158,7 +179,7 @@ cd "$(dirname "${BASH_SOURCE[0]}")/.."
 case "${1}" in
 
   "bump" )
-    bump_version "${2}"
+    bump_version
     ;;
 
   "release" )
@@ -166,12 +187,12 @@ case "${1}" in
     ;;
 
   "zip" )
-    zip "${2}"
+    zip
     ;;
 
   * )
     err "Please specify a task to run"
-	echo "Tasks: bump, release or zip"
+	echo "Available tasks: bump, release or zip"
 	exit ${ERR_PARAM_MISSING}
 
 esac

@@ -5,5 +5,5 @@ Github: allbitsnbytes
 Twitter: allbitsnbytes
 
 /* META */
-Updated: 2016/01/29
+Updated: 01-31-2016
 See: http://humanstxt.org/
