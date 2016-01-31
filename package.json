@@ -1,6 +1,6 @@
 {
   "name": "wp-log-viewer",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Worpdress debug log viewer",
   "author": {
     "name": "Maxwell Berkel",
@@ -19,6 +19,9 @@
     "url": "http://www.gnu.org/licenses/gpl.html"
   },
   "scripts": {
+    "bump": "bash scripts/plugin.bash bump",
+	"release": "bash scripts/plugin.bash release",
+	"zip": "bash scripts/plugin.bash zip"
   },
   "engines": {
     "node": ">= 0.10.x"

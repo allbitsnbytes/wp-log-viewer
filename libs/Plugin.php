@@ -31,7 +31,7 @@ class Plugin {
 	 *
 	 * @since 1.0.1
 	 */
-	var $user_authorized = false;
+	var $user_authorized = true;
 
 
 	/**
@@ -62,7 +62,8 @@ class Plugin {
 	 * @since 1.0.1
 	 */
 	public function check_if_authorized() {
-		$this->user_authorized = apply_filters('wplv_user_authorized', \current_user_can('manage_options'));
+		$authorized = \current_user_can('manage_options');
+		$this->user_authorized = apply_filters('wplv_user_authorized', $authorized);
 	}
 
 
@@ -128,9 +129,9 @@ class Plugin {
 	 * @since 0.12.0
 	 */
 	public function register_dashboard_widgets() {
-		$show_dashboard_widget = apply_filters('wplv_show_dashboard_widget', true);
+		$show_dashboard_widget = apply_filters('wplv_show_dashboard_widget', $this->user_authorized);
 
-		if ($this->user_authorized && $show_dashboard_widget) {
+		if ($show_dashboard_widget) {
 			\wp_add_dashboard_widget('wplv-widget', 'WP Log Viewer', [$this, 'display_dashboard_widget']);
 		}
 	}
@@ -152,9 +153,9 @@ class Plugin {
 	 * @since 0.12.0
 	 */
 	public function add_admin_bar_menu($admin_bar) {
-		$show_adminbar = apply_filters('wplv_show_adminbar_widget', true);
+		$show_adminbar = apply_filters('wplv_show_adminbar_widget', $this->user_authorized);
 
-		if ($this->user_authorized && $show_adminbar) {
+		if ($show_adminbar) {
 			$admin_bar->add_node([
 				'id'	=> 'wplv-menu',
 				'title'	=> 'Debug Log',
@@ -179,7 +180,7 @@ class Plugin {
 			$user_id = \get_current_user_id();
 
 			if ($url_path == '/debugging/download/log/') {
-				$can_download = apply_filters('wplv_can_download_log', \current_user_can('manage_options'));
+				$can_download = apply_filters('wplv_can_download_log', $this->user_authorized);
 
 				if ($can_download) {
 					header('Pragma: PUBLIC');
