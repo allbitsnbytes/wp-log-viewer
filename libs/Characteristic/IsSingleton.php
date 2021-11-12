@@ -34,9 +34,8 @@ trait IsSingleton
 
 	/**
      * Private constructor to prevent creating a new instance of the *Singleton* via the `new` operator from outside of this class.
-	 * @final
      */
-	final private function __construct() 
+	private function __construct() 
 	{
 		$this->init();
 	}
@@ -45,17 +44,15 @@ trait IsSingleton
     /**
      * Private clone method to prevent cloning of the instance of the *Singleton* instance.
      * @return void
-	 * @final
      */
-	final private function __clone() {}
+	private function __clone() {}
 
 
     /**
      * Private unserialize method to prevent unserializing of the *Singleton* instance.
      * @return void
-	 * @final
      */
-	final private function __wakeup() {}
+	private function __wakeup() {}
 
 
 	/**
